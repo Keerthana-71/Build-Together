@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Application - Build Together Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── Dark mode overrides for this page ── */
+        body.dark-mode .application-section {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        }
+        body.dark-mode .application-card {
+            background: #1e293b;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+        }
+        body.dark-mode .application-form-body {
+            background: #1e293b;
+        }
+        body.dark-mode .app-form-group label {
+            color: #cbd5e1;
+        }
+        body.dark-mode .app-form-group input,
+        body.dark-mode .app-form-group select,
+        body.dark-mode .app-form-group textarea {
+            background: #0f172a;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+        body.dark-mode .app-form-group input::placeholder,
+        body.dark-mode .app-form-group textarea::placeholder {
+            color: #475569;
+        }
+        body.dark-mode .app-form-group input:focus,
+        body.dark-mode .app-form-group select:focus,
+        body.dark-mode .app-form-group textarea:focus {
+            background: #1e293b;
+            border-color: #667eea;
+        }
+        body.dark-mode .app-form-group select option {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        body.dark-mode .success-msg h3 { color: #e2e8f0; }
+        body.dark-mode .success-msg p  { color: #94a3b8; }
+        .application-section {
+            padding: 60px 0 80px;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            min-height: 70vh;
+        }
+        .application-card {
+            max-width: 680px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+        .application-card-header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            padding: 35px 40px;
+            text-align: center;
+            color: white;
+        }
+        .application-card-header .card-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+        }
+        .application-card-header h2 { font-size: 1.8rem; margin-bottom: 8px; }
+        .application-card-header p { opacity: 0.85; font-size: 0.95rem; }
+        .application-form-body { padding: 40px; }
+        .app-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .app-form-grid .full { grid-column: span 2; }
+        .app-form-group { display: flex; flex-direction: column; gap: 6px; }
+        .app-form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .app-form-group label i { color: #667eea; width: 16px; }
+        .app-form-group input,
+        .app-form-group select,
+        .app-form-group textarea {
+            padding: 13px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .app-form-group input:focus,
+        .app-form-group select:focus,
+        .app-form-group textarea:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+        }
+        .app-form-group textarea { resize: vertical; min-height: 110px; }
+        .app-submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .app-submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+        }
+        .success-msg {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .success-msg .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+        }
+        .success-msg h3 { font-size: 1.6rem; color: #1e293b; margin-bottom: 10px; }
+        .success-msg p { color: #64748b; margin-bottom: 25px; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: gap 0.3s;
+        }
+        .back-link:hover { gap: 12px; }
+        @media (max-width: 600px) {
+            .app-form-grid { grid-template-columns: 1fr; }
+            .app-form-grid .full { grid-column: span 1; }
+            .application-form-body { padding: 25px 20px; }
+            .application-card-header { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+    <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="courses.html" class="active">Courses</a></li>
+        <li><a href="internship.html">Internship</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="apply.html" class="apply-nav">Apply Now</a></li>
+    </ul>
+    <div class="navbar-right">
+        <button class="dark-toggle" id="darkToggleBtn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+</nav>
+
+<section class="page-header">
+    <div class="header-content">
+        <h1>Course Application</h1>
+        <p class="hero-subtitle">Fill in your details and we'll get back to you within 24 hours.</p>
+    </div>
+</section>
+
+<section class="application-section">
+    <div class="container">
+        <div class="application-card">
+            <div class="application-card-header">
+                <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h2>Enroll in a Course</h2>
+                <p>Complete the form below to begin your learning journey</p>
+            </div>
+            <div class="application-form-body">
+                <form id="appForm" novalidate>
+                    <div class="app-form-grid">
+                        <div class="app-form-group">
+                            <label><i class="fas fa-user"></i> Full Name</label>
+                            <input type="text" id="appName" placeholder="Your full name" required>
+                        </div>
+                        <div class="app-form-group">
+                            <label><i class="fas fa-envelope"></i> Email Address</label>
+                            <input type="email" id="appEmail" placeholder="your@email.com" required>
+                            <div id="course-email-otp-container"></div>
+                        </div>
+                        <div class="app-form-group">
+                            <label><i class="fas fa-phone"></i> Phone Number</label>
+                            <input type="tel" id="appPhone" placeholder="e.g. 9876543210" maxlength="10" inputmode="numeric" required>
+                            <div id="course-otp-container"></div>
+                        </div>
+                        <div class="app-form-group">
+                            <label><i class="fas fa-map-marker-alt"></i> City / Location</label>
+                            <input type="text" id="appCity" placeholder="Your city">
+                        </div>
+                        <div class="app-form-group full">
+                            <label><i class="fas fa-book-open"></i> Select Course</label>
+                            <select id="appCourse" required>
+                                <option value="" disabled selected>Choose a course</option>
+                                <option value="Full Stack Web Development">Full Stack Web Development</option>
+                                <option value="Data Science & AI">Data Science &amp; AI</option>
+                                <option value="Advanced UI/UX Design">Advanced UI/UX Design</option>
+                                <option value="Digital Marketing Specialist">Digital Marketing Specialist</option>
+                                <option value="Cloud Computing (AWS/GCP)">Cloud Computing (AWS/GCP)</option>
+                                <option value="Cyber Security & Ethical Hacking">Cyber Security &amp; Ethical Hacking</option>
+                            </select>
+                        </div>
+                        <div class="app-form-group full">
+                            <label><i class="fas fa-user-graduate"></i> Highest Qualification</label>
+                            <select id="appQualification">
+                                <option value="" disabled selected>Select qualification</option>
+                                <option>High School (10th / 12th)</option>
+                                <option>Diploma</option>
+                                <option>Bachelor's Degree</option>
+                                <option>Master's Degree</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="app-form-group full">
+                            <label><i class="fas fa-comment-alt"></i> Why do you want to join? (Optional)</label>
+                            <textarea id="appMessage" placeholder="Tell us a bit about your goals..."></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="app-submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </form>
+
+                <div class="success-msg" id="successMsg">
+                    <div class="success-icon"><i class="fas fa-check"></i></div>
+                    <h3>Application Submitted!</h3>
+                    <p>Thank you! Our team will contact you within 24 hours to confirm your enrollment.</p>
+                    <a href="courses.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Courses</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer-simple">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+                <p>Empowering students with industry-ready skills and real-world experience since 2020.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="internship.html">Internship</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Our Courses</h4>
+                <ul>
+                    <li><a href="courses.html">Full Stack Dev</a></li>
+                    <li><a href="courses.html">Data Science &amp; AI</a></li>
+                    <li><a href="courses.html">UI/UX Design</a></li>
+                    <li><a href="courses.html">Cloud Computing</a></li>
+                    <li><a href="courses.html">Cyber Security</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <div class="footer-contact-list">
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>123 Tech Park, OMR Road,<br>Chennai - 600096</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>info@buildtogether.in</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+91 98765 43210</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Build Together Institute. All Rights Reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="navbar-auth.js"></script>
+<script src="darkmode.js"></script>
+<script src="otp-verify.js"></script>
+<script>
+    if (!sessionStorage.getItem('loggedIn')) {
+        alert('Please log in first to apply for a course.');
+        const course = new URLSearchParams(window.location.search).get('course');
+        if (course) sessionStorage.setItem('redirectAfterLogin', 'course-application.html?course=' + encodeURIComponent(course));
+        location.href = 'apply.html';
+    }
+
+    const API = 'http://localhost:5000';
+    let courseEmailVerified = false;
+    let coursePhoneVerified = false;
+
+    async function initVerification() {
+        const token = sessionStorage.getItem('token');
+        try {
+            const res = await fetch(`${API}/api/auth/verified-status`, { headers: { 'Authorization': 'Bearer ' + token } });
+            const data = await res.json();
+            if (res.ok && data.is_email_verified) {
+                const el = document.getElementById('appEmail');
+                el.value = data.email || sessionStorage.getItem('userEmail') || '';
+                el.readOnly = true; el.style.background = '#f0fdf4'; el.style.borderColor = '#10b981';
+                document.getElementById('course-email-otp-container').innerHTML =
+                    '<div style="margin-top:6px;padding:7px 12px;background:#d1fae5;border-radius:8px;color:#059669;font-size:0.82rem;font-weight:600;"><i class="fas fa-check-circle"></i> Email verified!</div>';
+                courseEmailVerified = true;
+            } else {
+                initEmailOtp('appEmail', 'course-email-otp-container', (v) => { courseEmailVerified = v; });
+            }
+            if (res.ok && data.is_phone_verified) {
+                const el = document.getElementById('appPhone');
+                el.value = data.phone || sessionStorage.getItem('userPhone') || '';
+                el.readOnly = true; el.style.background = '#f0fdf4'; el.style.borderColor = '#10b981';
+                document.getElementById('course-otp-container').innerHTML =
+                    '<div style="margin-top:6px;padding:7px 12px;background:#d1fae5;border-radius:8px;color:#059669;font-size:0.82rem;font-weight:600;"><i class="fas fa-check-circle"></i> Phone number verified!</div>';
+                coursePhoneVerified = true;
+            } else {
+                initPhoneOtp('appPhone', 'course-otp-container', (v) => { coursePhoneVerified = v; }, 'appEmail');
+            }
+        } catch(e) {
+            initEmailOtp('appEmail', 'course-email-otp-container', (v) => { courseEmailVerified = v; });
+            initPhoneOtp('appPhone', 'course-otp-container', (v) => { coursePhoneVerified = v; }, 'appEmail');
+        }
+    }
+    initVerification();
+    // Pre-select course from URL param
+    const params = new URLSearchParams(window.location.search);
+    const course = params.get('course');
+    if (course) {
+        const select = document.getElementById('appCourse');
+        for (let opt of select.options) {
+            if (opt.value === course) { opt.selected = true; break; }
+        }
+    }
+
+    // Allow only digits in phone field
+    document.getElementById('appPhone').addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+    });
+
+    // Form submit
+    document.getElementById('appForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const full_name     = document.getElementById('appName').value.trim();
+        const email         = document.getElementById('appEmail').value.trim();
+        const phone         = document.getElementById('appPhone').value.trim();
+        const city          = document.getElementById('appCity').value.trim();
+        const course_name   = document.getElementById('appCourse').value;
+        const qualification = document.getElementById('appQualification').value;
+        const message       = document.getElementById('appMessage').value.trim();
+
+        if (!full_name || !email || !phone || !course_name) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+        if (!courseEmailVerified) {
+            alert('Please verify your email address with OTP.');
+            return;
+        }
+        if (!coursePhoneVerified) {
+            alert('Please verify your phone number with OTP.');
+            return;
+        }
+
+        const token = sessionStorage.getItem('token');
+        try {
+            const res = await fetch(`${API}/api/apply/course`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ full_name, email, phone, city, course_name, qualification, message })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                alert(data.error || 'Submission failed. Please try again.');
+                return;
+            }
+            this.style.display = 'none';
+            document.getElementById('successMsg').style.display = 'block';
+        } catch (err) {
+            alert('Server error. Make sure backend is running.');
+        }
+    });
+
+    // Hamburger
+    document.getElementById('hamburger').addEventListener('click', function () {
+        document.querySelector('.nav-links').classList.toggle('active');
+        this.classList.toggle('active');
+    });
+</script>
+</body>
+</html>

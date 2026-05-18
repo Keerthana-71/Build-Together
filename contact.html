@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Build Together Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ui-enhancements.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+    <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="internship.html">Internship</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+        <li><a href="apply.html" class="apply-nav">Get Started</a></li>
+    </ul>
+    <div class="navbar-right">
+        <button class="dark-toggle" id="darkToggleBtn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+</nav>
+
+<section class="page-header">
+    <div class="header-content">
+        <h1>Get In Touch</h1>
+        <p class="hero-subtitle">Have questions? We're here to help. Reach out to us anytime.</p>
+    </div>
+</section>
+
+<section class="contact-section" data-reveal>
+    <div class="container">
+        <div class="contact-wrapper">
+            <div class="contact-info" data-animate="fade-left">
+                <h2>Contact Information</h2>
+                <div class="info-item"><p><strong>📍 Address:</strong><br>123 Tech Park, 2nd Street, OMR Road, Chennai - 600096</p></div>
+                <div class="info-item"><p><strong>📧 Email:</strong><br>info@buildtogether.in</p></div>
+                <div class="info-item"><p><strong>📞 Phone:</strong><br>+91 98765 43210 / 044-123456</p></div>
+                <div class="social-links">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form-box" data-animate="fade-right">
+                <h3>Send us a Message</h3>
+                <form id="contactForm">
+                    <input type="text" id="contactName" placeholder="Your Name" required>
+                    <input type="email" id="contactEmail" placeholder="Your Email" required>
+                    <input type="text" id="subject" placeholder="Subject" required>
+                    <textarea id="contactMessage" placeholder="Your Message" required></textarea>
+                    <div id="submitButtonContainer">
+                        <button type="submit" class="submit-btn">Send Message <i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="map-section" style="padding:50px 0;background:#f8fafc;">
+    <div class="container">
+        <h2 style="text-align:center;font-size:1.8rem;font-weight:700;color:#1e293b;margin-bottom:8px;">📍 Find Us on the Map</h2>
+        <p style="text-align:center;color:#64748b;margin-bottom:28px;font-size:0.95rem;">123 Tech Park, 2nd Street, OMR Road, Chennai - 600096</p>
+        <div style="border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.12);">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.0!2d80.2270!3d12.9716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a525d4e3b3b3b3b%3A0x0!2sOMR+Road%2C+Chennai%2C+Tamil+Nadu!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                width="100%" height="420" style="border:0;display:block;"
+                allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Build Together Institute Location - OMR Road Chennai">
+            </iframe>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ SECTION -->
+<section class="faq-section" style="padding:70px 0;background:#fff;">
+    <div class="container">
+        <h2 style="text-align:center;font-size:1.8rem;font-weight:700;color:#1e293b;margin-bottom:8px;">Frequently Asked Questions</h2>
+        <p style="text-align:center;color:#64748b;margin-bottom:40px;font-size:0.95rem;">Got questions? We've got answers.</p>
+        <div style="max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:14px;">
+
+            <div class="faq-item" style="background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%;padding:20px 24px;background:none;border:none;text-align:left;font-size:1rem;font-weight:600;color:#1e293b;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;">
+                    What courses does Build Together Institute offer?
+                    <i class="fas fa-chevron-down" style="color:#667eea;transition:transform 0.3s;"></i>
+                </button>
+                <div class="faq-answer" style="display:none;padding:0 24px 20px;color:#64748b;font-size:0.92rem;line-height:1.7;">We offer 6 professional courses: Full Stack Web Development, Data Science & AI, Advanced UI/UX Design, Digital Marketing Specialist, Cloud Computing (AWS/GCP), and Cyber Security & Ethical Hacking.</div>
+            </div>
+
+            <div class="faq-item" style="background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%;padding:20px 24px;background:none;border:none;text-align:left;font-size:1rem;font-weight:600;color:#1e293b;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;">
+                    Are classes available online and offline?
+                    <i class="fas fa-chevron-down" style="color:#667eea;transition:transform 0.3s;"></i>
+                </button>
+                <div class="faq-answer" style="display:none;padding:0 24px 20px;color:#64748b;font-size:0.92rem;line-height:1.7;">Yes! We offer both online (live Zoom/Meet sessions with recordings) and offline classes at our Chennai campus on OMR Road. Flexible schedules are available for working professionals.</div>
+            </div>
+
+            <div class="faq-item" style="background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%;padding:20px 24px;background:none;border:none;text-align:left;font-size:1rem;font-weight:600;color:#1e293b;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;">
+                    Is EMI available for course fees?
+                    <i class="fas fa-chevron-down" style="color:#667eea;transition:transform 0.3s;"></i>
+                </button>
+                <div class="faq-answer" style="display:none;padding:0 24px 20px;color:#64748b;font-size:0.92rem;line-height:1.7;">Yes! EMI options are available for all courses starting from ₹2,900/month. We also offer merit-based scholarships, group discounts, and early bird offers. Contact us for details.</div>
+            </div>
+
+            <div class="faq-item" style="background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%;padding:20px 24px;background:none;border:none;text-align:left;font-size:1rem;font-weight:600;color:#1e293b;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;">
+                    Do you provide placement assistance?
+                    <i class="fas fa-chevron-down" style="color:#667eea;transition:transform 0.3s;"></i>
+                </button>
+                <div class="faq-answer" style="display:none;padding:0 24px 20px;color:#64748b;font-size:0.92rem;line-height:1.7;">Absolutely! We have a dedicated placement team that provides resume building, mock interviews, LinkedIn optimization, and direct job referrals to our 50+ partner companies. Our placement rate is 95%.</div>
+            </div>
+
+            <div class="faq-item" style="background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%;padding:20px 24px;background:none;border:none;text-align:left;font-size:1rem;font-weight:600;color:#1e293b;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;">
+                    How do I apply for an internship?
+                    <i class="fas fa-chevron-down" style="color:#667eea;transition:transform 0.3s;"></i>
+                </button>
+                <div class="faq-answer" style="display:none;padding:0 24px 20px;color:#64748b;font-size:0.92rem;line-height:1.7;">Visit our Internship page, choose a role (Frontend Developer, Python & Data Science, or Digital Marketing), and click Apply Now. You'll need to create an account first. Our HR team will contact you within 48 hours.</div>
+            </div>
+
+            <div class="faq-item" style="background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%;padding:20px 24px;background:none;border:none;text-align:left;font-size:1rem;font-weight:600;color:#1e293b;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;">
+                    What is the duration of the internship program?
+                    <i class="fas fa-chevron-down" style="color:#667eea;transition:transform 0.3s;"></i>
+                </button>
+                <div class="faq-answer" style="display:none;padding:0 24px 20px;color:#64748b;font-size:0.92rem;line-height:1.7;">Internship duration ranges from 2 to 6 months depending on the role and your availability. Top performers receive a Pre-Placement Offer (PPO) for a full-time position.</div>
+            </div>
+
+            <div class="faq-item" style="background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;overflow:hidden;">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%;padding:20px 24px;background:none;border:none;text-align:left;font-size:1rem;font-weight:600;color:#1e293b;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;">
+                    How quickly will I get a response after contacting?
+                    <i class="fas fa-chevron-down" style="color:#667eea;transition:transform 0.3s;"></i>
+                </button>
+                <div class="faq-answer" style="display:none;padding:0 24px 20px;color:#64748b;font-size:0.92rem;line-height:1.7;">We respond to all inquiries within 24 hours on working days (Mon–Sat, 9 AM – 7 PM). For urgent queries, call us directly at +91 98765 43210.</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer class="footer-simple">
+    <div class="container">
+        <div class="footer-newsletter">
+            <div>
+                <h4>&#128140; Stay Updated</h4>
+                <p>Get the latest courses, internship openings &amp; career tips.</p>
+            </div>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email">
+                <button type="submit"><i class="fas fa-paper-plane"></i> Subscribe</button>
+            </form>
+        </div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+                <p>Empowering students with industry-ready skills and real-world experience since 2020.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="internship.html">Internship</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Our Courses</h4>
+                <ul>
+                    <li><a href="courses.html#fullstack">Full Stack Dev</a></li>
+                    <li><a href="courses.html#datascience">Data Science & AI</a></li>
+                    <li><a href="courses.html#uiux">UI/UX Design</a></li>
+                    <li><a href="courses.html#cloud">Cloud Computing</a></li>
+                    <li><a href="courses.html#cyber">Cyber Security</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <div class="footer-contact-list">
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>123 Tech Park, OMR Road,<br>Chennai - 600096</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>info@buildtogether.in</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+91 98765 43210</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Build Together Institute. All Rights Reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="navbar-auth.js"></script>
+<script src="darkmode.js"></script>
+<script src="ui-enhancements.js"></script>
+<script>
+    function toggleFaq(btn) {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector('i');
+        const isOpen = answer.style.display === 'block';
+        document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+        document.querySelectorAll('.faq-question i').forEach(i => i.style.transform = '');
+        if (!isOpen) { answer.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; }
+    }
+    const API = 'http://localhost:5000';
+
+    // Auto-fill & lock name/email if logged in
+    const loggedIn = sessionStorage.getItem('loggedIn');
+    if (loggedIn) {
+        const nameEl  = document.getElementById('contactName');
+        const emailEl = document.getElementById('contactEmail');
+        nameEl.value    = sessionStorage.getItem('userName')  || '';
+        emailEl.value   = sessionStorage.getItem('userEmail') || '';
+        nameEl.readOnly  = true;
+        emailEl.readOnly = true;
+        nameEl.style.background  = '#f1f5f9';
+        emailEl.style.background = '#f1f5f9';
+        nameEl.style.cursor      = 'not-allowed';
+        emailEl.style.cursor     = 'not-allowed';
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const full_name = document.getElementById('contactName').value.trim();
+        const email     = document.getElementById('contactEmail').value.trim();
+        const subject   = document.getElementById('subject').value.trim();
+        const message   = document.getElementById('contactMessage').value.trim();
+
+        if (!full_name || !email || !subject || !message) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        const btn = this.querySelector('.submit-btn');
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+
+        try {
+            const res = await fetch(`${API}/api/contact`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ full_name, email, subject, message })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                alert(data.error || 'Failed to send message.');
+                btn.textContent = 'Send Message';
+                btn.disabled = false;
+                return;
+            }
+            alert('Thank you! Your message has been sent. We will reply within 24 hours.');
+            this.reset();
+        } catch (err) {
+            alert('Server error. Make sure backend is running.');
+        }
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+    });
+    document.getElementById('hamburger').addEventListener('click', function () {
+        document.querySelector('.nav-links').classList.toggle('active');
+        this.classList.toggle('active');
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

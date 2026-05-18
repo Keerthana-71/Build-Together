@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AI Mock Interview | Build Together Institute</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="mock-interview.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ══ NAVBAR — same as all pages ══ -->
+<nav class="navbar" id="mainNavbar">
+    <div class="logo-text">Build<span class="logo-highlight">Together</span></div>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="internship.html">Internship</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="navbar-right">
+        <button class="dark-toggle" id="darkToggleBtn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        <div id="navAuthArea"></div>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     PANEL 1 — SETUP
+══════════════════════════════════════ -->
+<div id="setupPanel">
+
+    <!-- Hero -->
+    <div class="mi-hero">
+        <div class="mi-hero-inner">
+            <div class="mi-hero-badge"><i class="fas fa-robot"></i> AI-Powered Interview Platform</div>
+            <h1>Practice Like It's <span>Real</span></h1>
+            <p>Face an AI interviewer that asks smart follow-up questions, evaluates every answer in real-time, and generates a detailed performance report — camera + audio required, just like a real interview.</p>
+            <div class="mi-hero-stats">
+                <div class="mi-stat"><span class="mi-stat-num">10+</span><span class="mi-stat-lbl">Roles</span></div>
+                <div class="mi-stat"><span class="mi-stat-num">3</span><span class="mi-stat-lbl">Levels</span></div>
+                <div class="mi-stat"><span class="mi-stat-num">AI</span><span class="mi-stat-lbl">Evaluation</span></div>
+                <div class="mi-stat"><span class="mi-stat-num">PDF</span><span class="mi-stat-lbl">Report</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="mi-features">
+        <div class="mi-feat"><div class="mi-feat-icon"><i class="fas fa-brain"></i></div><span>Smart Follow-ups</span><small>Context-aware AI</small></div>
+        <div class="mi-feat"><div class="mi-feat-icon"><i class="fas fa-microphone"></i></div><span>Voice Input</span><small>Speak your answers</small></div>
+        <div class="mi-feat"><div class="mi-feat-icon"><i class="fas fa-video"></i></div><span>Live Camera</span><small>Real interview feel</small></div>
+        <div class="mi-feat"><div class="mi-feat-icon"><i class="fas fa-chart-bar"></i></div><span>Score Report</span><small>Detailed feedback</small></div>
+        <div class="mi-feat"><div class="mi-feat-icon"><i class="fas fa-file-pdf"></i></div><span>PDF Export</span><small>Download report</small></div>
+        <div class="mi-feat"><div class="mi-feat-icon"><i class="fas fa-history"></i></div><span>History</span><small>Track progress</small></div>
+    </div>
+
+    <!-- Setup Form -->
+    <div class="mi-setup-wrap">
+        <div class="mi-setup-card">
+            <div class="mi-setup-icon"><i class="fas fa-microphone-alt"></i></div>
+            <h2>Configure Your Interview</h2>
+            <p class="mi-setup-sub">Camera &amp; microphone will be enabled automatically — just like a real interview.</p>
+
+            <div class="mi-form">
+
+                <div class="mi-field">
+                    <label><i class="fas fa-briefcase"></i> Interview Role</label>
+                    <select id="roleSelect">
+                        <option value="">-- Select Role --</option>
+                        <optgroup label="Development">
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Backend Developer">Backend Developer</option>
+                            <option value="Full Stack Developer">Full Stack Developer</option>
+                            <option value="Java Developer">Java Developer</option>
+                            <option value="Python Developer">Python Developer</option>
+                            <option value="Mobile Developer">Mobile Developer</option>
+                        </optgroup>
+                        <optgroup label="Design & Data">
+                            <option value="UI/UX Designer">UI/UX Designer</option>
+                            <option value="Data Scientist">Data Scientist</option>
+                            <option value="Data Analyst">Data Analyst</option>
+                        </optgroup>
+                        <optgroup label="Infrastructure">
+                            <option value="DevOps Engineer">DevOps Engineer</option>
+                            <option value="Cloud Engineer">Cloud Engineer</option>
+                            <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                        </optgroup>
+                        <optgroup label="HR & Management">
+                            <option value="HR Round">HR Round (General)</option>
+                            <option value="Product Manager">Product Manager</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="mi-field">
+                    <label><i class="fas fa-layer-group"></i> Difficulty Level</label>
+                    <div class="mi-level-btns">
+                        <button class="mi-level-btn active" data-level="Beginner"><i class="fas fa-seedling"></i><span>Beginner</span><small>0–1 yr</small></button>
+                        <button class="mi-level-btn" data-level="Intermediate"><i class="fas fa-fire"></i><span>Intermediate</span><small>1–3 yr</small></button>
+                        <button class="mi-level-btn" data-level="Advanced"><i class="fas fa-rocket"></i><span>Advanced</span><small>3+ yr</small></button>
+                    </div>
+                </div>
+
+                <div class="mi-field">
+                    <label><i class="fas fa-list-ol"></i> Number of Questions</label>
+                    <div class="mi-count-btns">
+                        <button class="mi-count-btn active" data-count="5"><span>5</span><small>~10 min</small></button>
+                        <button class="mi-count-btn" data-count="8"><span>8</span><small>~16 min</small></button>
+                        <button class="mi-count-btn" data-count="10"><span>10</span><small>~20 min</small></button>
+                    </div>
+                </div>
+
+                <!-- Camera/Audio notice -->
+                <div class="mi-av-notice">
+                    <div class="mi-av-item"><i class="fas fa-video"></i><span>Camera — required, auto-enabled</span></div>
+                    <div class="mi-av-item"><i class="fas fa-microphone"></i><span>Microphone — required, auto-enabled</span></div>
+                </div>
+
+                <button class="mi-start-btn" id="startBtn">
+                    <i class="fas fa-play"></i> Start Interview
+                </button>
+            </div>
+        </div>
+
+        <!-- Past Interviews -->
+        <div class="mi-past" id="pastSection" style="display:none;">
+            <h3><i class="fas fa-history"></i> Your Past Interviews</h3>
+            <div id="pastList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANEL 2 — INTERVIEW (split screen)
+══════════════════════════════════════ -->
+<div id="interviewPanel" style="display:none;">
+
+    <!-- Top bar -->
+    <div class="iv-topbar">
+        <div class="iv-meta">
+            <span class="iv-role" id="ivRole"></span>
+            <span class="iv-level" id="ivLevel"></span>
+            <span class="iv-qpill" id="ivQPill">Q 0/0</span>
+        </div>
+        <div class="iv-center-status">
+            <div class="iv-rec-badge"><div class="iv-rec-dot"></div> LIVE INTERVIEW</div>
+        </div>
+        <div class="iv-controls">
+            <div class="iv-timer" id="ivTimerWrap">
+                <i class="fas fa-clock"></i>
+                <span id="ivTimer">02:00</span>
+            </div>
+            <button class="iv-end-btn" id="endBtn"><i class="fas fa-stop-circle"></i> End</button>
+        </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="iv-progress-bar">
+        <div class="iv-progress-fill" id="ivProgressFill"></div>
+    </div>
+    <div class="iv-progress-info">
+        <span id="ivProgressText">Question 0 of 0</span>
+        <span id="ivProgressPct">0%</span>
+    </div>
+
+    <!-- Split screen body -->
+    <div class="iv-body">
+
+        <!-- LEFT — Camera -->
+        <div class="iv-left">
+            <div class="iv-cam-wrap" id="ivCamWrap">
+                <video id="ivCamFeed" autoplay muted playsinline></video>
+                <div class="iv-cam-overlay">
+                    <div class="iv-cam-badge"><div class="iv-rec-dot"></div> YOU</div>
+                    <div class="iv-cam-name" id="ivCamName">Candidate</div>
+                </div>
+                <div class="iv-cam-denied" id="ivCamDenied" style="display:none;">
+                    <i class="fas fa-video-slash"></i>
+                    <span>Camera access denied</span>
+                    <small>Please allow camera in browser settings</small>
+                </div>
+            </div>
+
+            <!-- Mic status -->
+            <div class="iv-mic-status" id="ivMicStatus">
+                <div class="iv-mic-bars" id="ivMicBars">
+                    <div class="iv-mic-bar"></div><div class="iv-mic-bar"></div>
+                    <div class="iv-mic-bar"></div><div class="iv-mic-bar"></div>
+                    <div class="iv-mic-bar"></div>
+                </div>
+                <span id="ivMicLabel">Microphone active</span>
+            </div>
+
+            <!-- Answer word count -->
+            <div class="iv-wordcount" id="ivWordCount" style="display:none;">
+                <i class="fas fa-align-left"></i>
+                <div class="iv-wc-bars" id="ivWcBars">
+                    <div class="iv-wc-bar"></div><div class="iv-wc-bar"></div>
+                    <div class="iv-wc-bar"></div><div class="iv-wc-bar"></div>
+                    <div class="iv-wc-bar"></div>
+                </div>
+                <span id="ivWcLabel">0 words</span>
+            </div>
+        </div>
+
+        <!-- RIGHT — Chat + Answer -->
+        <div class="iv-right">
+            <!-- Chat messages -->
+            <div class="iv-chat" id="ivChat">
+                <div class="iv-chat-welcome">
+                    <div class="iv-ai-avatar"><i class="fas fa-robot"></i></div>
+                    <p>Connecting to your AI interviewer...</p>
+                </div>
+            </div>
+
+            <!-- Voice listening indicator -->
+            <div class="iv-listening" id="ivListening" style="display:none;">
+                <div class="iv-listen-dot"></div>
+                <span>Listening... speak your answer</span>
+                <button onclick="stopVoiceInput()" class="iv-stop-listen"><i class="fas fa-stop"></i> Stop</button>
+            </div>
+
+            <!-- Answer area -->
+            <div class="iv-answer-area" id="ivAnswerArea" style="display:none;">
+                <textarea id="ivAnswerInput" placeholder="Type your answer here... (Ctrl+Enter to submit)" rows="4"></textarea>
+                <div class="iv-answer-actions">
+                    <button class="iv-mic-btn" id="ivMicBtn" title="Speak your answer"><i class="fas fa-microphone"></i></button>
+                    <button class="iv-submit-btn" id="ivSubmitBtn"><i class="fas fa-paper-plane"></i> Submit Answer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANEL 3 — REPORT
+══════════════════════════════════════ -->
+<div id="reportPanel" style="display:none;" class="rp-wrap">
+    <div class="rp-inner">
+
+        <div class="rp-header">
+            <div class="rp-header-icon"><i class="fas fa-chart-bar"></i></div>
+            <h2>Interview Complete</h2>
+            <p id="rpSubtitle"></p>
+        </div>
+
+        <!-- Score ring -->
+        <div class="rp-score-section">
+            <div class="rp-ring-wrap">
+                <svg class="rp-ring-svg" viewBox="0 0 120 120">
+                    <circle class="rp-ring-bg" cx="60" cy="60" r="50"/>
+                    <circle class="rp-ring-fill" id="rpScoreRing" cx="60" cy="60" r="50"/>
+                </svg>
+                <div class="rp-ring-center">
+                    <span class="rp-score-num" id="rpFinalScore">0</span>
+                    <span class="rp-score-lbl">/ 10</span>
+                </div>
+            </div>
+            <div class="rp-breakdown">
+                <div class="rp-bd-item">
+                    <span class="rp-bd-label"><i class="fas fa-brain"></i> Technical</span>
+                    <div class="rp-bd-bar"><div class="rp-bd-fill" id="rpTechBar"></div></div>
+                    <span class="rp-bd-val" id="rpTechScore">0%</span>
+                </div>
+                <div class="rp-bd-item">
+                    <span class="rp-bd-label"><i class="fas fa-comments"></i> Communication</span>
+                    <div class="rp-bd-bar"><div class="rp-bd-fill" id="rpCommBar"></div></div>
+                    <span class="rp-bd-val" id="rpCommScore">0%</span>
+                </div>
+                <div class="rp-bd-item">
+                    <span class="rp-bd-label"><i class="fas fa-bolt"></i> Confidence</span>
+                    <div class="rp-bd-bar"><div class="rp-bd-fill" id="rpConfBar"></div></div>
+                    <span class="rp-bd-val" id="rpConfScore">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strengths & Weaknesses -->
+        <div class="rp-sw-grid">
+            <div class="rp-sw-card rp-strengths">
+                <h4><i class="fas fa-thumbs-up"></i> Strengths</h4>
+                <ul id="rpStrengths"></ul>
+            </div>
+            <div class="rp-sw-card rp-weaknesses">
+                <h4><i class="fas fa-exclamation-triangle"></i> Areas to Improve</h4>
+                <ul id="rpWeaknesses"></ul>
+            </div>
+        </div>
+
+        <!-- Suggestions -->
+        <div class="rp-suggestions">
+            <h4><i class="fas fa-lightbulb"></i> Improvement Suggestions</h4>
+            <ul id="rpSuggestions"></ul>
+        </div>
+
+        <!-- Q&A Review -->
+        <div class="rp-qa">
+            <h4><i class="fas fa-list-alt"></i> Question-by-Question Review</h4>
+            <div id="rpQAList"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="rp-actions">
+            <button class="rp-btn rp-retry" id="rpRetryBtn"><i class="fas fa-redo"></i> Retry Interview</button>
+            <button class="rp-btn rp-new" id="rpNewBtn"><i class="fas fa-plus"></i> New Interview</button>
+            <button class="rp-btn rp-pdf" id="rpPdfBtn"><i class="fas fa-file-pdf"></i> Download PDF</button>
+            <a href="dashboard.html" class="rp-btn rp-dash"><i class="fas fa-th-large"></i> Back to Dashboard</a>
+        </div>
+
+    </div>
+</div>
+
+<script src="darkmode.js"></script>
+<script src="navbar-auth.js"></script>
+<script src="mock-interview.js"></script>
+</body>
+</html>

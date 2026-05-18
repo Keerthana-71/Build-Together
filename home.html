@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Build Together Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ui-enhancements.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-text">BUILD</span> <span class="logo-highlight">TOGETHER</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.html" class="active">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="internship.html">Internship</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="apply.html" class="apply-nav">Get Started</a></li>
+        </ul>
+        <div class="navbar-right">
+            <button class="dark-toggle" id="darkToggleBtn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+            <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="hero-content" data-reveal>
+            <p class="welcome-tag"><i class="fas fa-graduation-cap"></i> &nbsp; Shaping Future Leaders</p>
+            <h1>Transform Your Career with <br><span class="gradient-text">Build Together Institute</span></h1>
+            <p>Industry-standard training, real-time projects, and expert mentorship designed to take your skills to the next level.</p>
+            <div class="hero-btns">
+                <button class="primary-btn" onclick="location.href='courses.html'">
+                    <i class="fas fa-book-open"></i> View Our Courses
+                </button>
+                <button class="secondary-btn" onclick="location.href='about.html'">
+                    Learn More &nbsp;<i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item"><h3>500+</h3><p>Students Trained</p></div>
+                <div class="stat-item"><h3>20+</h3><p>Expert Mentors</p></div>
+                <div class="stat-item"><h3>95%</h3><p>Placement Rate</p></div>
+                <div class="stat-item"><h3>15+</h3><p>Courses Offered</p></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Why Choose Us -->
+    <section class="intro-section" data-reveal>
+        <div class="container">
+            <div class="intro-grid">
+                <div class="intro-text" data-animate="fade-left">
+                    <h2>Why Choose Build Together Institute?</h2>
+                    <p>We provide a unique learning environment where theory meets practice. Our curriculum is updated constantly to match industry demands.</p>
+                    <p>From beginners to professionals, we craft personalized learning paths that accelerate your growth.</p>
+                    <ul class="intro-highlights">
+                        <li><i class="fas fa-check-circle"></i> Industry-aligned curriculum updated every quarter</li>
+                        <li><i class="fas fa-check-circle"></i> Hands-on projects with real client requirements</li>
+                        <li><i class="fas fa-check-circle"></i> 1-on-1 mentorship from working professionals</li>
+                        <li><i class="fas fa-check-circle"></i> Dedicated placement assistance & career support</li>
+                    </ul>
+                </div>
+                <div class="intro-img-container" data-animate="fade-right">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80"
+                         alt="Students learning at Build Together Institute"
+                         class="professional-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" data-reveal>
+        <div class="container">
+            <h2 class="section-title" data-animate>What We Offer</h2>
+            <div class="features-grid">
+                <div class="feature-box" data-animate data-delay="100">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3>Industry Experts</h3>
+                    <p>Learn from professionals with real-world experience in top companies.</p>
+                </div>
+                <div class="feature-box" data-animate data-delay="200">
+                    <div class="feature-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Real-Time Projects</h3>
+                    <p>Work on live projects to gain practical exposure and confidence.</p>
+                </div>
+                <div class="feature-box" data-animate data-delay="300">
+                    <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+                    <h3>Placement Support</h3>
+                    <p>We guide you with resume building, mock interviews, and job referrals.</p>
+                </div>
+                <div class="feature-box" data-animate data-delay="400">
+                    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                    <h3>Flexible Learning</h3>
+                    <p>Online & offline classes with flexible schedules for working students.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Courses -->
+    <section class="courses-preview" data-reveal>
+        <div class="container">
+            <h2 class="section-title" data-animate>Popular Courses</h2>
+            <div class="course-cards">
+                <div class="course-card" data-animate data-delay="100">
+                    <span class="course-tag">Most Popular</span>
+                    <h3>Full Stack Development</h3>
+                    <p>HTML, CSS, JavaScript, React, Node.js & more. Build complete web applications from scratch.</p>
+                </div>
+                <div class="course-card" data-animate data-delay="200">
+                    <span class="course-tag">Trending</span>
+                    <h3>Python Programming</h3>
+                    <p>From basics to advanced with real-time projects in data science and automation.</p>
+                </div>
+                <div class="course-card" data-animate data-delay="300">
+                    <span class="course-tag">New Batch</span>
+                    <h3>UI/UX Design</h3>
+                    <p>Design modern, user-friendly interfaces using Figma and industry-standard tools.</p>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:40px;">
+                <button onclick="location.href='courses.html'" class="primary-btn">
+                    View All Courses &nbsp;<i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 data-animate>Start Your Career Journey Today</h2>
+            <p data-animate data-delay="100">Join Build Together Institute and unlock your future with the right skills and the right mentors.</p>
+            <button onclick="location.href='internship-application.html'" class="primary-btn" data-animate data-delay="200">
+                Apply Now &nbsp;<i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonial-section" data-reveal>
+        <div class="container">
+            <h2 class="section-title" data-animate>Student Success Stories</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-box" data-animate data-delay="100">
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>"This institute helped me land my first job as a Full Stack Developer within 3 months of completing the course. The real-time projects made all the difference!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info"><h4>Arun Kumar</h4><span>Full Stack Developer, Chennai</span></div>
+                    </div>
+                </div>
+                <div class="testimonial-box" data-animate data-delay="200">
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>"The real-time projects and mock interviews gave me the confidence to crack my dream company. The mentors are incredibly supportive and knowledgeable."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">P</div>
+                        <div class="author-info"><h4>Priya Sharma</h4><span>UI/UX Designer, Bangalore</span></div>
+                    </div>
+                </div>
+                <div class="testimonial-box" data-animate data-delay="300">
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    <p>"Best decision I made for my career. The Python course was well-structured and the placement support team helped me get placed in a top MNC."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">R</div>
+                        <div class="author-info"><h4>Rahul Menon</h4><span>Python Developer, Hyderabad</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-simple">
+        <div class="container">
+            <div class="footer-newsletter">
+                <div>
+                    <h4>&#128140; Stay Updated</h4>
+                    <p>Get the latest courses, internship openings &amp; career tips.</p>
+                </div>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email">
+                    <button type="submit"><i class="fas fa-paper-plane"></i> Subscribe</button>
+                </form>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+                    <p>Empowering students with industry-ready skills and real-world experience since 2020.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/blessy_2604" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="home.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="internship.html">Internship</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Our Courses</h4>
+                    <ul>
+                        <li><a href="courses.html#fullstack">Full Stack Dev</a></li>
+                        <li><a href="courses.html#datascience">Data Science & AI</a></li>
+                        <li><a href="courses.html#uiux">UI/UX Design</a></li>
+                        <li><a href="courses.html#cloud">Cloud Computing</a></li>
+                        <li><a href="courses.html#cyber">Cyber Security</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Us</h4>
+                    <div class="footer-contact-list">
+                        <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>123 Tech Park, OMR Road,<br>Chennai - 600096</span></div>
+                        <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>info@buildtogether.in</span></div>
+                        <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+91 98765 43210</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Build Together Institute. All Rights Reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="navbar-auth.js"></script>
+    <script src="darkmode.js"></script>
+    <script src="ui-enhancements.js"></script>
+    <script>
+        document.getElementById('hamburger').addEventListener('click', function () {
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); observer.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+    </script>
+
+<!-- CHATBOT STYLES -->
+<style>
+#chatBtn {
+    position:fixed;bottom:30px;right:30px;z-index:9999;
+    width:60px;height:60px;border-radius:50%;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    border:none;cursor:pointer;box-shadow:0 6px 24px rgba(102,126,234,0.5);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.5rem;color:white;transition:transform 0.3s;
+}
+#chatBtn:hover{transform:scale(1.1);}
+.chat-ping{
+    position:absolute;top:-4px;right:-4px;
+    width:16px;height:16px;background:#10b981;
+    border-radius:50%;border:2px solid white;
+    animation:ping 1.5s infinite;
+}
+@keyframes ping{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:0.6;}}
+#chatBox{
+    position:fixed;bottom:100px;right:30px;z-index:9998;
+    width:360px;background:white;border-radius:20px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.18);
+    display:none;flex-direction:column;overflow:hidden;
+    animation:slideUp 0.3s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+#chatBox.open{display:flex;}
+.chat-header{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    padding:16px 20px;display:flex;align-items:center;gap:12px;
+}
+.chat-avatar{
+    width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,0.2);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.2rem;flex-shrink:0;
+}
+.chat-header-info h4{color:white;font-size:0.95rem;margin:0;}
+.chat-header-info span{color:rgba(255,255,255,0.75);font-size:0.75rem;}
+.chat-close-btn{
+    margin-left:auto;background:rgba(255,255,255,0.2);
+    border:none;color:white;width:30px;height:30px;
+    border-radius:50%;cursor:pointer;font-size:1rem;
+    display:flex;align-items:center;justify-content:center;
+}
+#chatMessages{
+    flex:1;overflow-y:auto;padding:16px;
+    display:flex;flex-direction:column;gap:10px;
+    max-height:320px;
+}
+.msg{display:flex;gap:8px;align-items:flex-end;}
+.msg.bot{justify-content:flex-start;}
+.msg.user{justify-content:flex-end;}
+.msg-bubble{
+    max-width:78%;padding:10px 14px;
+    border-radius:16px;font-size:0.83rem;line-height:1.5;
+}
+.msg.bot .msg-bubble{background:#f1f5f9;color:#1e293b;border-bottom-left-radius:4px;}
+.msg.user .msg-bubble{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border-bottom-right-radius:4px;}
+.msg-bot-icon{
+    width:28px;height:28px;border-radius:50%;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.75rem;color:white;flex-shrink:0;
+}
+.chat-suggestions{padding:8px 16px;display:flex;flex-wrap:wrap;gap:6px;}
+.suggestion-chip{
+    padding:5px 12px;background:#ede9fe;color:#667eea;
+    border:none;border-radius:20px;font-size:0.75rem;
+    font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.2s;
+}
+.suggestion-chip:hover{background:#667eea;color:white;}
+.chat-input-row{
+    padding:12px 16px;border-top:1px solid #f1f5f9;
+    display:flex;gap:8px;
+}
+#chatInput{
+    flex:1;padding:10px 14px;border:2px solid #e2e8f0;
+    border-radius:12px;font-size:0.83rem;font-family:inherit;
+    outline:none;transition:border 0.2s;
+}
+#chatInput:focus{border-color:#667eea;}
+#chatSendBtn{
+    width:40px;height:40px;border-radius:12px;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    border:none;color:white;cursor:pointer;font-size:0.9rem;
+    display:flex;align-items:center;justify-content:center;
+}
+.typing-dot{display:flex;gap:4px;padding:4px 0;}
+.typing-dot span{
+    width:7px;height:7px;background:#94a3b8;
+    border-radius:50%;animation:bounce 1s infinite;
+}
+.typing-dot span:nth-child(2){animation-delay:0.15s;}
+.typing-dot span:nth-child(3){animation-delay:0.3s;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+@media(max-width:480px){
+    #chatBox{width:calc(100vw - 20px);right:10px;bottom:90px;}
+    #chatBtn{bottom:20px;right:20px;}
+}
+</style>
+
+<!-- Chat Toggle Button -->
+<button id="chatBtn" onclick="toggleChat()" aria-label="Open chatbot">
+    <i class="fas fa-robot"></i>
+    <span class="chat-ping"></span>
+</button>
+
+<!-- Chat Box -->
+<div id="chatBox">
+    <div class="chat-header">
+        <div class="chat-avatar"><i class="fas fa-robot"></i></div>
+        <div class="chat-header-info">
+            <h4>BTI Assistant</h4>
+            <span>&#x1F7E2; Online &mdash; Ask me anything!</span>
+        </div>
+        <button class="chat-close-btn" onclick="toggleChat()">&times;</button>
+    </div>
+    <div id="chatMessages"></div>
+    <div class="chat-suggestions">
+        <button class="suggestion-chip" onclick="sendSuggestion('What courses do you offer?')">Courses</button>
+        <button class="suggestion-chip" onclick="sendSuggestion('How to enroll?')">Enroll</button>
+        <button class="suggestion-chip" onclick="sendSuggestion('Tell me about internships')">Internship</button>
+        <button class="suggestion-chip" onclick="sendSuggestion('Placement support')">Placement</button>
+        <button class="suggestion-chip" onclick="sendSuggestion('Contact details')">Contact</button>
+        <button class="suggestion-chip" onclick="sendSuggestion('Course fees')">Fees</button>
+    </div>
+    <div class="chat-input-row">
+        <input id="chatInput" type="text" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendMessage()">
+        <button id="chatSendBtn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+// ── BTI Chatbot ──
+// -- BTI Chatbot --
+const botKB = [
+
+    // Greetings
+    { p:['hi','hello','hey','hii','hai','vanakkam','helo','good morning','good afternoon','good evening'],
+      r:'Hi there! Welcome to Build Together Institute!\n\nI am BTI Assistant. Ask me about our courses, internships, fees, placement, or anything about BTI!' },
+
+    // Course + Fee (specific first)
+    { p:['full stack fee','fee for full stack','full stack cost','full stack price'],
+      r:'Full Stack Web Development Fee\n\nFee: Rs.18,000 (one-time)\nEMI: Rs.3,000/month\nDuration: 6 months\n\nIncludes projects, certificate and placement support!' },
+    { p:['data science fee','fee for data science','ai course fee','data science cost'],
+      r:'Data Science and AI Fee\n\nFee: Rs.22,000 (one-time)\nEMI: Rs.2,800/month\nDuration: 8 months\n\nIncludes projects, certificate and placement support!' },
+    { p:['ui ux fee','design course fee','fee for ui ux','ui ux cost'],
+      r:'Advanced UI/UX Design Fee\n\nFee: Rs.14,000 (one-time)\nEMI: Rs.3,600/month\nDuration: 4 months\n\nIncludes Figma projects, certificate and portfolio building!' },
+    { p:['digital marketing fee','marketing course fee','fee for digital marketing','digital marketing cost'],
+      r:'Digital Marketing Fee\n\nFee: Rs.10,000 (one-time)\nEMI: Rs.3,400/month\nDuration: 3 months\n\nIncludes live campaigns, certificate and placement support!' },
+    { p:['cloud computing fee','aws course fee','fee for cloud','cloud cost'],
+      r:'Cloud Computing Fee\n\nFee: Rs.20,000 (one-time)\nEMI: Rs.4,100/month\nDuration: 5 months\n\nIncludes AWS labs, certificate and placement support!' },
+    { p:['cyber security fee','cybersecurity fee','fee for cyber','hacking course fee'],
+      r:'Cyber Security Fee\n\nFee: Rs.19,000 (one-time)\nEMI: Rs.3,200/month\nDuration: 6 months\n\nIncludes lab access, certificate and placement support!' },
+
+    // Course + Duration (specific first)
+    { p:['full stack duration','how long full stack','full stack months'],
+      r:'Full Stack Web Development is a 6-month course.\n\nWeekly classes with hands-on projects every week!' },
+    { p:['data science duration','how long data science','data science months'],
+      r:'Data Science and AI is an 8-month course.\n\nCovers Python, ML, Deep Learning and a capstone project!' },
+    { p:['ui ux duration','design course duration','how long ui ux'],
+      r:'Advanced UI/UX Design is a 4-month course.\n\nFast-track with Figma, UX research and portfolio project!' },
+    { p:['digital marketing duration','how long digital marketing','marketing course months'],
+      r:'Digital Marketing is a 3-month course.\n\nGet job-ready in just 3 months!' },
+    { p:['cloud computing duration','how long cloud','cloud computing months'],
+      r:'Cloud Computing is a 5-month course.\n\nCovers AWS, Docker, Kubernetes and a cloud deployment project!' },
+    { p:['cyber security duration','how long cyber security','cybersecurity months'],
+      r:'Cyber Security is a 6-month course.\n\nCovers ethical hacking, OWASP, penetration testing and security audit!' },
+
+    // Course details
+    { p:['full stack','web development','fullstack'],
+      r:'Full Stack Web Development - 6 Months\n\nCovers: HTML, CSS, JavaScript, React.js, Node.js, Express, MySQL and deployment.\n\nFee: Rs.18,000 | EMI: Rs.3,000/mo\n\nBuild real-world projects and get placement support!' },
+    { p:['data science','machine learning','deep learning'],
+      r:'Data Science and AI - 8 Months\n\nCovers: Python, NumPy, Pandas, Matplotlib, Scikit-learn, TensorFlow, NLP and Computer Vision.\n\nFee: Rs.22,000 | EMI: Rs.2,800/mo' },
+    { p:['ui ux','uiux','figma'],
+      r:'Advanced UI/UX Design - 4 Months\n\nCovers: Design systems, Figma prototyping, UX research, accessibility and portfolio building.\n\nFee: Rs.14,000 | EMI: Rs.3,600/mo' },
+    { p:['digital marketing','google ads','meta ads'],
+      r:'Digital Marketing Specialist - 3 Months\n\nCovers: SEO, content marketing, social media strategy, Google Ads, Meta Ads and analytics.\n\nFee: Rs.10,000 | EMI: Rs.3,400/mo' },
+    { p:['cloud computing','devops','docker','kubernetes'],
+      r:'Cloud Computing AWS/GCP - 5 Months\n\nCovers: AWS core services, EC2, S3, Lambda, Docker, Kubernetes, CI/CD pipelines and cloud security.\n\nFee: Rs.20,000 | EMI: Rs.4,100/mo' },
+    { p:['cyber security','ethical hacking','penetration testing','cybersecurity'],
+      r:'Cyber Security and Ethical Hacking - 6 Months\n\nCovers: Network security, Kali Linux, penetration testing, OWASP Top 10, incident response and security audits.\n\nFee: Rs.19,000 | EMI: Rs.3,200/mo' },
+
+    // Enrollment
+    { p:['how to enroll','how to apply','how to join','how to register','steps to enroll','enrollment process','admission process'],
+      r:'Enrolling is easy!\n\n1. Click Apply Now in the top navigation\n2. Create your account or log in\n3. Go to Courses page\n4. Click Enroll Now on your preferred course\n5. Fill the application form\n\nOur team contacts you within 24 hours!' },
+    { p:['enroll now','apply now','want to join','want to enroll','want to apply'],
+      r:'To enroll, click Apply Now in the navigation bar!\n\nOr visit our Courses page and click Enroll Now on any course.\n\nOur team will contact you within 24 hours!' },
+
+    // Internship
+    { p:['internship stipend','paid internship','internship salary'],
+      r:'Yes! Our internships are paid!\n\nMonthly stipend is provided based on your role and performance.\n\nContact us: +91 98765 43210' },
+    { p:['internship duration','how long internship','internship months'],
+      r:'Internship duration is typically 2 to 6 months.\n\nContact us for current openings:\nPhone: +91 98765 43210\nEmail: info@buildtogether.in' },
+    { p:['internship','intern'],
+      r:'We offer 3 paid internship roles:\n\n1. Frontend Developer Intern\n2. Python and Data Science Intern\n3. Digital Marketing Intern\n\nBenefits: Monthly stipend, certificate, 1-on-1 mentorship, PPO opportunity\n\nVisit our Internship page to apply!' },
+
+    // Placement
+    { p:['placement rate','how many placed','placement percentage','job guarantee'],
+      r:'Our placement rate is 95%!\n\nWe have placed 500+ students in top MNCs across India.' },
+    { p:['placement','job support','career support','job assistance'],
+      r:'Our Placement Support includes:\n\n- Resume building and review\n- Mock interviews with industry experts\n- LinkedIn profile optimization\n- Job referrals to partner companies\n- 95% placement rate\n\nWe have placed students in top MNCs across India!' },
+
+    // EMI / Scholarship
+    { p:['emi','installment','monthly payment','pay monthly'],
+      r:'EMI Options Available!\n\n- Full Stack: Rs.3,000/mo\n- Data Science and AI: Rs.2,800/mo\n- UI/UX Design: Rs.3,600/mo\n- Digital Marketing: Rs.3,400/mo\n- Cloud Computing: Rs.4,100/mo\n- Cyber Security: Rs.3,200/mo\n\nContact us: +91 98765 43210' },
+    { p:['scholarship','merit scholarship','group discount','early bird'],
+      r:'Scholarships and Discounts Available!\n\n- Merit-based scholarships\n- Group discounts\n- Early bird offers\n\nContact us: +91 98765 43210\nEmail: info@buildtogether.in' },
+
+    // Generic fee
+    { p:['course fee','fees','course cost','course price','how much','all fees'],
+      r:'Course Fee Structure:\n\n1. Full Stack Web Dev - Rs.18,000\n2. Data Science and AI - Rs.22,000\n3. UI/UX Design - Rs.14,000\n4. Digital Marketing - Rs.10,000\n5. Cloud Computing - Rs.20,000\n6. Cyber Security - Rs.19,000\n\nEMI available | Scholarships for deserving students\nCall +91 98765 43210 for details!' },
+
+    // Generic duration
+    { p:['course duration','all durations','how many months','course length'],
+      r:'Course Durations:\n\n- Full Stack Web Dev - 6 months\n- Data Science and AI - 8 months\n- UI/UX Design - 4 months\n- Digital Marketing - 3 months\n- Cloud Computing - 5 months\n- Cyber Security - 6 months' },
+
+    // Course list
+    { p:['what courses','which courses','list of courses','courses available','all courses','course list','what do you offer'],
+      r:'We offer 6 professional courses:\n\n1. Full Stack Web Development - 6 months\n2. Data Science and AI - 8 months\n3. Advanced UI/UX Design - 4 months\n4. Digital Marketing Specialist - 3 months\n5. Cloud Computing AWS/GCP - 5 months\n6. Cyber Security and Ethical Hacking - 6 months\n\nAsk me about any specific course for details!' },
+
+    // Certificate
+    { p:['certificate','certification','certified'],
+      r:'Yes! You receive a globally recognized certificate on completing each course.\n\nOur certificates are valued by top companies and can be added to your LinkedIn profile!' },
+
+    // Mentors
+    { p:['mentor','mentorship','trainer','faculty','teacher','instructor'],
+      r:'Our mentors are working professionals with 5+ years of industry experience.\n\nYou get 1-on-1 sessions, doubt clearing, code reviews and career guidance!' },
+
+    // Class mode
+    { p:['online class','offline class','live class','class mode','learning mode','mode of class'],
+      r:'We offer both Online and Offline classes!\n\n- Online: Live sessions via Zoom/Meet\n- Offline: At our Chennai campus\n- Flexible schedules for working professionals\n- Recorded sessions for revision' },
+
+    // Contact
+    { p:['contact us','phone number','email address','our address','office location','where is bti','reach bti'],
+      r:'Build Together Institute\n\nAddress: 123 Tech Park, OMR Road, Chennai - 600096\nEmail: info@buildtogether.in\nPhone: +91 98765 43210\n\nMon-Sat: 9 AM - 7 PM' },
+
+    // Projects
+    { p:['hands on project','real world project','live project','capstone project','practical project'],
+      r:'All courses include hands-on projects!\n\n- Real-world client-style projects\n- Weekly tasks and assessments\n- Final capstone project\n- GitHub portfolio building\n\nYou graduate with a strong project portfolio!' },
+
+    // Batch
+    { p:['next batch','batch start','upcoming batch','new batch','batch date'],
+      r:'New batches start every month!\n\nContact us for exact upcoming batch dates:\nPhone: +91 98765 43210\nEmail: info@buildtogether.in\n\nApply early to reserve your seat!' },
+
+    // About
+    { p:['about bti','about build together','who are you','what is bti','about institute'],
+      r:'Build Together Institute is a leading tech training institute in Chennai.\n\n- 500+ students trained\n- 20+ expert mentors\n- 95% placement rate\n- 15+ courses offered\n\nEmpowering students with industry-ready skills since 2020!' },
+
+    // Refund â€” goes to admin
+    { p:['refund','money back','withdrawal'],
+      r:'For refund queries, please contact our support team directly:\n\nEmail: info@buildtogether.in\nPhone: +91 98765 43210\n\nOur team will assist you within 24 hours.' },
+
+    // Closing
+    { p:['thank you','thanks','thank u','thx'],
+      r:'You are welcome! Feel free to ask anything else. We are here to help you build your career!' },
+    { p:['bye','goodbye','see you','ok bye'],
+      r:'Goodbye! Have a great day!\n\nDon\'t forget to explore our courses and take the first step towards your dream career!' }
+];
+
+// Match: longer phrases first to avoid false positives
+function getBotReply(input) {
+    const lower = input.toLowerCase().trim();
+    const sorted = [...botKB].sort((a, b) =>
+        Math.max(...b.p.map(x => x.length)) - Math.max(...a.p.map(x => x.length))
+    );
+    for (const item of sorted) {
+        if (item.p.some(p => lower.includes(p.toLowerCase()))) return item.r;
+    }
+    return null;
+}
+
+
+
+// ── Socket.io setup ──
+const socket = io('http://localhost:5000');
+
+// Generate or reuse session id
+let sessionId = sessionStorage.getItem('chatSessionId');
+if (!sessionId) {
+    sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+    sessionStorage.setItem('chatSessionId', sessionId);
+}
+
+const userName  = sessionStorage.getItem('userName')  || 'Guest';
+const userEmail = sessionStorage.getItem('userEmail') || null;
+
+socket.emit('user_join', { session_id: sessionId });
+
+// Track if admin has taken over
+let adminReplied = false;
+// Track if waiting for yes/no
+let waitingForContact = false;
+
+// Dedicated event for admin reply — no page refresh, no AI reply after this
+socket.on('admin_reply', (data) => {
+    adminReplied = true;
+    appendAdminBubble(data.message);
+});
+
+let chatOpen = false, greeted = false;
+
+function toggleChat() {
+    chatOpen = !chatOpen;
+    document.getElementById('chatBox').classList.toggle('open', chatOpen);
+    if (chatOpen && !greeted) {
+        greeted = true;
+        setTimeout(() => addBotMsg('👋 Hi! I am BTI Assistant.\n\nHow can I help you today? Ask me about our courses, internships, fees, placement, or anything about Build Together Institute! 😊'), 400);
+    }
+    if (chatOpen) document.getElementById('chatInput').focus();
+}
+
+function addBotMsg(text, typing = true) {
+    const msgs = document.getElementById('chatMessages');
+    if (typing) {
+        const t = document.createElement('div');
+        t.className = 'msg bot';
+        t.innerHTML = '<div class="msg-bot-icon"><i class="fas fa-robot"></i></div><div class="msg-bubble"><div class="typing-dot"><span></span><span></span><span></span></div></div>';
+        msgs.appendChild(t);
+        msgs.scrollTop = msgs.scrollHeight;
+        setTimeout(() => {
+            t.remove();
+            appendBotBubble(msgs, text);
+        }, 800);
+    } else {
+        appendBotBubble(msgs, text);
+    }
+}
+
+function appendBotBubble(msgs, text) {
+    const div = document.createElement('div');
+    div.className = 'msg bot';
+    div.innerHTML = '<div class="msg-bot-icon"><i class="fas fa-robot"></i></div><div class="msg-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function appendAdminBubble(text) {
+    const msgs = document.getElementById('chatMessages');
+    const div  = document.createElement('div');
+    div.className = 'msg bot';
+    div.innerHTML = '<div class="msg-bot-icon" style="background:linear-gradient(135deg,#10b981,#059669);"><i class="fas fa-user-shield"></i></div><div class="msg-bubble" style="background:#d1fae5;color:#065f46;">👨‍💼 <strong>Support:</strong> ' + text + '</div>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addUserMsg(text) {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg user';
+    div.innerHTML = '<div class="msg-bubble">' + text + '</div>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function handleBotReply(text) {
+    if (adminReplied) return;
+
+    // If waiting for yes/no response
+    if (waitingForContact) {
+        waitingForContact = false;
+        const lower = text.toLowerCase().trim();
+        if (lower === 'yes' || lower === 'y' || lower.includes('yes')) {
+            socket.emit('user_message', { session_id: sessionId, message: '[User requested admin contact]', user_name: userName, user_email: userEmail });
+            addBotMsg('✅ Got it! An admin will contact you shortly in this chat.\n\nPlease keep this chat open. 🙏');
+        } else {
+            addBotMsg('No problem! Feel free to ask anything else or contact us directly:\n\n📧 info@buildtogether.in\n📞 +91 98765 43210');
+        }
+        return;
+    }
+
+    const reply = getBotReply(text);
+    if (reply) {
+        setTimeout(() => addBotMsg(reply), 300);
+    } else {
+        // AI doesn't know — ask if user wants admin
+        setTimeout(() => {
+            waitingForContact = true;
+            const msgs = document.getElementById('chatMessages');
+            const div  = document.createElement('div');
+            div.className = 'msg bot';
+            div.innerHTML =
+                '<div class="msg-bot-icon"><i class="fas fa-robot"></i></div>' +
+                '<div>' +
+                  '<div class="msg-bubble">🤔 I don\'t have information on that yet.<br><br>Would you like an <strong>admin to contact you</strong> shortly in this chat?</div>' +
+                  '<div style="display:flex;gap:8px;margin-top:8px;">' +
+                    '<button onclick="replyContact(\'yes\')" style="padding:7px 18px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;">✅ Yes</button>' +
+                    '<button onclick="replyContact(\'no\')"  style="padding:7px 18px;background:#f1f5f9;color:#64748b;border:none;border-radius:20px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;">❌ No</button>' +
+                  '</div>' +
+                '</div>';
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+        }, 300);
+    }
+}
+
+function replyContact(choice) {
+    waitingForContact = false;
+    addUserMsg(choice === 'yes' ? 'Yes' : 'No');
+    if (choice === 'yes') {
+        socket.emit('user_message', { session_id: sessionId, message: '[User requested admin contact]', user_name: userName, user_email: userEmail });
+        addBotMsg('✅ Got it! An admin will contact you shortly in this chat.\n\nPlease keep this chat open. 🙏');
+    } else {
+        addBotMsg('No problem! Feel free to ask anything else or contact us directly:\n\n📧 info@buildtogether.in\n📞 +91 98765 43210');
+    }
+}
+window.replyContact = replyContact;
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text  = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addUserMsg(text);
+    socket.emit('user_message', { session_id: sessionId, message: text, user_name: userName, user_email: userEmail });
+    handleBotReply(text);
+}
+
+function sendSuggestion(text) {
+    addUserMsg(text);
+    socket.emit('user_message', { session_id: sessionId, message: text, user_name: userName, user_email: userEmail });
+    handleBotReply(text);
+}
+</script>
+</body>
+</html>

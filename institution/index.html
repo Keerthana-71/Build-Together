@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BUILD UR FUTURE INSTITUTE</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+:root {
+    --primary: #0A1F44;
+    --accent: #FF6B2B;
+    --light: #f4f7fb;
+}
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family:'DM Sans', sans-serif;
+}
+
+h1,h2,h3 {
+    font-family:'Syne', sans-serif;
+}
+
+body {
+    background:white;
+}
+
+/* NAVBAR */
+nav {
+    position:fixed;
+    width:100%;
+    top:0;
+    left:0;
+    background:white;
+    padding:15px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+    z-index:1000;
+}
+
+.logo {
+    font-weight:700;
+    color:var(--primary);
+}
+
+.nav-links {
+    display:flex;
+    gap:25px;
+}
+
+.nav-links a {
+    text-decoration:none;
+    color:#333;
+}
+
+.apply-btn {
+    background:var(--accent);
+    color:white;
+    padding:10px 18px;
+    border-radius:30px;
+    box-shadow:0 0 10px rgba(255,107,43,0.6);
+}
+
+/* HERO */
+.hero {
+    height:100vh;
+    background:linear-gradient(135deg,#0A1F44,#122f66);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    flex-direction:column;
+    padding:20px;
+}
+
+.hero h1 {
+    font-size:3rem;
+}
+
+.hero p {
+    margin:15px 0;
+    max-width:600px;
+}
+
+.hero .btns {
+    display:flex;
+    gap:15px;
+}
+
+.btn {
+    padding:12px 22px;
+    border-radius:30px;
+    border:none;
+    cursor:pointer;
+}
+
+.btn-outline {
+    border:2px solid white;
+    background:transparent;
+    color:white;
+}
+
+.btn-solid {
+    background:var(--accent);
+    color:white;
+}
+
+/* SECTION */
+section {
+    padding:80px 40px;
+}
+
+/* ABOUT */
+.about {
+    display:flex;
+    gap:40px;
+    flex-wrap:wrap;
+}
+
+.stats {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.stat {
+    background:var(--light);
+    padding:20px;
+    border-radius:10px;
+}
+
+/* COURSES */
+.courses {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card {
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    transition:0.3s;
+    border:1px solid #eee;
+}
+
+.card:hover {
+    transform:translateY(-8px);
+    border-color:var(--accent);
+}
+
+/* PLACEMENT */
+.placement {
+    display:flex;
+    flex-wrap:wrap;
+    gap:30px;
+}
+
+.timeline {
+    display:flex;
+    justify-content:space-between;
+    margin-top:30px;
+}
+
+.step {
+    text-align:center;
+}
+
+/* LOGO SCROLL */
+.logos {
+    display:flex;
+    gap:50px;
+    animation:scroll 15s linear infinite;
+}
+
+@keyframes scroll {
+    from {transform:translateX(0);}
+    to {transform:translateX(-50%);}
+}
+
+/* TESTIMONIAL */
+.testimonial {
+    text-align:center;
+}
+
+.testimonial-card {
+    max-width:500px;
+    margin:auto;
+}
+
+/* FORM */
+.form-step {
+    display:none;
+}
+
+.form-step.active {
+    display:block;
+}
+
+.progress {
+    height:8px;
+    background:#ddd;
+    margin-bottom:20px;
+}
+
+.progress-bar {
+    height:100%;
+    width:0%;
+    background:var(--accent);
+}
+
+/* FAQ */
+.faq-item {
+    border-bottom:1px solid #ddd;
+    padding:10px 0;
+}
+
+.faq-answer {
+    display:none;
+}
+
+/* FOOTER */
+footer {
+    background:var(--primary);
+    color:white;
+    padding:40px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .nav-links {
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+<div class="logo">BUILD UR FUTURE</div>
+<div class="nav-links">
+<a href="#home">Home</a>
+<a href="#courses">Courses</a>
+<a href="#placements">Placements</a>
+<a href="#about">About</a>
+<a href="#apply" class="apply-btn">Apply Now</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+<h1>Launch Your Career with Industry-Ready Training</h1>
+<p>Train Today. Place Tomorrow. Get job-ready with expert-led programs.</p>
+
+<div class="btns">
+<button class="btn btn-outline">Explore Courses</button>
+<button class="btn btn-solid">Apply Now</button>
+</div>
+
+<p style="margin-top:20px;">500+ Placements | 20+ Courses | 95% Success Rate</p>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+<div class="about">
+<div class="stats">
+<div class="stat"><h2 class="counter" data-target="500">0</h2><p>Students</p></div>
+<div class="stat"><h2 class="counter" data-target="50">0</h2><p>Companies</p></div>
+<div class="stat"><h2 class="counter" data-target="10">0</h2><p>Years</p></div>
+<div class="stat"><h2 class="counter" data-target="20">0</h2><p>Courses</p></div>
+</div>
+
+<div>
+<h2>About Us</h2>
+<p>We empower students with industry-ready skills and strong placement support.</p>
+</div>
+</div>
+</section>
+
+<!-- COURSES -->
+<section id="courses">
+<h2>Our Courses</h2>
+<div class="courses">
+<div class="card">Web Development</div>
+<div class="card">Data Analytics</div>
+<div class="card">Digital Marketing</div>
+<div class="card">Graphic Design</div>
+<div class="card">Soft Skills</div>
+<div class="card">HR Training</div>
+</div>
+</section>
+
+<!-- PLACEMENT -->
+<section id="placements">
+<h2>Placement Training</h2>
+
+<div class="placement">
+<div>
+<ul>
+<li>Resume Building</li>
+<li>Mock Interviews</li>
+<li>Aptitude Training</li>
+<li>Company Connections</li>
+</ul>
+</div>
+
+<div>🎯 Illustration</div>
+</div>
+
+<div class="timeline">
+<div class="step">Enroll</div>
+<div class="step">Train</div>
+<div class="step">Practice</div>
+<div class="step">Placed</div>
+</div>
+</section>
+
+<!-- LOGOS -->
+<section>
+<h2>Our Students Work At</h2>
+<div class="logos">
+<div>Google</div>
+<div>Infosys</div>
+<div>TCS</div>
+<div>Amazon</div>
+<div>Zoho</div>
+</div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section>
+<h2>Success Stories</h2>
+<div class="testimonial">
+<div class="testimonial-card">
+<p>"Got placed in 3 months!"</p>
+<h4>Keerthana</h4>
+</div>
+</div>
+</section>
+
+<!-- FORM -->
+<section id="apply">
+<h2>Apply Now</h2>
+
+<div class="progress">
+<div class="progress-bar" id="progress"></div>
+</div>
+
+<form id="form">
+
+<div class="form-step active">
+<input placeholder="Full Name" required><br><br>
+<input placeholder="Email" required><br><br>
+<button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<div class="form-step">
+<select>
+<option>Web Dev</option>
+<option>Data Analytics</option>
+</select><br><br>
+<button type="button" onclick="nextStep()">Next</button>
+</div>
+
+<div class="form-step">
+<input placeholder="Qualification"><br><br>
+<button type="submit">Submit</button>
+</div>
+
+</form>
+</section>
+
+<!-- FAQ -->
+<section>
+<h2>FAQ</h2>
+
+<div class="faq-item">
+<h4 onclick="toggleFAQ(this)">Who can apply?</h4>
+<p class="faq-answer">Anyone interested.</p>
+</div>
+
+<div class="faq-item">
+<h4 onclick="toggleFAQ(this)">Placement guarantee?</h4>
+<p class="faq-answer">We provide full support.</p>
+</div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+<h3>BUILD UR FUTURE INSTITUTE</h3>
+<p>Train Today. Place Tomorrow.</p>
+<p>Email: info@bufi.com</p>
+</footer>
+
+<script>
+lucide.createIcons();
+
+/* COUNTER */
+document.querySelectorAll('.counter').forEach(counter=>{
+let update=()=>{
+let target=+counter.getAttribute('data-target');
+let count=+counter.innerText;
+let inc=target/100;
+
+if(count<target){
+counter.innerText=Math.ceil(count+inc);
+setTimeout(update,20);
+}else{
+counter.innerText=target;
+}
+}
+update();
+});
+
+/* FORM */
+let step=0;
+let steps=document.querySelectorAll('.form-step');
+let progress=document.getElementById('progress');
+
+function nextStep(){
+steps[step].classList.remove('active');
+step++;
+steps[step].classList.add('active');
+progress.style.width=((step)/(steps.length-1))*100+"%";
+}
+
+/* FAQ */
+function toggleFAQ(el){
+let ans=el.nextElementSibling;
+ans.style.display=ans.style.display==='block'?'none':'block';
+}
+</script>
+
+</body>
+</html>

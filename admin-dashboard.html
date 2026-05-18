@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Build Together Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:#f1f5f9; display:flex; flex-direction:column; min-height:100vh; }
+
+        /* NAV */
+        .navbar {
+            background:#2c3e50;
+            padding:20px 5%; display:flex; align-items:center; justify-content:space-between;
+            box-shadow:0 2px 10px rgba(0,0,0,0.2); position:sticky; top:0; z-index:1000;
+        }
+        .navbar .logo { display:flex; align-items:center; gap:4px; }
+        .logo-text { color:white; font-weight:bold; font-size:1.5rem; letter-spacing:1px; }
+        .logo-highlight { color:#3498db; font-weight:bold; font-size:1.5rem; }
+        .nav-right { display:flex; align-items:center; gap:12px; }
+        .admin-badge { background:rgba(255,255,255,0.15); color:white; padding:5px 14px; border-radius:20px; font-size:0.8rem; font-weight:600; }
+        .nav-logout { background:rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.2); padding:7px 14px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:0.82rem; font-weight:600; transition:all 0.3s; }
+        .nav-logout:hover { background:rgba(255,255,255,0.2); }
+
+        /* LAYOUT */
+        .dash-wrapper { display:grid; grid-template-columns:260px 1fr; flex:1; }
+
+        /* SIDEBAR */
+        .sidebar {
+            background:#0f172a; padding:24px 16px;
+            display:flex; flex-direction:column; gap:4px;
+            position:sticky; top:0; height:calc(100vh - 54px); overflow-y:auto;
+        }
+        .sidebar-profile {
+            text-align:center; padding:16px 0 24px;
+            border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:12px;
+        }
+        .sidebar-avatar {
+            width:64px; height:64px; border-radius:50%;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.6rem; font-weight:700; color:white; margin:0 auto 10px;
+        }
+        .sidebar-profile h3 { color:white; font-size:0.95rem; margin-bottom:3px; }
+        .sidebar-profile span { color:#94a3b8; font-size:0.75rem; }
+        .sidebar-nav { display:flex; flex-direction:column; gap:3px; }
+        .sidebar-nav a {
+            display:flex; align-items:center; gap:10px;
+            padding:11px 14px; color:#94a3b8; text-decoration:none;
+            border-radius:10px; font-size:0.88rem; font-weight:500; transition:all 0.2s;
+            position:relative;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active { background:rgba(102,126,234,0.15); color:#667eea; }
+        .sidebar-nav a i { width:16px; }
+        .nav-badge {
+            margin-left:auto; background:#ef4444; color:white;
+            border-radius:10px; padding:1px 7px; font-size:0.68rem; font-weight:700;
+        }
+        .sidebar-bottom { margin-top:auto; padding-top:16px; border-top:1px solid rgba(255,255,255,0.08); }
+        .sidebar-bottom a {
+            display:flex; align-items:center; gap:10px;
+            padding:11px 14px; color:#ef4444; text-decoration:none;
+            border-radius:10px; font-size:0.88rem; font-weight:500; transition:background 0.2s;
+        }
+        .sidebar-bottom a:hover { background:rgba(239,68,68,0.1); }
+
+        /* MAIN */
+        .dash-main { padding:30px; overflow-y:auto; }
+
+        .page-title { font-size:1.5rem; font-weight:700; color:#1e293b; margin-bottom:4px; }
+        .page-sub   { color:#64748b; font-size:0.88rem; margin-bottom:24px; }
+
+        /* STAT CARDS */
+        .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+        .stat-card {
+            background:white; border-radius:16px; padding:20px;
+            display:flex; align-items:center; gap:14px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.05);
+        }
+        .stat-icon {
+            width:50px; height:50px; border-radius:12px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.3rem; color:white; flex-shrink:0;
+        }
+        .stat-icon.purple { background:linear-gradient(135deg,#667eea,#764ba2); }
+        .stat-icon.green  { background:linear-gradient(135deg,#10b981,#059669); }
+        .stat-icon.orange { background:linear-gradient(135deg,#f59e0b,#d97706); }
+        .stat-icon.red    { background:linear-gradient(135deg,#ef4444,#dc2626); }
+        .stat-card h3 { font-size:1.5rem; color:#1e293b; margin-bottom:2px; }
+        .stat-card p  { color:#64748b; font-size:0.8rem; }
+
+        /* SECTION */
+        .section { display:none; }
+        .section.active { display:block; }
+
+        /* TABLE */
+        .table-card { background:white; border-radius:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05); overflow:hidden; margin-bottom:20px; }
+        .table-header { padding:18px 22px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
+        .table-header h3 { font-size:1rem; color:#1e293b; display:flex; align-items:center; gap:8px; }
+        .table-wrap { overflow-x:auto; }
+        table { width:100%; border-collapse:collapse; }
+        th { background:#f8fafc; padding:12px 16px; text-align:left; font-size:0.78rem; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+        td { padding:13px 16px; font-size:0.85rem; color:#1e293b; border-top:1px solid #f8fafc; }
+        tr:hover td { background:#fafafa; }
+        .empty-row td { text-align:center; color:#94a3b8; padding:30px; }
+
+        /* BADGES */
+        .badge { padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; }
+        .badge-pending    { background:#fef3c7; color:#d97706; }
+        .badge-approved   { background:#d1fae5; color:#059669; }
+        .badge-ongoing    { background:#dbeafe; color:#2563eb; }
+        .badge-completed  { background:#d1fae5; color:#059669; }
+        .badge-rejected   { background:#fee2e2; color:#ef4444; }
+        .badge-shortlisted{ background:#ede9fe; color:#667eea; }
+        .badge-selected   { background:#d1fae5; color:#059669; }
+        .badge[title] { cursor: default; }
+
+        /* STATUS SELECT */
+        .status-select {
+            padding:5px 10px; border:1.5px solid #e2e8f0; border-radius:8px;
+            font-size:0.8rem; font-family:inherit; outline:none; cursor:pointer;
+            background:white; color:#1e293b;
+        }
+        .status-select:focus { border-color:#667eea; }
+
+        /* SEARCH */
+        .search-input {
+            padding:8px 14px; border:2px solid #e2e8f0; border-radius:10px;
+            font-size:0.85rem; font-family:inherit; outline:none; width:220px;
+        }
+        .search-input:focus { border-color:#667eea; }
+
+        /* CHAT LAYOUT */
+        .chat-layout { display:grid; grid-template-columns:280px 1fr; gap:0; background:white; border-radius:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05); overflow:hidden; height:calc(100vh - 200px); }
+        .chat-sessions { border-right:1px solid #f1f5f9; display:flex; flex-direction:column; overflow:hidden; }
+        .chat-sessions-header { padding:16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .chat-sessions-header h3 { font-size:0.92rem; color:#1e293b; }
+        .refresh-btn { background:#f1f5f9; border:none; padding:5px 10px; border-radius:8px; cursor:pointer; color:#667eea; font-size:0.78rem; font-family:inherit; font-weight:600; }
+        .session-list { flex:1; overflow-y:auto; min-height:0; }
+        .session-item { padding:13px 16px; border-bottom:1px solid #f8fafc; cursor:pointer; transition:background 0.2s; display:flex; align-items:center; gap:10px; }
+        .session-item:hover { background:#f8fafc; }
+        .session-item.active { background:#ede9fe; border-left:3px solid #667eea; }
+        .session-av { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:0.95rem; flex-shrink:0; }
+        .session-info { flex:1; min-width:0; }
+        .session-info h4 { font-size:0.85rem; color:#1e293b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .session-info span { font-size:0.72rem; color:#94a3b8; }
+        .unread-dot { width:20px; height:20px; background:#ef4444; color:white; border-radius:50%; font-size:0.68rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        /* OVERVIEW GRID */
+        .chat-overview { flex:1; display:flex; flex-direction:column; overflow:hidden; background:#f8fafc; }
+        .chat-overview-header { padding:16px 20px 10px; flex-shrink:0; }
+        .chat-overview-header h3 { font-size:0.95rem; color:#1e293b; font-weight:600; }
+        .chat-overview-header p { font-size:0.75rem; color:#94a3b8; margin-top:2px; }
+        .chat-overview-grid { flex:1; overflow-y:auto; padding:0 16px 16px; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; align-content:start; }
+        .ov-card { background:white; border-radius:12px; padding:14px; cursor:pointer; border:2px solid transparent; box-shadow:0 1px 5px rgba(0,0,0,0.06); transition:border-color 0.2s,box-shadow 0.2s; }
+        .ov-card:hover { border-color:#667eea; box-shadow:0 4px 14px rgba(102,126,234,0.15); }
+        .ov-card-top { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+        .ov-card-av { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:1rem; flex-shrink:0; }
+        .ov-card-info { flex:1; min-width:0; }
+        .ov-card-info h4 { font-size:0.83rem; color:#1e293b; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ov-card-info span { font-size:0.72rem; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+        .ov-card-unread { width:20px; height:20px; background:#ef4444; color:white; border-radius:50%; font-size:0.68rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .ov-card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
+        .ov-card-time { font-size:0.7rem; color:#94a3b8; }
+        .ov-card-btn { font-size:0.72rem; color:#667eea; font-weight:600; background:#ede9fe; border:none; padding:3px 9px; border-radius:6px; cursor:pointer; font-family:inherit; }
+        .ov-empty { grid-column:1/-1; text-align:center; color:#94a3b8; padding:50px 20px; font-size:0.85rem; }
+        .ov-empty i { font-size:2rem; color:#e2e8f0; display:block; margin-bottom:8px; }
+        /* CHAT PANEL */
+        .chat-panel { display:flex; flex-direction:column; position:relative; overflow:hidden; }
+        .chat-back-btn { background:#f1f5f9; border:none; padding:6px 11px; border-radius:8px; cursor:pointer; color:#667eea; font-size:0.78rem; font-family:inherit; font-weight:600; display:flex; align-items:center; gap:5px; flex-shrink:0; }
+        .chat-back-btn:hover { background:#ede9fe; }
+        .chat-panel-header { padding:14px 20px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:10px; background:white; flex-shrink:0; }
+        .chat-panel-header .av { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; }
+        .chat-panel-header h4 { font-size:0.92rem; color:#1e293b; }
+        .chat-panel-header span { font-size:0.75rem; color:#94a3b8; }
+        .chat-messages { flex:1; overflow-y:auto; min-height:0; padding:16px; display:flex; flex-direction:column; gap:10px; background:#f8fafc; }
+        .cmsg { display:flex; gap:8px; align-items:flex-end; }
+        .cmsg.user  { justify-content:flex-start; }
+        .cmsg.admin { justify-content:flex-end; }
+        .cmsg-bubble { max-width:65%; padding:9px 13px; border-radius:14px; font-size:0.83rem; line-height:1.5; }
+        .cmsg.user  .cmsg-bubble { background:white; color:#1e293b; border-bottom-left-radius:3px; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+        .cmsg.admin .cmsg-bubble { background:linear-gradient(135deg,#667eea,#764ba2); color:white; border-bottom-right-radius:3px; }
+        .cmsg-time { font-size:0.68rem; color:#94a3b8; margin-top:2px; }
+        .cmsg-icon { width:28px; height:28px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; color:#64748b; flex-shrink:0; }
+        .chat-scroll-btn { position:absolute; right:14px; width:32px; height:32px; border-radius:50%; background:white; border:1px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#667eea; font-size:0.82rem; z-index:10; }
+        .chat-scroll-btn:hover { background:#ede9fe; }
+        #chatScrollTop { top:64px; }
+        #chatScrollBottom { bottom:66px; }
+        .chat-input-row { padding:14px 16px; border-top:1px solid #f1f5f9; display:flex; gap:8px; background:white; flex-shrink:0; }
+        .chat-input-row input { flex:1; padding:10px 14px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.85rem; font-family:inherit; outline:none; }
+        .chat-input-row input:focus { border-color:#667eea; }
+        .chat-send-btn { background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:10px 18px; border-radius:10px; cursor:pointer; font-size:0.85rem; font-weight:600; font-family:inherit; display:flex; align-items:center; gap:6px; }
+        .no-sessions-msg { padding:30px; text-align:center; color:#94a3b8; font-size:0.85rem; }
+
+        /* CONTACT MESSAGES */
+        .msg-card { background:white; border-radius:14px; padding:20px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.05); border-left:4px solid #667eea; }
+        .msg-card-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; flex-wrap:wrap; gap:8px; }
+        .msg-card-header h4 { font-size:0.92rem; color:#1e293b; }
+        .msg-card-header span { font-size:0.75rem; color:#94a3b8; }
+        .msg-subject { font-size:0.82rem; font-weight:600; color:#667eea; margin-bottom:6px; }
+        .msg-body { font-size:0.83rem; color:#64748b; line-height:1.6; }
+        .msg-meta { font-size:0.75rem; color:#94a3b8; margin-top:8px; }
+
+        @media(max-width:900px) {
+            .dash-wrapper { grid-template-columns:1fr; }
+            .sidebar { display:none; }
+            .stats-grid { grid-template-columns:repeat(2,1fr); }
+            .chat-layout { grid-template-columns:1fr; height:auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR — same as all pages -->
+<nav class="navbar">
+    <div class="logo-text">Build<span class="logo-highlight">Together</span></div>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="internship.html">Internship</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="navbar-right">
+        <span id="navDateTime" style="color:#94a3b8;font-size:0.75rem;margin-right:6px;"></span>
+        <div style="position:relative;display:inline-block;margin-right:6px;">
+            <button id="notifBell" onclick="toggleNotifPanel()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;position:relative;">
+                <i class="fas fa-bell" id="bellIcon"></i>
+                <span id="notifCount" style="display:none;position:absolute;top:-4px;right:-4px;background:#ef4444;color:white;border-radius:50%;min-width:18px;height:18px;font-size:0.65rem;font-weight:700;align-items:center;justify-content:center;padding:0 3px;">0</span>
+            </button>
+            <div id="notifPanel" style="display:none;position:absolute;right:0;top:44px;width:320px;background:white;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:9999;overflow:hidden;">
+                <div style="padding:12px 16px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;background:#f8fafc;">
+                    <span style="font-weight:700;color:#1e293b;font-size:0.9rem;"><i class="fas fa-bell" style="color:#667eea;margin-right:6px;"></i>Notifications</span>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <button onclick="toggleSound()" id="soundToggleBtn" title="Toggle sound" style="background:#ede9fe;border:none;cursor:pointer;color:#667eea;font-size:0.82rem;padding:3px 8px;border-radius:6px;"><i class="fas fa-volume-up" id="soundIcon"></i></button>
+                        <button onclick="markAllRead()" style="font-size:0.72rem;color:#667eea;background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;">Mark all read</button>
+                    </div>
+                </div>
+                <div id="notifList" style="max-height:360px;overflow-y:auto;"><div style="padding:20px;text-align:center;color:#94a3b8;font-size:0.82rem;"><i class="fas fa-spinner fa-spin"></i> Loading...</div></div>
+            </div>
+        </div>
+        <span class="admin-badge" id="navAdminName"><i class="fas fa-user-shield"></i> Admin</span>
+        <button class="dark-toggle" id="darkToggleBtn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        <button class="nav-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+</nav>
+
+<!-- DASHBOARD WRAPPER -->
+<div class="dash-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-profile">
+            <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+            <h3 id="sidebarName">Admin</h3>
+            <span id="sidebarEmail">admin@bti.in</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="active" onclick="showSection('overview',this)">
+                <i class="fas fa-th-large"></i> Overview
+            </a>
+            <a href="#" onclick="showSection('courses',this)">
+                <i class="fas fa-graduation-cap"></i> Course Applications
+                <span class="nav-badge" id="badgeCourse" style="display:none;">0</span>
+            </a>
+            <a href="#" onclick="showSection('internships',this)">
+                <i class="fas fa-briefcase"></i> Internship Applications
+                <span class="nav-badge" id="badgeIntern" style="display:none;">0</span>
+            </a>
+            <a href="#" onclick="showSection('messages',this)">
+                <i class="fas fa-envelope"></i> Contact Messages
+                <span class="nav-badge" id="badgeMsg" style="display:none;">0</span>
+            </a>
+            <a href="#" onclick="showSection('chat',this)">
+                <i class="fas fa-comments"></i> Live Chat
+                <span class="nav-badge" id="badgeChat" style="display:none;">0</span>
+            </a>
+            <a href="#" onclick="showSection('interviews',this)">
+                <i class="fas fa-robot"></i> Mock Interviews
+                <span class="nav-badge" id="badgeInterview" style="display:none;">0</span>
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="home.html"><i class="fas fa-home"></i> Back to Website</a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dash-main">
+
+        <!-- OVERVIEW -->
+        <div class="section active" id="section-overview">
+            <div class="page-title">Welcome, <span id="greetName">Admin</span> 👋</div>
+            <div class="page-sub">Here's what's happening at Build Together Institute today.</div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-graduation-cap"></i></div>
+                    <div><h3 id="statCourseApps">0</h3><p>Course Applications</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-briefcase"></i></div>
+                    <div><h3 id="statInternApps">0</h3><p>Internship Applications</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fas fa-envelope"></i></div>
+                    <div><h3 id="statMessages">0</h3><p>Contact Messages</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fas fa-comments"></i></div>
+                    <div><h3 id="statChats">0</h3><p>Live Chat Sessions</p></div>
+                </div>
+            </div>
+
+            <!-- Recent Course Applications -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fas fa-graduation-cap" style="color:#667eea;"></i> Recent Course Applications</h3>
+                    <a href="#" onclick="showSection('courses', document.querySelector('.sidebar-nav a:nth-child(2)'));return false;" style="font-size:0.82rem;color:#667eea;font-weight:600;text-decoration:none;">View All →</a>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Course</th><th>Date</th><th>Status</th></tr></thead>
+                        <tbody id="recentCourseTable"><tr class="empty-row"><td colspan="4">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Internship Applications -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fas fa-briefcase" style="color:#10b981;"></i> Recent Internship Applications</h3>
+                    <a href="#" onclick="showSection('internships', document.querySelector('.sidebar-nav a:nth-child(3)'));return false;" style="font-size:0.82rem;color:#667eea;font-weight:600;text-decoration:none;">View All →</a>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Role</th><th>Date</th><th>Status</th></tr></thead>
+                        <tbody id="recentInternTable"><tr class="empty-row"><td colspan="4">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- COURSE APPLICATIONS -->
+        <div class="section" id="section-courses">
+            <div class="page-title">Course Applications</div>
+            <div class="page-sub">Review and update student course application statuses.</div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fas fa-graduation-cap" style="color:#667eea;"></i> All Applications</h3>
+                    <input class="search-input" type="text" placeholder="Search name or course..." oninput="filterTable('courseTable', this.value)">
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Course</th><th>City</th><th>Date</th><th>Status</th></tr></thead>
+                        <tbody id="courseTable"><tr class="empty-row"><td colspan="7">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERNSHIP APPLICATIONS -->
+        <div class="section" id="section-internships">
+            <div class="page-title">Internship Applications</div>
+            <div class="page-sub">Review and update internship application statuses.</div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fas fa-briefcase" style="color:#10b981;"></i> All Applications</h3>
+                    <input class="search-input" type="text" placeholder="Search name or role..." oninput="filterTable('internTable', this.value)">
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Skills</th><th>Date</th><th>Status</th></tr></thead>
+                        <tbody id="internTable"><tr class="empty-row"><td colspan="6">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT MESSAGES -->
+        <div class="section" id="section-messages">
+            <div class="page-title">Contact Messages</div>
+            <div class="page-sub">Messages received from the contact form.</div>
+            <div id="messagesContent"><p style="color:#94a3b8;">Loading...</p></div>
+        </div>
+
+        <!-- MOCK INTERVIEWS -->
+        <div class="section" id="section-interviews">
+            <div class="page-title">Mock Interview Results</div>
+            <div class="page-sub">View all student AI mock interview sessions and scores.</div>
+
+            <!-- Analytics Cards -->
+            <div class="stats-grid" style="margin-bottom:24px;">
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-robot"></i></div>
+                    <div><h3 id="miTotal">0</h3><p>Total Interviews</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-star"></i></div>
+                    <div><h3 id="miAvgScore">0</h3><p>Avg Score / 10</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="fas fa-users"></i></div>
+                    <div><h3 id="miUsers">0</h3><p>Unique Students</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fas fa-trophy"></i></div>
+                    <div><h3 id="miPassed">0</h3><p>Scored 7+ / 10</p></div>
+                </div>
+            </div>
+
+            <!-- Role-wise breakdown -->
+            <div class="table-card" style="margin-bottom:20px;">
+                <div class="table-header">
+                    <h3><i class="fas fa-chart-bar" style="color:#667eea;"></i> Performance by Role</h3>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Role</th><th>Interviews</th><th>Avg Score</th><th>Performance</th></tr></thead>
+                        <tbody id="miRoleTable"><tr class="empty-row"><td colspan="4">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- All interview results -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fas fa-list-alt" style="color:#10b981;"></i> All Interview Results</h3>
+                    <input class="search-input" type="text" placeholder="Search student or role..." oninput="filterTable('miResultsTable', this.value)">
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Student</th><th>Email</th><th>Role</th><th>Level</th><th>Score</th><th>Technical</th><th>Communication</th><th>Confidence</th><th>Duration</th><th>Date</th></tr></thead>
+                        <tbody id="miResultsTable"><tr class="empty-row"><td colspan="10">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIVE CHAT -->
+        <div class="section" id="section-chat">
+            <div class="page-title">Live Chat</div>
+            <div class="page-sub">Reply to user queries in real time.</div>
+            <div class="chat-layout">
+                <!-- Sessions -->
+                <div class="chat-sessions">
+                    <div class="chat-sessions-header">
+                        <h3><i class="fas fa-users" style="color:#667eea;margin-right:6px;"></i>Conversations</h3>
+                        <button class="refresh-btn" onclick="loadChatSessions()"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div class="session-list" id="sessionList">
+                        <div class="no-sessions-msg">No conversations yet</div>
+                    </div>
+                </div>
+                <!-- Chat Panel -->
+                <div class="chat-panel" id="chatPanel">
+                    <div class="chat-empty" id="chatEmpty">
+                        <i class="fas fa-comments"></i>
+                        <p>Select a conversation to reply</p>
+                    </div>
+                    <div id="activeChatWrap" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+                        <div class="chat-panel-header">
+                            <div class="av" id="chatAv">U</div>
+                            <div>
+                                <h4 id="chatUserName">User</h4>
+                                <span id="chatUserEmail">-</span>
+                            </div>
+                        </div>
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-input-row">
+                            <input type="text" id="adminInput" placeholder="Type your reply..." onkeydown="if(event.key==='Enter')sendAdminReply()">
+                            <button class="chat-send-btn" onclick="sendAdminReply()"><i class="fas fa-paper-plane"></i> Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="darkmode.js"></script>
+
+<script>
+const API   = 'http://localhost:5000';
+const token = sessionStorage.getItem('token');
+const role  = sessionStorage.getItem('userRole');
+const name  = sessionStorage.getItem('userName');
+const email = sessionStorage.getItem('userEmail');
+
+// ── Login Guard ──
+if (!token || role !== 'admin') {
+    alert('Admin access only. Please login.');
+    location.href = 'apply.html';
+}
+
+// ── Set profile info ──
+document.getElementById('navAdminName').innerHTML  = '<i class="fas fa-user-shield"></i> ' + (name || 'Admin');
+document.getElementById('sidebarName').textContent  = name  || 'Admin';
+document.getElementById('sidebarEmail').textContent = email || '';
+document.getElementById('greetName').textContent    = (name || 'Admin').split(' ')[0];
+document.getElementById('sidebarAvatar').textContent = (name || 'A').charAt(0).toUpperCase();
+
+// ── Section switcher ──
+function showSection(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+    if (el) el.classList.add('active');
+    // Load data on demand
+    if (id === 'courses')      loadCourseApps();
+    if (id === 'internships')  loadInternApps();
+    if (id === 'messages')     loadMessages();
+    if (id === 'chat')         loadChatSessions();
+    if (id === 'interviews')   loadInterviewResults();
+    return false;
+}
+
+// ── Logout ──
+function doLogout() {
+    sessionStorage.clear();
+    location.href = 'apply.html';
+}
+
+// ── Helpers ──
+function fmtDate(d) {
+    return new Date(d).toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function badgeHtml(status) {
+    const map = { pending:'badge-pending', approved:'badge-approved', ongoing:'badge-ongoing', completed:'badge-completed', rejected:'badge-rejected', shortlisted:'badge-shortlisted', selected:'badge-selected' };
+    return '<span class="badge ' + (map[status] || 'badge-pending') + '">' + (status || 'pending') + '</span>';
+}
+
+function filterTable(tableId, query) {
+    const q   = query.toLowerCase();
+    const rows = document.querySelectorAll('#' + tableId + ' tr');
+    rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+}
+
+// ── OVERVIEW ──
+async function loadOverview() {
+    try {
+        const [cRes, iRes, mRes, chRes] = await Promise.all([
+            fetch(API + '/api/admin/course-applications',     { headers:{ Authorization:'Bearer '+token } }),
+            fetch(API + '/api/admin/internship-applications', { headers:{ Authorization:'Bearer '+token } }),
+            fetch(API + '/api/admin/messages',                { headers:{ Authorization:'Bearer '+token } }),
+            fetch(API + '/api/chat/sessions',                 { headers:{ Authorization:'Bearer '+token } })
+        ]);
+        const courses    = await cRes.json();
+        const interns    = await iRes.json();
+        const messages   = await mRes.json();
+        const chatSess   = await chRes.json();
+
+        // Stats
+        document.getElementById('statCourseApps').textContent = Array.isArray(courses)  ? courses.length  : 0;
+        document.getElementById('statInternApps').textContent = Array.isArray(interns)  ? interns.length  : 0;
+        document.getElementById('statMessages').textContent   = Array.isArray(messages) ? messages.length : 0;
+        document.getElementById('statChats').textContent      = Array.isArray(chatSess) ? chatSess.length : 0;
+
+        // Pending badges
+        if (Array.isArray(courses)) {
+            const pending = courses.filter(c => c.status === 'pending').length;
+            const el = document.getElementById('badgeCourse');
+            if (pending > 0) { el.textContent = pending; el.style.display = 'inline-flex'; }
+        }
+        if (Array.isArray(interns)) {
+            const pending = interns.filter(i => i.status === 'pending').length;
+            const el = document.getElementById('badgeIntern');
+            if (pending > 0) { el.textContent = pending; el.style.display = 'inline-flex'; }
+        }
+        if (Array.isArray(messages)) {
+            const el = document.getElementById('badgeMsg');
+            if (messages.length > 0) { el.textContent = messages.length; el.style.display = 'inline-flex'; }
+        }
+        if (Array.isArray(chatSess)) {
+            const unread = chatSess.reduce((sum, s) => sum + (s.unread || 0), 0);
+            const el = document.getElementById('badgeChat');
+            if (unread > 0) { el.textContent = unread; el.style.display = 'inline-flex'; }
+        }
+
+        const recentC = Array.isArray(courses) ? courses.slice(0, 5) : [];
+        document.getElementById('recentCourseTable').innerHTML = recentC.length
+            ? recentC.map(c =>
+                '<tr><td>' + c.full_name + '</td><td>' + c.course_name + '</td><td>' + fmtDate(c.applied_at) + '</td><td>' + badgeHtml(c.status) + '</td></tr>'
+              ).join('')
+            : '<tr class="empty-row"><td colspan="4">No applications yet</td></tr>';
+
+        // Recent intern table (last 5)
+        const recentI = Array.isArray(interns) ? interns.slice(0, 5) : [];
+        document.getElementById('recentInternTable').innerHTML = recentI.length
+            ? recentI.map(i =>
+                '<tr><td>' + i.full_name + '</td><td>' + i.role_applied + '</td><td>' + fmtDate(i.applied_at) + '</td><td>' + badgeHtml(i.status) + '</td></tr>'
+              ).join('')
+            : '<tr class="empty-row"><td colspan="4">No applications yet</td></tr>';
+
+    } catch(e) { console.error(e); }
+}
+
+// ── Course status cell — Approve/Reject for pending only, read-only badge otherwise ──
+function courseStatusCell(c) {
+    if (c.status === 'pending') {
+        return `<div style="display:flex;gap:6px;align-items:center;">
+            <button onclick="updateCourseStatus(${c.id},'approved',this)" style="padding:5px 12px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:7px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;">&#10003; Approve</button>
+            <button onclick="updateCourseStatus(${c.id},'rejected',this)" style="padding:5px 12px;background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border:none;border-radius:7px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:inherit;">&#10007; Reject</button>
+        </div>`;
+    }
+    // Read-only badge for approved/ongoing/completed/rejected
+    const map = {
+        approved:  { cls: 'badge-approved',   label: '&#10003; Approved' },
+        ongoing:   { cls: 'badge-ongoing',    label: '&#9654; Ongoing' },
+        completed: { cls: 'badge-completed',  label: '&#9733; Completed' },
+        rejected:  { cls: 'badge-rejected',   label: '&#10007; Rejected' }
+    };
+    const b = map[c.status] || { cls: 'badge-pending', label: c.status };
+    return `<span class="badge ${b.cls}" title="Set automatically by student progress">${b.label}</span>`;
+}
+
+// ── COURSE APPLICATIONS ──
+async function loadCourseApps() {
+    const tbody = document.getElementById('courseTable');
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">Loading...</td></tr>';
+    try {
+        const res  = await fetch(API + '/api/admin/course-applications', { headers:{ Authorization:'Bearer '+token } });
+        const data = await res.json();
+        if (!Array.isArray(data) || !data.length) {
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No applications found</td></tr>'; return;
+        }        tbody.innerHTML = data.map(c => `
+            <tr>
+                <td>${c.full_name}</td>
+                <td style="color:#64748b;font-size:0.8rem;">${c.email}</td>
+                <td>${c.phone || '-'}</td>
+                <td><strong>${c.course_name}</strong></td>
+                <td>${c.city || '-'}</td>
+                <td style="color:#94a3b8;font-size:0.8rem;">${fmtDate(c.applied_at)}</td>
+                <td>${courseStatusCell(c)}</td>
+            </tr>`).join('');
+    } catch(e) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="7">Failed to load</td></tr>';
+    }
+}
+
+async function updateCourseStatus(id, status, btn) {
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    try {
+        const res = await fetch(API + '/api/admin/course-applications/' + id, {
+            method:'PATCH',
+            headers:{ 'Content-Type':'application/json', Authorization:'Bearer '+token },
+            body: JSON.stringify({ status })
+        });
+        const data = await res.json();
+        if (!res.ok) { showToast(data.error || 'Update failed.', 'error'); btn.disabled = false; btn.style.opacity = '1'; return; }
+        showToast('Application ' + status + ' successfully!', 'success');
+        loadCourseApps();
+        loadOverview();
+    } catch(e) { showToast('Server error.', 'error'); btn.disabled = false; btn.style.opacity = '1'; }
+}
+
+// ── INTERNSHIP APPLICATIONS ──
+async function loadInternApps() {
+    const tbody = document.getElementById('internTable');
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">Loading...</td></tr>';
+    try {
+        const res  = await fetch(API + '/api/admin/internship-applications', { headers:{ Authorization:'Bearer '+token } });
+        const data = await res.json();
+        if (!Array.isArray(data) || !data.length) {
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No applications found</td></tr>'; return;
+        }
+        tbody.innerHTML = data.map(i => `
+            <tr>
+                <td>${i.full_name}</td>
+                <td style="color:#64748b;font-size:0.8rem;">${i.email}</td>
+                <td><strong>${i.role_applied}</strong></td>
+                <td style="font-size:0.8rem;color:#64748b;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${i.skills || '-'}</td>
+                <td style="color:#94a3b8;font-size:0.8rem;">${fmtDate(i.applied_at)}</td>
+                <td>
+                    <select class="status-select" onchange="updateInternStatus(${i.id}, this.value, this)">
+                        <option value="pending"     ${i.status==='pending'     ?'selected':''}>Pending</option>
+                        <option value="shortlisted" ${i.status==='shortlisted' ?'selected':''}>Shortlisted</option>
+                        <option value="selected"    ${i.status==='selected'    ?'selected':''}>Selected</option>
+                        <option value="rejected"    ${i.status==='rejected'    ?'selected':''}>Rejected</option>
+                    </select>
+                </td>
+            </tr>`).join('');
+    } catch(e) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">Failed to load</td></tr>';
+    }
+}
+
+async function updateInternStatus(id, status, el) {
+    el.disabled = true;
+    try {
+        const res = await fetch(API + '/api/admin/internship-applications/' + id, {
+            method:'PATCH',
+            headers:{ 'Content-Type':'application/json', Authorization:'Bearer '+token },
+            body: JSON.stringify({ status })
+        });
+        if (!res.ok) { alert('Update failed.'); }
+        else { showToast('Status updated to ' + status); loadOverview(); }
+    } catch(e) { alert('Server error.'); }
+    el.disabled = false;
+}
+
+// ── CONTACT MESSAGES ──
+async function loadMessages() {
+    const el = document.getElementById('messagesContent');
+    el.innerHTML = '<p style="color:#94a3b8;">Loading...</p>';
+    try {
+        const res  = await fetch(API + '/api/admin/messages', { headers:{ Authorization:'Bearer '+token } });
+        const data = await res.json();
+        if (!Array.isArray(data) || !data.length) {
+            el.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:40px;">No messages yet.</p>'; return;
+        }
+        el.innerHTML = data.map(m => `
+            <div class="msg-card">
+                <div class="msg-card-header">
+                    <h4><i class="fas fa-user" style="color:#667eea;margin-right:6px;"></i>${m.full_name} <span style="color:#94a3b8;font-weight:400;font-size:0.8rem;">&lt;${m.email}&gt;</span></h4>
+                    <span>${fmtDate(m.received_at || m.created_at)}</span>
+                </div>
+                <div class="msg-subject">📌 ${m.subject}</div>
+                <div class="msg-body">${m.message}</div>
+            </div>`).join('');
+    } catch(e) {
+        el.innerHTML = '<p style="color:#ef4444;">Failed to load messages.</p>';
+    }
+}
+
+// ── TOAST ──
+function showToast(msg) {
+    let t = document.getElementById('toast');
+    if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        t.style.cssText = 'position:fixed;bottom:30px;right:30px;background:#1e293b;color:white;padding:12px 20px;border-radius:12px;font-size:0.85rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:opacity 0.3s;';
+        document.body.appendChild(t);
+    }
+    t.textContent = '✓ ' + msg;
+    t.style.opacity = '1';
+    setTimeout(() => t.style.opacity = '0', 2500);
+}
+
+// Init
+loadOverview();
+loadInterviewResults(); // pre-load interview data
+
+// ── Load Interview Results ──
+async function loadInterviewResults() {
+    try {
+        // Analytics
+        const aRes = await fetch(API + '/api/admin/interview-analytics', { headers:{ Authorization:'Bearer '+token } });
+        if (aRes.ok) {
+            const aData = await aRes.json();
+            const s = aData.summary || {};
+            document.getElementById('miTotal').textContent    = s.total_interviews || 0;
+            document.getElementById('miAvgScore').textContent = s.avg_score ? parseFloat(s.avg_score).toFixed(1) : '0';
+            document.getElementById('miUsers').textContent    = s.unique_users || 0;
+            document.getElementById('miPassed').textContent   = s.passed_count || 0;
+
+            // Badge
+            const el = document.getElementById('badgeInterview');
+            if (s.total_interviews > 0) { el.textContent = s.total_interviews; el.style.display = 'inline-flex'; }
+
+            // Role table
+            const roles = aData.by_role || [];
+            const roleBody = document.getElementById('miRoleTable');
+            if (roles.length) {
+                roleBody.innerHTML = roles.map(r => {
+                    const avg = parseFloat(r.avg_score || 0).toFixed(1);
+                    const pct = Math.round((avg / 10) * 100);
+                    const color = pct >= 70 ? '#10b981' : pct >= 40 ? '#f59e0b' : '#ef4444';
+                    return `<tr>
+                        <td><strong>${r.role}</strong></td>
+                        <td>${r.count}</td>
+                        <td><strong style="color:${color}">${avg}/10</strong></td>
+                        <td><div style="display:flex;align-items:center;gap:8px;">
+                            <div style="flex:1;height:8px;background:#f1f5f9;border-radius:10px;overflow:hidden;">
+                                <div style="height:100%;width:${pct}%;background:${color};border-radius:10px;"></div>
+                            </div>
+                            <span style="font-size:0.78rem;color:#64748b;">${pct}%</span>
+                        </div></td>
+                    </tr>`;
+                }).join('');
+            } else {
+                roleBody.innerHTML = '<tr class="empty-row"><td colspan="4">No data yet</td></tr>';
+            }
+        }
+
+        // All results
+        const rRes = await fetch(API + '/api/admin/interviews', { headers:{ Authorization:'Bearer '+token } });
+        if (rRes.ok) {
+            const results = await rRes.json();
+            const tbody = document.getElementById('miResultsTable');
+            if (!results.length) {
+                tbody.innerHTML = '<tr class="empty-row"><td colspan="10">No interviews completed yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = results.map(r => {
+                const score = parseFloat(r.final_score || 0).toFixed(1);
+                const scoreColor = score >= 7 ? '#059669' : score >= 4 ? '#d97706' : '#ef4444';
+                const scoreBg    = score >= 7 ? '#d1fae5' : score >= 4 ? '#fef3c7' : '#fee2e2';
+                const duration   = r.duration_seconds ? Math.floor(r.duration_seconds/60) + 'm ' + (r.duration_seconds%60) + 's' : '-';
+                const levelBadge = { Beginner:'badge-approved', Intermediate:'badge-ongoing', Advanced:'badge-shortlisted' }[r.level] || 'badge-pending';
+                return `<tr>
+                    <td><strong>${r.full_name || '-'}</strong></td>
+                    <td style="color:#64748b;font-size:0.8rem;">${r.email || '-'}</td>
+                    <td>${r.role}</td>
+                    <td><span class="badge ${levelBadge}">${r.level}</span></td>
+                    <td><span style="background:${scoreBg};color:${scoreColor};padding:4px 10px;border-radius:20px;font-weight:700;font-size:0.82rem;">${score}/10</span></td>
+                    <td style="font-size:0.82rem;">${r.technical_score || 0}%</td>
+                    <td style="font-size:0.82rem;">${r.communication_score || 0}%</td>
+                    <td style="font-size:0.82rem;">${r.confidence_score || 0}%</td>
+                    <td style="font-size:0.8rem;color:#94a3b8;">${duration}</td>
+                    <td style="font-size:0.8rem;color:#94a3b8;">${fmtDate(r.completed_at || r.created_at)}</td>
+                </tr>`;
+            }).join('');
+        }
+    } catch(e) { console.error('Interview results error:', e); }
+}
+
+// ── DateTime Clock ──
+function updateClock() {
+    const now = new Date();
+    document.getElementById('navDateTime').textContent = now.toLocaleString('en-IN', { timeZone:'Asia/Kolkata', weekday:'short', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', second:'2-digit' }) + ' IST';
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ── Bell animation ──
+const _bs = document.createElement('style');
+_bs.textContent = '@keyframes bellRing{0%,100%{transform:rotate(0)}15%{transform:rotate(18deg)}30%{transform:rotate(-16deg)}45%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}75%{transform:rotate(4deg)}}.bell-ring{animation:bellRing 0.6s ease;}';
+document.head.appendChild(_bs);
+
+// ── Sound toggle ──
+let soundEnabled = localStorage.getItem('notifSound') !== 'false';
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem('notifSound', soundEnabled);
+    document.getElementById('soundIcon').className = soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+    document.getElementById('soundToggleBtn').style.background = soundEnabled ? '#ede9fe' : '#f1f5f9';
+    document.getElementById('soundToggleBtn').style.color = soundEnabled ? '#667eea' : '#94a3b8';
+}
+if (!soundEnabled) {
+    setTimeout(() => {
+        const si = document.getElementById('soundIcon');
+        const sb = document.getElementById('soundToggleBtn');
+        if (si) si.className = 'fas fa-volume-mute';
+        if (sb) { sb.style.background = '#f1f5f9'; sb.style.color = '#94a3b8'; }
+    }, 100);
+}
+
+function playNotifSound() {
+    if (!soundEnabled) return;
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        [0, 0.12, 0.24].forEach((delay, i) => {
+            const o = ctx.createOscillator(), g = ctx.createGain();
+            o.connect(g); g.connect(ctx.destination);
+            o.frequency.value = [880, 1100, 1320][i];
+            o.type = 'sine';
+            g.gain.setValueAtTime(0, ctx.currentTime + delay);
+            g.gain.linearRampToValueAtTime(0.18, ctx.currentTime + delay + 0.04);
+            g.gain.linearRampToValueAtTime(0, ctx.currentTime + delay + 0.18);
+            o.start(ctx.currentTime + delay);
+            o.stop(ctx.currentTime + delay + 0.22);
+        });
+    } catch(e) {}
+}
+
+function ringBell() {
+    const b = document.getElementById('bellIcon');
+    if (!b) return;
+    b.classList.remove('bell-ring');
+    void b.offsetWidth;
+    b.classList.add('bell-ring');
+    setTimeout(() => b.classList.remove('bell-ring'), 700);
+}
+
+// ── Notifications ──
+let notifOpen = false;
+let seenNotifIds = JSON.parse(localStorage.getItem('seenNotifIds') || '[]');
+let lastNotifData = [];
+
+async function loadNotifications() {
+    try {
+        const res = await fetch(API + '/api/notifications', { headers: { Authorization: 'Bearer ' + token } });
+        const data = await res.json();
+        const list = document.getElementById('notifList');
+        const countEl = document.getElementById('notifCount');
+        if (!Array.isArray(data) || !data.length) {
+            list.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;font-size:0.82rem;"><i class="fas fa-check-circle" style="color:#10b981;"></i> All caught up!</div>';
+            countEl.style.display = 'none'; lastNotifData = []; return;
+        }
+        const newOnes = data.filter(n => !seenNotifIds.includes(n.time + n.text));
+        if (newOnes.length > 0 && lastNotifData.length > 0) { playNotifSound(); ringBell(); }
+        lastNotifData = data;
+        const unread = data.filter(n => !seenNotifIds.includes(n.time + n.text)).length;
+        list.innerHTML = data.map(n => {
+            const id = n.time + n.text;
+            const isUnread = !seenNotifIds.includes(id);
+            const t = new Date(n.time);
+            const ts = t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) + ', ' + t.toLocaleDateString('en-IN',{day:'2-digit',month:'short'});
+            return '<div onclick="markOneRead(\'' + id.replace(/'/g,"\\'") + '\',this)" style="padding:12px 16px;border-bottom:1px solid #f8fafc;display:flex;gap:10px;align-items:flex-start;cursor:pointer;background:' + (isUnread?'#f5f3ff':'white') + ';transition:background 0.2s;">' +
+                '<div style="width:34px;height:34px;border-radius:50%;background:' + n.color + '22;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">' +
+                '<i class="fas ' + n.icon + '" style="color:' + n.color + ';font-size:0.82rem;"></i>' +
+                (isUnread ? '<span style="position:absolute;top:0;right:0;width:8px;height:8px;background:#667eea;border-radius:50%;border:2px solid white;"></span>' : '') +
+                '</div><div style="flex:1;"><div style="font-size:0.82rem;color:#1e293b;font-weight:' + (isUnread?'600':'400') + ';">' + n.text + '</div>' +
+                '<div style="font-size:0.72rem;color:#94a3b8;margin-top:2px;">' + ts + '</div></div></div>';
+        }).join('');
+        if (unread > 0) { countEl.textContent = unread; countEl.style.display = 'flex'; }
+        else countEl.style.display = 'none';
+    } catch(e) {}
+}
+
+function markOneRead(id, el) {
+    if (seenNotifIds.includes(id)) return;
+    seenNotifIds.push(id);
+    localStorage.setItem('seenNotifIds', JSON.stringify(seenNotifIds));
+    el.style.background = 'white';
+    const dot = el.querySelector('span[style*="667eea"]');
+    if (dot) dot.remove();
+    const txt = el.querySelector('div[style*="font-weight"]');
+    if (txt) txt.style.fontWeight = '400';
+    const c = document.getElementById('notifCount');
+    const cur = parseInt(c.textContent) - 1;
+    if (cur <= 0) c.style.display = 'none'; else c.textContent = cur;
+}
+
+function markAllRead() {
+    lastNotifData.forEach(n => { const id = n.time+n.text; if (!seenNotifIds.includes(id)) seenNotifIds.push(id); });
+    localStorage.setItem('seenNotifIds', JSON.stringify(seenNotifIds));
+    document.getElementById('notifCount').style.display = 'none';
+    loadNotifications();
+}
+
+function toggleNotifPanel() {
+    const panel = document.getElementById('notifPanel');
+    notifOpen = !notifOpen;
+    panel.style.display = notifOpen ? 'block' : 'none';
+    if (notifOpen) loadNotifications();
+}
+document.addEventListener('click', (e) => {
+    if (notifOpen && !e.target.closest('#notifBell') && !e.target.closest('#notifPanel')) {
+        notifOpen = false;
+        document.getElementById('notifPanel').style.display = 'none';
+    }
+});
+setInterval(loadNotifications, 30000);
+loadNotifications();
+</script>
+
+<script>
+// ── LIVE CHAT ──
+let socket        = null;
+let activeSession = null;
+let chatSessions  = [];
+
+function initSocket() {
+    socket = io(API);
+    socket.emit('admin_join');
+
+    socket.on('admin_new_message', (data) => {
+        // Update unread in session list
+        if (data.sender === 'user') {
+            const s = chatSessions.find(x => x.session_id === data.session_id);
+            if (s) { s.unread = (s.unread || 0) + 1; }
+            else   { chatSessions.unshift({ session_id: data.session_id, user_name: data.user_name || 'Guest', user_email: data.user_email || '', unread: 1 }); }
+            renderSessionList();
+            // Update badge
+            const total = chatSessions.reduce((sum, s) => sum + (s.unread || 0), 0);
+            const el = document.getElementById('badgeChat');
+            if (total > 0) { el.textContent = total; el.style.display = 'inline-flex'; }
+        }
+        // If this session is open, append message live
+        if (activeSession === data.session_id) {
+            appendChatMsg(data);
+            markRead(activeSession);
+        }
+    });
+}
+
+async function loadChatSessions() {
+    try {
+        const res  = await fetch(API + '/api/chat/sessions', { headers:{ Authorization:'Bearer '+token } });
+        const data = await res.json();
+        chatSessions = Array.isArray(data) ? data : [];
+        renderSessionList();
+
+        // Update badge
+        const total = chatSessions.reduce((sum, s) => sum + (s.unread || 0), 0);
+        const el = document.getElementById('badgeChat');
+        if (total > 0) { el.textContent = total; el.style.display = 'inline-flex'; }
+        else el.style.display = 'none';
+
+        // Update stat
+        document.getElementById('statChats').textContent = chatSessions.length;
+    } catch(e) {}
+}
+
+function renderSessionList() {
+    const list = document.getElementById('sessionList');
+    if (!chatSessions.length) {
+        list.innerHTML = '<div class="no-sessions-msg">No conversations yet</div>';
+        return;
+    }
+    list.innerHTML = chatSessions.map(s => `
+        <div class="session-item ${activeSession === s.session_id ? 'active' : ''}"
+             onclick="openSession('${s.session_id}','${s.user_name}','${s.user_email || ''}')">
+            <div class="session-av">${(s.user_name || 'G').charAt(0).toUpperCase()}</div>
+            <div class="session-info">
+                <h4>${s.user_name || 'Guest'}</h4>
+                <span>${s.user_email || 'No email'}</span>
+            </div>
+            ${s.unread > 0 ? `<div class="unread-dot">${s.unread}</div>` : ''}
+        </div>`).join('');
+}
+
+async function openSession(session_id, user_name, user_email) {
+    activeSession = session_id;
+    document.getElementById('chatEmpty').style.display        = 'none';
+    document.getElementById('activeChatWrap').style.display   = 'flex';
+    document.getElementById('chatAv').textContent             = (user_name || 'G').charAt(0).toUpperCase();
+    document.getElementById('chatUserName').textContent       = user_name || 'Guest';
+    document.getElementById('chatUserEmail').textContent      = user_email || 'No email';
+    renderSessionList();
+
+    // Load history
+    try {
+        const res  = await fetch(API + '/api/chat/history/' + session_id, { headers:{ Authorization:'Bearer '+token } });
+        const data = await res.json();
+        const msgs = document.getElementById('chatMessages');
+        msgs.innerHTML = '';
+        if (Array.isArray(data)) data.forEach(m => appendChatMsg(m));
+    } catch(e) {}
+
+    markRead(session_id);
+    document.getElementById('adminInput').focus();
+}
+
+function appendChatMsg(data) {
+    const msgs = document.getElementById('chatMessages');
+    const time = new Date(data.created_at).toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+    const div  = document.createElement('div');
+    div.className = 'cmsg ' + data.sender;
+    if (data.sender === 'user') {
+        div.innerHTML = `
+            <div class="cmsg-icon"><i class="fas fa-user"></i></div>
+            <div>
+                <div class="cmsg-bubble">${data.message}</div>
+                <div class="cmsg-time">${data.user_name || 'User'} · ${time}</div>
+            </div>`;
+    } else {
+        div.innerHTML = `
+            <div style="text-align:right;">
+                <div class="cmsg-bubble">${data.message}</div>
+                <div class="cmsg-time" style="text-align:right;">You · ${time}</div>
+            </div>
+            <div class="cmsg-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;">
+                <i class="fas fa-user-shield"></i>
+            </div>`;
+    }
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function sendAdminReply() {
+    const input = document.getElementById('adminInput');
+    const text  = input.value.trim();
+    if (!text || !activeSession || !socket) return;
+    input.value = '';
+    socket.emit('admin_message', { session_id: activeSession, message: text });
+}
+
+async function markRead(session_id) {
+    try {
+        await fetch(API + '/api/chat/mark-read/' + session_id, {
+            method:'POST', headers:{ Authorization:'Bearer '+token }
+        });
+        const s = chatSessions.find(x => x.session_id === session_id);
+        if (s) { s.unread = 0; renderSessionList(); }
+        // Update badge
+        const total = chatSessions.reduce((sum, s) => sum + (s.unread || 0), 0);
+        const el = document.getElementById('badgeChat');
+        if (total > 0) { el.textContent = total; el.style.display = 'inline-flex'; }
+        else el.style.display = 'none';
+    } catch(e) {}
+}
+
+// Init socket
+initSocket();
+// Auto refresh sessions every 15s
+setInterval(loadChatSessions, 15000);
+
+// Hamburger
+document.getElementById('hamburger') && document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('navLinks') && document.getElementById('navLinks').classList.toggle('active');
+});
+</script>
+</body>
+</html>

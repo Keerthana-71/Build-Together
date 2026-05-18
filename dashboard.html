@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Build Together Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #f1f5f9; }
+
+        .dashboard-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* ---- SIDEBAR ---- */
+        .sidebar {
+            background: #0f172a;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-profile {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 15px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 15px;
+        }
+
+        .sidebar-profile h3 { color: white; font-size: 1rem; margin-bottom: 4px; }
+        .sidebar-profile span { color: #94a3b8; font-size: 0.82rem; }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: rgba(102,126,234,0.15);
+            color: #667eea;
+        }
+
+        .sidebar-nav a i { width: 18px; }
+
+        .sidebar-logout {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .sidebar-logout a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #ef4444;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .sidebar-logout a:hover { background: rgba(239,68,68,0.1); }
+
+        /* ---- MAIN CONTENT ---- */
+        .dashboard-main { padding: 35px; overflow-y: auto; }
+
+        .dash-greeting { margin-bottom: 30px; }
+        .dash-greeting h1 { font-size: 1.8rem; color: #1e293b; margin-bottom: 5px; }
+        .dash-greeting p { color: #64748b; }
+
+        /* Stats Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .stat-card-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .stat-card-icon.blue  { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .stat-card-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+        .stat-card-icon.orange{ background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+        .stat-card h3 { font-size: 1.6rem; color: #1e293b; margin-bottom: 3px; }
+        .stat-card p  { color: #64748b; font-size: 0.85rem; }
+
+        /* Enrolled Course Card */
+        .section-title-dash {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .enrolled-card {
+            background: linear-gradient(135deg, #1e3a5f, #2c5282);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .enrolled-card h2 { font-size: 1.4rem; margin-bottom: 8px; }
+        .enrolled-card p  { opacity: 0.85; font-size: 0.9rem; margin-bottom: 15px; }
+
+        .course-status-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-pending  { background: rgba(251,191,36,0.2); color: #fbbf24; border: 1px solid #fbbf24; }
+        .badge-approved { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid #10b981; }
+        .badge-rejected { background: rgba(239,68,68,0.2);  color: #ef4444; border: 1px solid #ef4444; }
+
+        .no-course-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .no-course-card i  { font-size: 3rem; color: #cbd5e1; margin-bottom: 15px; }
+        .no-course-card h3 { color: #1e293b; margin-bottom: 8px; }
+        .no-course-card p  { color: #64748b; margin-bottom: 20px; }
+
+        /* Syllabus / Progress */
+        .syllabus-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .week-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .week-card.locked {
+            opacity: 0.55;
+            filter: grayscale(0.3);
+        }
+
+        .week-card.completed { border-left: 4px solid #10b981; }
+        .week-card.unlocked  { border-left: 4px solid #667eea; }
+        .week-card.locked    { border-left: 4px solid #cbd5e1; }
+
+        .week-num {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .week-num.completed { background: #d1fae5; color: #059669; }
+        .week-num.unlocked  { background: #ede9fe; color: #667eea; }
+        .week-num.locked    { background: #f1f5f9; color: #94a3b8; }
+
+        .week-info { flex: 1; }
+        .week-info h4 { color: #1e293b; font-size: 1rem; margin-bottom: 4px; }
+        .week-info p  { color: #64748b; font-size: 0.85rem; }
+
+        .week-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .week-badge.completed { background: #d1fae5; color: #059669; }
+        .week-badge.unlocked  { background: #ede9fe; color: #667eea; }
+        .week-badge.locked    { background: #f1f5f9; color: #94a3b8; }
+
+        .complete-btn {
+            padding: 9px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .complete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102,126,234,0.4);
+        }
+
+        .certificate-btn {
+            padding: 9px 20px;
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .certificate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245,158,11,0.35);
+        }
+
+        .lock-icon { color: #94a3b8; font-size: 1.2rem; }
+
+        .week-card { cursor: pointer; flex-wrap: wrap; }
+        .week-tasks-panel {
+            width: 100%; margin-top: 16px; padding-top: 16px;
+            border-top: 1px solid #f1f5f9;
+            display: none; flex-direction: column; gap: 10px;
+        }
+        .week-tasks-panel.open { display: flex; }
+        .task-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 12px 16px; border-radius: 10px; background: #f8fafc;
+        }
+        .task-item.done { background: #f0fdf4; }
+        .task-item.locked-task { opacity: 0.5; pointer-events: none; }
+        .task-icon {
+            width: 34px; height: 34px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; flex-shrink: 0;
+        }
+        .task-icon.task-type   { background: #ede9fe; color: #667eea; }
+        .task-icon.assess-type { background: #fef3c7; color: #d97706; }
+        .task-icon.done-type   { background: #d1fae5; color: #059669; }
+        .task-icon.lock-type   { background: #f1f5f9; color: #94a3b8; }
+        .task-info { flex: 1; }
+        .task-info h5 { font-size: 0.88rem; color: #1e293b; margin-bottom: 2px; }
+        .task-info p  { font-size: 0.78rem; color: #64748b; }
+        .task-complete-btn {
+            padding: 6px 14px; background: linear-gradient(135deg,#667eea,#764ba2);
+            color: white; border: none; border-radius: 8px;
+            font-size: 0.78rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+        }
+        .task-complete-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(102,126,234,0.4); }
+        .week-toggle-icon { color: #94a3b8; transition: transform 0.3s; flex-shrink: 0; }
+        .week-card.open .week-toggle-icon { transform: rotate(180deg); }
+
+        /* Progress Bar */
+        .progress-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .progress-bar-wrap {
+            background: #f1f5f9;
+            border-radius: 10px;
+            height: 12px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 0.82rem;
+            color: #64748b;
+        }
+
+        /* Profile */
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1100px; }
+        .profile-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+        .profile-card h4 { font-size: 0.9rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display:flex; align-items:center; gap:8px; }
+        .profile-input { width:100%; padding:10px 14px; border:2px solid #e2e8f0; border-radius:10px; font-size:0.88rem; font-family:inherit; outline:none; transition:border 0.2s; box-sizing:border-box; }
+        .profile-input:focus { border-color:#667eea; }
+        .profile-save-btn { width:100%; padding:11px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:10px; font-size:0.88rem; font-weight:600; cursor:pointer; margin-top:14px; }
+        .badge-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+        .badge-item { text-align:center; padding:16px 8px; border-radius:12px; background:#f8fafc; }
+        .badge-item.earned { background:linear-gradient(135deg,#ede9fe,#ddd6fe); }
+        .badge-item .badge-icon { font-size:1.8rem; margin-bottom:6px; }
+        .badge-item .badge-name { font-size:0.75rem; font-weight:600; color:#1e293b; }
+        .badge-item.locked-badge { opacity:0.4; filter:grayscale(1); }
+        .timeline-item { display:flex; gap:14px; align-items:flex-start; padding-bottom:16px; border-left:2px solid #e2e8f0; margin-left:10px; padding-left:18px; position:relative; }
+        .timeline-item:last-child { border-left:2px solid transparent; }
+        .timeline-dot { width:12px; height:12px; border-radius:50%; background:#667eea; position:absolute; left:-7px; top:4px; flex-shrink:0; }
+        .timeline-text { font-size:0.82rem; color:#1e293b; font-weight:500; }
+        .timeline-date { font-size:0.75rem; color:#94a3b8; margin-top:2px; }
+        @media (max-width: 900px) {
+            .dashboard-wrapper { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .stats-row { grid-template-columns: 1fr; }
+            .dashboard-main { padding: 20px; }
+            .profile-grid { grid-template-columns: 1fr; }
+            .badge-grid { grid-template-columns: repeat(2,1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+    <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="internship.html">Internship</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="apply.html" class="apply-nav">Apply Now</a></li>
+    </ul>
+    <div class="navbar-right">
+        <span id="navDateTime" style="color:#64748b;font-size:0.75rem;margin-right:6px;"></span>
+        <div style="position:relative;display:inline-block;margin-right:6px;">
+            <button id="notifBell" onclick="toggleNotifPanel()" style="background:#f1f5f9;border:1px solid #e2e8f0;color:#64748b;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;position:relative;">
+                <i class="fas fa-bell"></i>
+                <span id="notifCount" style="display:none;position:absolute;top:-4px;right:-4px;background:#ef4444;color:white;border-radius:50%;width:18px;height:18px;font-size:0.65rem;font-weight:700;align-items:center;justify-content:center;">0</span>
+            </button>
+            <div id="notifPanel" style="display:none;position:absolute;right:0;top:44px;width:300px;background:white;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.15);z-index:9999;overflow:hidden;">
+                <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-weight:700;color:#1e293b;font-size:0.9rem;"><i class="fas fa-bell" style="color:#667eea;margin-right:6px;"></i>My Updates</span>
+                </div>
+                <div id="notifList" style="max-height:300px;overflow-y:auto;"><div style="padding:20px;text-align:center;color:#94a3b8;font-size:0.82rem;"><i class="fas fa-spinner fa-spin"></i> Loading...</div></div>
+            </div>
+        </div>
+        <button class="dark-toggle" id="darkToggleBtn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+</nav>
+
+<div class="dashboard-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-profile">
+            <div class="profile-avatar" id="sidebarAvatar">?</div>
+            <h3 id="sidebarName">Loading...</h3>
+            <span id="sidebarEmail">...</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#overview" class="active" onclick="return showSection('overview', this)">
+                <i class="fas fa-th-large"></i> Overview
+            </a>
+            <a href="#syllabus" onclick="return showSection('syllabus', this)">
+                <i class="fas fa-book-open"></i> My Course
+            </a>
+            <a href="#internship" onclick="return showSection('internship', this)">
+                <i class="fas fa-briefcase"></i> Internship
+            </a>
+            <a href="#profile" onclick="return showSection('profile', this)">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="mock-interview.html">
+                <i class="fas fa-robot"></i> Mock Interview
+            </a>
+        </nav>
+        <div class="sidebar-logout">
+            <a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+        <!-- OVERVIEW SECTION -->
+        <div id="section-overview">
+            <div class="dash-greeting">
+                <h1>Welcome back, <span id="greetName">Student</span>! 👋</h1>
+                <p>Here's your learning progress overview.</p>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-card-icon blue"><i class="fas fa-book"></i></div>
+                    <div>
+                        <h3 id="statCourse">0</h3>
+                        <p>Course Enrolled</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon green"><i class="fas fa-check-circle"></i></div>
+                    <div>
+                        <h3 id="statCompleted">0</h3>
+                        <p>Weeks Completed</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon orange"><i class="fas fa-lock-open"></i></div>
+                    <div>
+                        <h3 id="statUnlocked">0</h3>
+                        <p>Weeks Unlocked</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enrolled Course -->
+            <div class="section-title-dash"><i class="fas fa-graduation-cap"></i> Enrolled Course</div>
+            <div id="enrolledCourseSection"></div>
+
+            <!-- Progress Bar -->
+            <div id="progressSection" style="display:none">
+                <div class="section-title-dash"><i class="fas fa-chart-line"></i> Overall Progress</div>
+                <div class="progress-section">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <strong id="progressCourseName">Course</strong>
+                        <span id="progressPercent" style="color:#667eea; font-weight:700;">0%</span>
+                    </div>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" id="progressBarFill" style="width:0%"></div>
+                    </div>
+                    <div class="progress-label">
+                        <span id="progressDetail">0 of 0 weeks completed</span>
+                        <span id="progressStatus">In Progress</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SYLLABUS SECTION -->
+        <div id="section-syllabus" style="display:none">
+            <div class="dash-greeting">
+                <h1>My Course <i class="fas fa-book-open" style="color:#667eea"></i></h1>
+                <p>Complete each week to unlock the next one.</p>
+            </div>
+            <div id="myCourseStatusSection"></div>
+            <div id="syllabusContent"></div>
+        </div>
+
+        <!-- INTERNSHIP SECTION -->
+        <div id="section-internship" style="display:none">
+            <div class="dash-greeting">
+                <h1>Internship <i class="fas fa-briefcase" style="color:#667eea"></i></h1>
+                <p>Track your internship application and journey.</p>
+            </div>
+            <div id="internshipContent"></div>
+        </div>
+
+        <!-- PROFILE SECTION -->
+        <div id="section-profile" style="display:none">
+            <div class="dash-greeting">
+                <h1>My Profile <i class="fas fa-user" style="color:#667eea"></i></h1>
+                <p>Manage your account and track your achievements.</p>
+            </div>
+
+            <!-- Top: Avatar + Stats -->
+            <div class="profile-card" style="max-width:1100px;margin-bottom:20px;">
+                <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+                    <div class="profile-avatar" id="profileAvatar" style="width:80px;height:80px;font-size:2rem;flex-shrink:0;">?</div>
+                    <div style="flex:1;">
+                        <h3 id="profileName" style="color:#1e293b;font-size:1.3rem;margin-bottom:4px;"></h3>
+                        <span id="profileRole" style="color:#667eea;font-size:0.85rem;font-weight:600;text-transform:capitalize;"></span>
+                        <div style="font-size:0.8rem;color:#94a3b8;margin-top:4px;"><i class="fas fa-calendar" style="margin-right:5px;"></i>Member since <span id="profileJoined"></span></div>
+                    </div>
+                    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+                        <div style="text-align:center;padding:12px 20px;background:#f8fafc;border-radius:12px;">
+                            <div id="pStatCourse" style="font-size:1.4rem;font-weight:700;color:#667eea;">0</div>
+                            <div style="font-size:0.72rem;color:#64748b;">Courses</div>
+                        </div>
+                        <div style="text-align:center;padding:12px 20px;background:#f8fafc;border-radius:12px;">
+                            <div id="pStatWeeks" style="font-size:1.4rem;font-weight:700;color:#10b981;">0</div>
+                            <div style="font-size:0.72rem;color:#64748b;">Weeks Done</div>
+                        </div>
+                        <div style="text-align:center;padding:12px 20px;background:#f8fafc;border-radius:12px;">
+                            <div id="pStatIntern" style="font-size:1.4rem;font-weight:700;color:#f59e0b;">0</div>
+                            <div style="font-size:0.72rem;color:#64748b;">Internships</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <!-- Edit Profile -->
+                <div class="profile-card">
+                    <h4><i class="fas fa-edit" style="color:#667eea;"></i> Edit Profile</h4>
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <div>
+                            <div style="font-size:0.75rem;color:#94a3b8;margin-bottom:4px;">Full Name</div>
+                            <input id="editName" class="profile-input" type="text" placeholder="Your full name">
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem;color:#94a3b8;margin-bottom:4px;">Email</div>
+                            <input id="editEmail" class="profile-input" type="text" disabled style="background:#f1f5f9;color:#94a3b8;cursor:not-allowed;">
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem;color:#94a3b8;margin-bottom:4px;">Phone</div>
+                            <input id="editPhone" class="profile-input" type="tel" placeholder="e.g. 9876543210" oninput="this.value=this.value.replace(/[^0-9]/g,'')" maxlength="15">
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem;color:#94a3b8;margin-bottom:4px;">City</div>
+                            <input id="editCity" class="profile-input" type="text" placeholder="Your city">
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem;color:#94a3b8;margin-bottom:4px;"><i class="fab fa-linkedin" style="color:#0077b5;"></i> LinkedIn URL</div>
+                            <input id="editLinkedin" class="profile-input" type="url" placeholder="https://linkedin.com/in/...">
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem;color:#94a3b8;margin-bottom:4px;"><i class="fab fa-github" style="color:#1e293b;"></i> GitHub URL</div>
+                            <input id="editGithub" class="profile-input" type="url" placeholder="https://github.com/...">
+                        </div>
+                        <button class="profile-save-btn" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+                        <div id="profileSaveMsg" style="font-size:0.82rem;text-align:center;display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- Badges + Timeline -->
+                <div style="display:flex;flex-direction:column;gap:20px;">
+                    <!-- Badges -->
+                    <div class="profile-card">
+                        <h4><i class="fas fa-trophy" style="color:#f59e0b;"></i> Achievements</h4>
+                        <div class="badge-grid" id="badgeGrid"></div>
+                    </div>
+                    <!-- Activity Timeline -->
+                    <div class="profile-card">
+                        <h4><i class="fas fa-history" style="color:#667eea;"></i> Activity Timeline</h4>
+                        <div id="activityTimeline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- VIDEO QUIZ MODAL -->
+<div id="videoQuizModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:10000;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:white;border-radius:20px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;">
+        <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:20px 24px;border-radius:20px 20px 0 0;display:flex;justify-content:space-between;align-items:center;">
+            <div style="color:white;font-weight:700;font-size:1rem;"><i class="fas fa-clipboard-check" style="margin-right:8px;"></i>Video Quiz — Prove You Watched!</div>
+            <button onclick="document.getElementById('videoQuizModal').style.display='none'" style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">&times;</button>
+        </div>
+        <div style="padding:24px;">
+            <div id="videoQuizBody"></div>
+            <div id="videoQuizResult" style="margin-top:14px;"></div>
+            <button id="videoQuizSubmitBtn" style="width:100%;margin-top:16px;padding:13px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:600;cursor:pointer;"><i class="fas fa-paper-plane"></i> Submit Quiz</button>
+        </div>
+    </div>
+</div>
+
+<!-- VIDEO MODAL -->
+<div id="videoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#0f172a;border-radius:20px;width:100%;max-width:780px;overflow:hidden;">
+        <div style="background:linear-gradient(135deg,#ef4444,#dc2626);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="color:white;font-weight:700;font-size:1rem;"><i class="fab fa-youtube" style="margin-right:8px;"></i>Watch to Complete Task</div>
+            <button onclick="confirmCloseVideo()" style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">&times;</button>
+        </div>
+        <div style="padding:20px;">
+
+            <div id="videoPlayerWrap" style="position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;">
+                <div id="ytPlayerDiv" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px;"></div>
+            </div>
+            <div id="videoProgress" style="margin-top:14px;">
+                <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#94a3b8;margin-bottom:6px;">
+                    <span>Progress</span>
+                    <span id="videoProgressText">0%</span>
+                </div>
+                <div style="background:#1e293b;border-radius:10px;height:8px;overflow:hidden;">
+                    <div id="videoProgressBar" style="height:100%;width:0%;background:linear-gradient(135deg,#ef4444,#f59e0b);border-radius:10px;transition:width 1s;"></div>
+                </div>
+                <div id="videoStatusMsg" style="margin-top:10px;text-align:center;font-size:0.82rem;color:#94a3b8;">Watch the full video to unlock the next task</div>
+                <button id="videoQuizTriggerBtn" onclick="onVideoCompleted()" style="display:none;width:100%;margin-top:12px;padding:12px;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;font-size:0.92rem;font-weight:600;cursor:pointer;"><i class="fas fa-clipboard-check"></i> Take Quiz &amp; Complete Task</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QUIZ MODAL -->
+<div id="quizModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:white;border-radius:20px;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;">
+        <div style="background:linear-gradient(135deg,#667eea,#764ba2);padding:22px 28px;border-radius:20px 20px 0 0;display:flex;justify-content:space-between;align-items:center;">
+            <div style="color:white;font-weight:700;font-size:1.1rem;"><i class="fas fa-clipboard-list" style="margin-right:8px;"></i>Week Assessment</div>
+            <button onclick="document.getElementById('quizModal').style.display='none'" style="background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;">&times;</button>
+        </div>
+        <div style="padding:24px 28px;">
+            <div id="quizBody"></div>
+            <div id="quizResult" style="margin-top:16px;"></div>
+            <button id="quizSubmitBtn" style="width:100%;margin-top:16px;padding:14px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;"><i class="fas fa-paper-plane"></i> Submit Quiz</button>
+        </div>
+    </div>
+</div>
+
+<script src="navbar-auth.js"></script>
+<script src="darkmode.js"></script>
+<script>
+    const API = 'http://localhost:5000';
+    const token = sessionStorage.getItem('token');
+
+    // Login guard
+    if (!sessionStorage.getItem('loggedIn') || !token) {
+        alert('Please log in first.');
+        location.href = 'apply.html';
+    }
+
+    let dashData = null;
+
+    // Load dashboard data
+    async function loadDashboard() {
+        try {
+            const res = await fetch(API + '/api/dashboard', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.error); return; }
+
+            const uniqueCourses = [];
+            const seenCourses = new Set();
+            (data.enrolled_courses || []).forEach(course => {
+                if (!seenCourses.has(course.course_name)) {
+                    seenCourses.add(course.course_name);
+                    uniqueCourses.push(course);
+                }
+            });
+            data.enrolled_courses = uniqueCourses;
+            dashData = data;
+            allCourses = uniqueCourses;
+            renderProfile(data);
+
+            if (uniqueCourses.length > 0) {
+                renderEnrolledCourses(uniqueCourses);
+                await loadSyllabus(uniqueCourses[0].course_name);
+            } else {
+                renderNoCourse();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderProfile(data) {
+        const u = data.user;
+        const initial = u.full_name.charAt(0).toUpperCase();
+        const joined  = new Date(u.created_at).toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
+
+        // Sidebar
+        document.getElementById('sidebarAvatar').textContent = initial;
+        document.getElementById('sidebarName').textContent   = u.full_name;
+        document.getElementById('sidebarEmail').textContent  = u.email;
+        document.getElementById('greetName').textContent     = u.full_name.split(' ')[0];
+
+        // Profile top card
+        document.getElementById('profileAvatar').textContent = initial;
+        document.getElementById('profileName').textContent   = u.full_name;
+        document.getElementById('profileRole').textContent   = u.role;
+        document.getElementById('profileJoined').textContent = joined;
+
+        // Edit form prefill
+        document.getElementById('editName').value     = u.full_name || '';
+        document.getElementById('editEmail').value    = u.email || '';
+        document.getElementById('editPhone').value    = u.phone || '';
+        document.getElementById('editCity').value     = u.city || '';
+        document.getElementById('editLinkedin').value = u.linkedin || '';
+        document.getElementById('editGithub').value   = u.github || '';
+
+        // Stats
+        const courseCount  = data.enrolled_courses ? data.enrolled_courses.length : 0;
+        const internCount  = data.internship ? 1 : 0;
+        document.getElementById('statCourse').textContent  = courseCount;
+        document.getElementById('pStatCourse').textContent = courseCount;
+        document.getElementById('pStatIntern').textContent = internCount;
+
+        if (data.enrolled_courses && data.enrolled_courses.length > 0)
+            document.getElementById('profileCourse') && (document.getElementById('profileCourse').textContent = data.enrolled_courses.map(c => c.course_name).join(', '));
+
+        if (data.internship) renderInternship(data.internship);
+        else renderNoInternship();
+
+        // Badges & Timeline need syllabus data — rendered after loadSyllabus
+        renderBadges(data, 0);
+        renderTimeline(data);
+    }
+
+    function renderBadges(data, weeksCompleted) {
+        const courseCount = data.enrolled_courses ? data.enrolled_courses.length : 0;
+        const hasIntern   = !!data.internship;
+        const badges = [
+            { icon: '🎓', name: 'Course Enrolled',    earned: courseCount > 0 },
+            { icon: '🏆', name: 'First Week Done',     earned: weeksCompleted >= 1 },
+            { icon: '🔥', name: '3 Weeks Streak',      earned: weeksCompleted >= 3 },
+            { icon: '⭐', name: 'Halfway There',       earned: weeksCompleted >= 3 },
+            { icon: '💼', name: 'Internship Applied',  earned: hasIntern },
+            { icon: '🚀', name: 'Course Completed',    earned: weeksCompleted >= 6 },
+        ];
+        document.getElementById('badgeGrid').innerHTML = badges.map(b =>
+            '<div class="badge-item ' + (b.earned ? 'earned' : 'locked-badge') + '">' +
+            '<div class="badge-icon">' + b.icon + '</div>' +
+            '<div class="badge-name">' + b.name + '</div>' +
+            '</div>'
+        ).join('');
+        document.getElementById('pStatWeeks').textContent = weeksCompleted;
+    }
+
+    function renderTimeline(data) {
+        const events = [];
+        if (data.user.created_at)
+            events.push({ text: 'Joined Build Together', date: data.user.created_at });
+        if (data.enrolled_courses)
+            data.enrolled_courses.forEach(c => events.push({ text: 'Applied for ' + c.course_name, date: c.applied_at }));
+        if (data.internship)
+            events.push({ text: 'Applied for ' + data.internship.role_applied + ' Internship', date: data.internship.applied_at });
+
+        events.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const el = document.getElementById('activityTimeline');
+        if (!events.length) { el.innerHTML = '<p style="color:#94a3b8;font-size:0.85rem;">No activity yet.</p>'; return; }
+        el.innerHTML = events.map(e =>
+            '<div class="timeline-item">' +
+            '<div class="timeline-dot"></div>' +
+            '<div><div class="timeline-text">' + e.text + '</div>' +
+            '<div class="timeline-date">' + new Date(e.date).toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' }) + '</div>' +
+            '</div></div>'
+        ).join('');
+    }
+
+    async function saveProfile() {
+        const body = {
+            full_name: document.getElementById('editName').value.trim(),
+            phone:     document.getElementById('editPhone').value.trim(),
+            city:      document.getElementById('editCity').value.trim(),
+            linkedin:  document.getElementById('editLinkedin').value.trim(),
+            github:    document.getElementById('editGithub').value.trim()
+        };
+        if (!body.full_name) { alert('Name is required.'); return; }
+        if (body.phone && !/^[0-9]+$/.test(body.phone)) { alert('Phone number must contain only digits.'); return; }
+        const msg = document.getElementById('profileSaveMsg');
+        try {
+            const res  = await fetch(API + '/api/profile', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            msg.style.display = 'block';
+            if (res.ok) {
+                msg.style.color = '#059669';
+                msg.textContent = '✓ ' + data.message;
+                document.getElementById('profileName').textContent  = body.full_name;
+                document.getElementById('sidebarName').textContent  = body.full_name;
+                document.getElementById('profileAvatar').textContent = body.full_name.charAt(0).toUpperCase();
+                document.getElementById('sidebarAvatar').textContent = body.full_name.charAt(0).toUpperCase();
+            } else {
+                msg.style.color = '#ef4444';
+                msg.textContent = '✗ ' + data.error;
+            }
+            setTimeout(() => msg.style.display = 'none', 3000);
+        } catch(e) {
+            alert('Server error.');
+        }
+    }
+
+    function certificateButtonHTML(courseName) {
+        return '<button class="complete-btn certificate-btn" onclick=\'downloadCertificate(' + JSON.stringify(courseName) + ')\'><i class="fas fa-certificate"></i> Get Certificate</button>';
+    }
+
+    function renderEnrolledCourses(courses) {
+        const statusClass = { pending: 'badge-pending', approved: 'badge-approved', rejected: 'badge-rejected' };
+
+        let overviewHtml = '';
+        courses.forEach(course => {
+            const appliedDate = new Date(course.applied_at).toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
+            const isCompleted = course.total_weeks > 0 && course.completed_weeks >= course.total_weeks;
+            const statusBadge = isCompleted
+                ? '<span class="course-status-badge badge-approved">✅ Completed</span>'
+                : '<span class="course-status-badge ' + (statusClass[course.status] || 'badge-pending') + '">' + course.status.charAt(0).toUpperCase() + course.status.slice(1) + '</span>';
+            overviewHtml +=
+                '<div class="enrolled-card" style="margin-bottom:16px;">' +
+                    '<div>' +
+                        '<h2><i class="fas fa-graduation-cap"></i> ' + course.course_name + '</h2>' +
+                        '<p>Applied on ' + appliedDate + '</p>' +
+                        statusBadge +
+                        (course.total_weeks > 0 ? '<div style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:8px;">' + course.completed_weeks + ' / ' + course.total_weeks + ' weeks completed</div>' : '') +
+                    '</div>' +
+                    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;">' +
+                        '<button class="complete-btn" onclick=\'goToSyllabus(' + JSON.stringify(course.course_name) + ')\'><i class="fas fa-book-open"></i> ' + (isCompleted ? 'View Course' : 'View Syllabus') + '</button>' +
+                        (isCompleted ? certificateButtonHTML(course.course_name) : '') +
+                    '</div>' +
+                '</div>';
+        });
+        document.getElementById('enrolledCourseSection').innerHTML = overviewHtml;
+
+        // My Course section — tabs if multiple courses
+        if (courses.length === 1) {
+            const c = courses[0];
+            const appliedDate = new Date(c.applied_at).toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
+            const isCompleted = c.total_weeks > 0 && c.completed_weeks >= c.total_weeks;
+            const statusClass = { pending: 'badge-pending', approved: 'badge-approved', rejected: 'badge-rejected' };
+            const statusBadge = isCompleted
+                ? '<span class="course-status-badge badge-approved">✅ Completed</span>'
+                : '<span class="course-status-badge ' + (statusClass[c.status] || 'badge-pending') + '">' + c.status.charAt(0).toUpperCase() + c.status.slice(1) + '</span>';
+            document.getElementById('myCourseStatusSection').innerHTML =
+                '<div style="background:white;border-radius:16px;padding:22px 25px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">' +
+                    '<div><div style="font-size:0.78rem;color:#94a3b8;margin-bottom:4px;">Enrolled Course</div>' +
+                    '<div style="font-size:1.05rem;font-weight:700;color:#1e293b;">' + c.course_name + '</div>' +
+                    '<div style="font-size:0.82rem;color:#64748b;margin-top:3px;">Applied on ' + appliedDate + '</div>' +
+                    (c.total_weeks > 0 ? '<div style="font-size:0.8rem;color:#94a3b8;margin-top:3px;">' + c.completed_weeks + ' / ' + c.total_weeks + ' weeks completed</div>' : '') +
+                    '</div>' +
+                    '<div style="text-align:right;display:flex;flex-direction:column;justify-content:center;gap:10px;">' +
+                        statusBadge +
+                        (isCompleted ? certificateButtonHTML(c.course_name) : '') +
+                    '</div>' +
+                '</div>';
+        } else {
+            // Multiple courses — show tabs
+            let tabsHtml = '<div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">';
+            courses.forEach((c, i) => {
+                tabsHtml += '<button onclick="switchCourseTab(' + i + ', this)" id="course-tab-' + i + '" style="padding:8px 18px;border-radius:20px;border:2px solid ' + (i===0?'#667eea':'#e2e8f0') + ';background:' + (i===0?'#667eea':'white') + ';color:' + (i===0?'white':'#64748b') + ';font-weight:600;font-size:0.85rem;cursor:pointer;">' + c.course_name + '</button>';
+            });
+            tabsHtml += '</div>';
+            courses.forEach((c, i) => {
+                const appliedDate = new Date(c.applied_at).toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
+                const isCourseCompleted = c.total_weeks > 0 && c.completed_weeks >= c.total_weeks;
+                const statusBadge = isCourseCompleted
+                    ? '<span class="course-status-badge badge-approved">✅ Completed</span>'
+                    : '<span class="course-status-badge ' + (statusClass[c.status] || 'badge-pending') + '">' + c.status.charAt(0).toUpperCase() + c.status.slice(1) + '</span>';
+                tabsHtml += '<div id="course-tab-content-' + i + '" style="display:' + (i===0?'block':'none') + ';background:white;border-radius:16px;padding:22px 25px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,0.06);">' +
+                    '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">' +
+                    '<div><div style="font-size:0.78rem;color:#94a3b8;margin-bottom:4px;">Enrolled Course</div>' +
+                    '<div style="font-size:1.05rem;font-weight:700;color:#1e293b;">' + c.course_name + '</div>' +
+                    '<div style="font-size:0.82rem;color:#64748b;margin-top:3px;">Applied on ' + appliedDate + '</div></div>' +
+                    '<div style="text-align:right;display:flex;flex-direction:column;justify-content:center;gap:10px;">' +
+                        statusBadge +
+                        (isCourseCompleted ? certificateButtonHTML(c.course_name) : '') +
+                    '</div>' +
+                    '</div></div>';
+            });
+            document.getElementById('myCourseStatusSection').innerHTML = tabsHtml;
+        }
+    }
+
+    let allCourses = [];
+    function switchCourseTab(idx, btn) {
+        document.querySelectorAll('[id^="course-tab-content-"]').forEach((el, i) => el.style.display = i === idx ? 'block' : 'none');
+        document.querySelectorAll('[id^="course-tab-"]').forEach(b => {
+            b.style.background = 'white'; b.style.color = '#64748b'; b.style.borderColor = '#e2e8f0';
+        });
+        btn.style.background = '#667eea'; btn.style.color = 'white'; btn.style.borderColor = '#667eea';
+        loadSyllabus(allCourses[idx].course_name);
+    }
+
+    function renderInternship(intern) {
+        const statusClass = { pending: 'badge-pending', approved: 'badge-approved', rejected: 'badge-rejected', shortlisted: 'badge-pending', selected: 'badge-approved' };
+        const appliedDate = new Date(intern.applied_at).toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
+        const badge = '<span class="course-status-badge ' + (statusClass[intern.status] || 'badge-pending') + '">' + intern.status.charAt(0).toUpperCase() + intern.status.slice(1) + '</span>';
+        const roleIcons = { 'Frontend Developer Intern': 'fa-code', 'Python & Data Science Intern': 'fa-chart-bar', 'Digital Marketing Intern': 'fa-bullhorn' };
+        const icon = roleIcons[intern.role_applied] || 'fa-briefcase';
+
+        const steps = [
+            { icon: 'fa-paper-plane', label: 'Applied',       done: true },
+            { icon: 'fa-search',      label: 'Under Review',  done: ['shortlisted','selected','approved'].includes(intern.status) },
+            { icon: 'fa-comments',    label: 'Interview',     done: ['selected','approved'].includes(intern.status) },
+            { icon: 'fa-rocket',      label: 'Onboarded',     done: intern.status === 'selected' || intern.status === 'approved' }
+        ];
+
+        const stepsHtml = steps.map((s, i) =>
+            '<div style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative;">' +
+            (i < steps.length - 1 ? '<div style="position:absolute;top:18px;left:50%;width:100%;height:2px;background:' + (steps[i+1].done ? '#667eea' : '#e2e8f0') + ';z-index:0;"></div>' : '') +
+            '<div style="width:36px;height:36px;border-radius:50%;background:' + (s.done ? 'linear-gradient(135deg,#667eea,#764ba2)' : '#f1f5f9') + ';display:flex;align-items:center;justify-content:center;z-index:1;margin-bottom:8px;">' +
+            '<i class="fas ' + s.icon + '" style="color:' + (s.done ? 'white' : '#94a3b8') + ';font-size:0.8rem;"></i></div>' +
+            '<div style="font-size:0.72rem;color:' + (s.done ? '#1e293b' : '#94a3b8') + ';font-weight:' + (s.done ? '600' : '400') + ';text-align:center;">' + s.label + '</div></div>'
+        ).join('');
+
+        const whatNextMap = {
+            pending:     { icon: 'fa-clock', color: '#f59e0b', title: 'Application Under Review', msg: 'Our HR team is reviewing your application. You will be contacted within 48 hours via email.' },
+            shortlisted: { icon: 'fa-star',  color: '#667eea', title: 'Congratulations! You are Shortlisted', msg: 'You have been shortlisted for an interview. Check your email for the interview schedule and preparation tips.' },
+            selected:    { icon: 'fa-rocket',color: '#10b981', title: 'Welcome Aboard! 🎉', msg: 'You have been selected! Our team will share your onboarding details, mentor assignment, and start date via email.' },
+            approved:    { icon: 'fa-rocket',color: '#10b981', title: 'Welcome Aboard! 🎉', msg: 'You have been selected! Our team will share your onboarding details, mentor assignment, and start date via email.' },
+            rejected:    { icon: 'fa-redo',  color: '#ef4444', title: 'Application Not Selected', msg: 'Unfortunately your application was not selected this time. Don\'t give up — you can apply for another role!' }
+        };
+        const next = whatNextMap[intern.status] || whatNextMap.pending;
+
+        document.getElementById('internshipContent').innerHTML =
+            // Hero card
+            '<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:20px;padding:28px 30px;color:white;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">' +
+                '<div>' +
+                    '<div style="font-size:0.75rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Applied Role</div>' +
+                    '<h2 style="font-size:1.3rem;margin-bottom:8px;"><i class="fas ' + icon + '"></i> ' + intern.role_applied + '</h2>' +
+                    '<div style="font-size:0.85rem;color:rgba(255,255,255,0.55);margin-bottom:12px;"><i class="fas fa-calendar-alt" style="margin-right:6px;"></i>Applied on ' + appliedDate + '</div>' +
+                    badge +
+                '</div>' +
+                '<div style="text-align:right;">' +
+                    '<div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-bottom:6px;">Application ID</div>' +
+                    '<div style="font-size:0.9rem;font-weight:600;color:rgba(255,255,255,0.75);font-family:monospace;">#INT-' + String(new Date(intern.applied_at).getTime() % 100000).padStart(5,'0') + '</div>' +
+                '</div>' +
+            '</div>' +
+            // Timeline
+            '<div style="background:white;border-radius:16px;padding:24px 28px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,0.06);">' +
+                '<div style="font-size:0.85rem;font-weight:700;color:#1e293b;margin-bottom:20px;"><i class="fas fa-route" style="color:#667eea;margin-right:8px;"></i>Application Journey</div>' +
+                '<div style="display:flex;justify-content:space-between;">' + stepsHtml + '</div>' +
+            '</div>' +
+            // What's next
+            '<div style="background:white;border-radius:16px;padding:22px 24px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,0.06);border-left:4px solid ' + next.color + ';">' +
+                '<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">' +
+                    '<div style="width:36px;height:36px;border-radius:10px;background:' + next.color + '22;display:flex;align-items:center;justify-content:center;">' +
+                        '<i class="fas ' + next.icon + '" style="color:' + next.color + ';"></i>' +
+                    '</div>' +
+                    '<div style="font-weight:700;color:#1e293b;">' + next.title + '</div>' +
+                '</div>' +
+                '<p style="color:#64748b;font-size:0.88rem;margin:0;">' + next.msg + '</p>' +
+                (intern.status === 'rejected' ? '<a href="internship.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 18px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;"><i class="fas fa-search"></i> View Other Roles</a>' : '') +
+            '</div>' +
+            // Benefits
+            '<div style="background:white;border-radius:16px;padding:22px 24px;box-shadow:0 2px 10px rgba(0,0,0,0.06);">' +
+                '<div style="font-size:0.85rem;font-weight:700;color:#1e293b;margin-bottom:16px;"><i class="fas fa-star" style="color:#f59e0b;margin-right:8px;"></i>Program Benefits</div>' +
+                '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">' +
+                    '<div style="text-align:center;padding:16px 8px;background:#f8fafc;border-radius:12px;"><div style="font-size:1.6rem;margin-bottom:6px;">💰</div><div style="font-size:0.8rem;font-weight:600;color:#1e293b;">Paid</div><div style="font-size:0.72rem;color:#64748b;">Monthly stipend</div></div>' +
+                    '<div style="text-align:center;padding:16px 8px;background:#f8fafc;border-radius:12px;"><div style="font-size:1.6rem;margin-bottom:6px;">📜</div><div style="font-size:0.8rem;font-weight:600;color:#1e293b;">Certificate</div><div style="font-size:0.72rem;color:#64748b;">Globally recognized</div></div>' +
+                    '<div style="text-align:center;padding:16px 8px;background:#f8fafc;border-radius:12px;"><div style="font-size:1.6rem;margin-bottom:6px;">👨‍🏫</div><div style="font-size:0.8rem;font-weight:600;color:#1e293b;">Mentorship</div><div style="font-size:0.72rem;color:#64748b;">1-on-1 guidance</div></div>' +
+                    '<div style="text-align:center;padding:16px 8px;background:#f8fafc;border-radius:12px;"><div style="font-size:1.6rem;margin-bottom:6px;">💼</div><div style="font-size:0.8rem;font-weight:600;color:#1e293b;">PPO</div><div style="font-size:0.72rem;color:#64748b;">Full-time offer</div></div>' +
+                '</div>' +
+            '</div>';
+    }
+
+    function renderNoInternship() {
+        document.getElementById('internshipContent').innerHTML =
+            '<div class="no-course-card">' +
+                '<i class="fas fa-briefcase"></i>' +
+                '<h3>No Internship Applied Yet</h3>' +
+                '<p>Explore our internship roles and kickstart your career.</p>' +
+                '<a href="internship.html" class="primary-btn"><i class="fas fa-search"></i> View Internships</a>' +
+            '</div>';
+    }
+
+    function renderNoCourse() {
+        document.getElementById('enrolledCourseSection').innerHTML =
+            '<div class="no-course-card">' +
+                '<i class="fas fa-book"></i>' +
+                '<h3>No Course Enrolled Yet</h3>' +
+                '<p>Browse our courses and enroll to start your learning journey.</p>' +
+                '<a href="courses.html" class="primary-btn"><i class="fas fa-search"></i> Browse Courses</a>' +
+            '</div>';
+    }
+
+    async function loadSyllabus(courseName) {
+        try {
+            const res = await fetch(API + '/api/dashboard/syllabus?course=' + encodeURIComponent(courseName), {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await res.json();
+            if (!res.ok) return;
+
+            renderSyllabus(data, courseName);
+            renderProgress(data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function downloadCertificate(courseName) {
+        const win = window.open('', '_blank');
+        if (!win) {
+            alert('Please allow popups for this site to download your certificate.');
+            return;
+        }
+
+        try {
+            const res = await fetch(API + '/api/dashboard/certificate?course=' + encodeURIComponent(courseName), {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                win.close();
+                alert(data.error || 'Failed to generate certificate.');
+                return;
+            }
+
+            const date = new Date(data.completion_date).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+            const html = `<!DOCTYPE html><html><head><title>Certificate - ${data.course_name}</title><style>
+                body { margin:0; font-family: 'Poppins', sans-serif; background:#e2e8f0; }
+                .cert-wrapper { width:100%; min-height:100vh; padding:60px 40px; box-sizing:border-box; display:flex; justify-content:center; align-items:center; }
+                .cert-container { width:900px; background:#ffffff; padding:50px 60px; border:18px solid #0f172a; border-image: linear-gradient(135deg,#667eea,#764ba2) 1; box-shadow:0 30px 90px rgba(15,23,42,0.18); position:relative; }
+                .cert-container::before { content:''; position:absolute; inset:40px; border:2px dotted rgba(15,23,42,0.12); pointer-events:none; }
+                .cert-header { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:40px; }
+                .cert-logo { font-size:1.2rem; font-weight:800; letter-spacing:0.5rem; color:#0f172a; }
+                .cert-logo span { color:#667eea; }
+                .cert-title { text-align:center; margin-bottom:16px; }
+                .cert-title h1 { font-size:3.1rem; letter-spacing:0.15em; margin:0; color:#0f172a; font-family:'Times New Roman', serif; }
+                .cert-title p { margin:0; font-size:0.95rem; color:#64748b; letter-spacing:0.2em; text-transform:uppercase; }
+                .cert-body { text-align:center; color:#1f2937; line-height:1.8; }
+                .cert-body .name { font-size:3rem; font-weight:800; color:#2563eb; margin:24px 0 12px; }
+                .cert-body .course { display:block; font-size:1.6rem; font-weight:700; color:#111827; margin:18px 0; }
+                .cert-body .subtitle { font-size:1rem; color:#475569; margin-top:16px; }
+                .cert-details { margin:38px auto 0; max-width:780px; font-size:0.95rem; color:#475569; }
+                .cert-note { margin-top:26px; font-size:0.82rem; color:#64748b; text-align:center; }
+                @media print { body { background:none; } .cert-wrapper { padding:0; } .cert-container { box-shadow:none; border-width:12px; } }
+            </style></head><body><div class="cert-wrapper"><div class="cert-container">
+                <div class="cert-header"><div class="cert-logo">BUILD <span>TOGETHER</span></div><div style="text-align:right;color:#64748b;font-size:0.92rem;">Certificate ID: BT-${Math.floor(Math.random()*900000+100000)}</div></div>
+                <div class="cert-title"><p>Certificate of Completion</p><h1>Certificate</h1></div>
+                <div class="cert-body">
+                    <p class="subtitle">This is to certify that</p>
+                    <div class="name">${data.full_name}</div>
+                    <p class="subtitle">has successfully completed the professional training program in</p>
+                    <div class="course">${data.course_name}</div>
+                    <p class="cert-details">This certificate confirms the successful completion of the full course syllabus as set by Build Together Institute. The certificate is issued based on verified student progress and is valid for professional and academic recognition.</p>
+                </div>
+                <div class="cert-note">This certificate is digitally generated and valid.</div>
+                <div style="margin-top:24px;text-align:right;color:#94a3b8;font-size:0.9rem;">Issued on ${date}</div>
+            </div></div></body></html>`;
+            const win = window.open('', '_blank');
+            win.document.write(html);
+            win.document.close();
+            setTimeout(() => win.print(), 600);
+        } catch (e) {
+            console.error('Certificate Error:', e);
+            if (win && !win.closed) win.close();
+            alert('Certificate generation failed.');
+        }
+    }
+
+    function renderSyllabus(data, courseName) {
+        const { syllabus, progress } = data;
+        const progressMap = {};
+        progress.forEach(p => { progressMap[p.week_no] = p; });
+
+        let html = '<div class="syllabus-grid">';
+        syllabus.forEach(week => {
+            const prog = progressMap[week.week_no];
+            const isCompleted = prog && prog.is_completed;
+            const isUnlocked  = prog && prog.is_unlocked;
+            const isLocked    = !prog || !prog.is_unlocked;
+            const stateClass  = isCompleted ? 'completed' : isUnlocked ? 'unlocked' : 'locked';
+            const badgeText   = isCompleted ? 'Completed' : isUnlocked ? 'In Progress' : 'Locked';
+
+            html += '<div class="week-card ' + stateClass + '" id="week-card-' + week.week_no + '" onclick="toggleWeek(' + week.week_no + ', \'' + courseName + '\', ' + (isLocked ? 'false' : 'true') + ')">' +
+                '<div class="week-num ' + stateClass + '">' +
+                    (isCompleted ? '<i class="fas fa-check"></i>' : isLocked ? '<i class="fas fa-lock"></i>' : week.week_no) +
+                '</div>' +
+                '<div class="week-info">' +
+                    '<h4>Week ' + week.week_no + ': ' + week.topic + '</h4>' +
+                    '<p>' + week.description + '</p>' +
+                '</div>' +
+                '<span class="week-badge ' + stateClass + '">' + badgeText + '</span>' +
+                (isLocked ? '<i class="fas fa-lock lock-icon"></i>' : '<i class="fas fa-chevron-down week-toggle-icon"></i>') +
+                '<div class="week-tasks-panel" id="tasks-panel-' + week.week_no + '"></div>' +
+            '</div>';
+        });
+        html += '</div>';
+
+        const completedWeeks = progress.filter(p => p.is_completed).length;
+        const totalWeeks = syllabus.length;
+        const certSection = totalWeeks > 0 && completedWeeks >= totalWeeks ? '<div style="margin-bottom:16px;"><button class="complete-btn certificate-btn" onclick=\'downloadCertificate(' + JSON.stringify(courseName) + ')\'><i class="fas fa-certificate"></i> Download Certificate</button></div>' : '';
+        document.getElementById('syllabusContent').innerHTML =
+            '<div class="section-title-dash"><i class="fas fa-book-open"></i> ' + courseName + '</div>' + certSection + html;
+    }
+
+    async function toggleWeek(weekNo, courseName, isUnlocked) {
+        if (!isUnlocked) return;
+        const card  = document.getElementById('week-card-' + weekNo);
+        const panel = document.getElementById('tasks-panel-' + weekNo);
+        const isOpen = card.classList.contains('open');
+
+        document.querySelectorAll('.week-card.open').forEach(c => {
+            c.classList.remove('open');
+            c.querySelector('.week-tasks-panel').classList.remove('open');
+        });
+
+        if (!isOpen) {
+            card.classList.add('open');
+            panel.classList.add('open');
+            panel.innerHTML = '<div style="color:#94a3b8;font-size:0.85rem;padding:8px;"><i class="fas fa-spinner fa-spin"></i> Loading tasks...</div>';
+            await loadTasks(courseName, weekNo, panel);
+        }
+    }
+
+    async function loadTasks(courseName, weekNo, panel) {
+        try {
+            const res  = await fetch(API + '/api/dashboard/tasks?course=' + encodeURIComponent(courseName) + '&week=' + weekNo, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await res.json();
+            if (!res.ok) { panel.innerHTML = '<p style="color:#ef4444">Failed to load tasks.</p>'; return; }
+            renderTaskPanel(panel, data.tasks, data.doneMap, data.progressMap, courseName, weekNo);
+        } catch(e) {
+            panel.innerHTML = '<p style="color:#ef4444">Server error.</p>';
+        }
+    }
+
+    function renderTaskPanel(panel, tasks, doneMap, progressMap, courseName, weekNo) {
+        if (!tasks.length) { panel.innerHTML = '<p style="color:#94a3b8;font-size:0.85rem;">No tasks available for this week.</p>'; return; }
+
+        const regularTasks = tasks.filter(t => t.task_type === 'task');
+        const assessments  = tasks.filter(t => t.task_type === 'assessment');
+        const allTasksDone = regularTasks.every(t => doneMap[t.id]);
+        const pm = progressMap || {};
+
+        let html = '';
+
+        regularTasks.forEach(task => {
+            const done        = doneMap[task.id];
+            const videoWatched = pm[task.id] && pm[task.id].video_watched;
+
+            html += '<div class="task-item ' + (done ? 'done' : '') + '" data-task-id="' + task.id + '">' +
+                '<div class="task-icon ' + (done ? 'done-type' : 'task-type') + '"><i class="fas ' + (done ? 'fa-check' : 'fa-tasks') + '"></i></div>' +
+                '<div class="task-info"><h5>' + task.title + '</h5><p>' + task.description + '</p>' +
+                    (task.video_url && !done
+                        ? '<button class="task-complete-btn" style="margin-top:8px;background:linear-gradient(135deg,#ef4444,#dc2626);" onclick="event.stopPropagation(); openVideoModal(\'' + courseName + '\', ' + weekNo + ', ' + task.id + ', \'' + task.video_url + '\')"><i class="fab fa-youtube"></i> Watch Video</button>'
+                        : task.resource_link && !done
+                            ? '<a href="' + task.resource_link + '" target="_blank" onclick="trackVisit(\'' + courseName + '\', ' + weekNo + ', ' + task.id + ')" style="display:inline-flex;align-items:center;gap:5px;margin-top:6px;color:#667eea;font-size:0.78rem;font-weight:600;text-decoration:none;"><i class="fas fa-external-link-alt"></i> Study Resource</a>'
+                            : '') +
+                    (!done && task.resource_link && !task.video_url ? '<div class="visit-warn" style="display:none;margin-top:6px;padding:6px 10px;background:#fef3c7;border-radius:6px;font-size:0.72rem;color:#d97706;"><i class="fas fa-exclamation-triangle"></i> Please stay on the resource page for at least 10 seconds</div>' : '') +
+                '</div>' +
+                (done
+                    ? '<span style="color:#059669;font-size:0.78rem;font-weight:600;white-space:nowrap;"><i class="fas fa-check-circle"></i> Done</span>'
+                    : task.video_url
+                        ? '<span style="color:#ef4444;font-size:0.75rem;white-space:nowrap;"><i class="fab fa-youtube"></i> Watch to unlock</span>'
+                        : task.resource_link
+                            ? '<span style="color:#94a3b8;font-size:0.75rem;white-space:nowrap;"><i class="fas fa-clock"></i> Auto-marks after 10s</span>'
+                            : '<button class="task-complete-btn" onclick="event.stopPropagation(); completeTask(\'' + courseName + '\', ' + weekNo + ', ' + task.id + ', this)">Mark Done</button>'
+                ) +
+            '</div>';
+        });
+
+        assessments.forEach(task => {
+            const done      = doneMap[task.id];
+            const locked    = !allTasksDone && !done;
+            const quizScore = pm[task.id] ? pm[task.id].quiz_score : null;
+
+            html += '<div class="task-item ' + (done ? 'done' : locked ? 'locked-task' : '') + '">' +
+                '<div class="task-icon ' + (done ? 'done-type' : locked ? 'lock-type' : 'assess-type') + '"><i class="fas ' + (done ? 'fa-check' : locked ? 'fa-lock' : 'fa-clipboard-list') + '"></i></div>' +
+                '<div class="task-info"><h5>' + task.title +
+                    (locked ? ' <span style="color:#94a3b8;font-weight:400;font-size:0.75rem;">(Complete all tasks first)</span>' : '') +
+                    (quizScore !== null ? ' <span style="color:#667eea;font-size:0.75rem;font-weight:600;">Last score: ' + quizScore + '%</span>' : '') +
+                '</h5><p>' + task.description + '</p></div>' +
+                (done
+                    ? '<span style="color:#059669;font-size:0.78rem;font-weight:600;white-space:nowrap;"><i class="fas fa-check-circle"></i> Passed</span>'
+                    : !locked
+                        ? '<button class="task-complete-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706);" onclick="event.stopPropagation(); openQuiz(\'' + courseName + '\', ' + weekNo + ', ' + task.id + ')">Take Quiz</button>'
+                        : ''
+                ) +
+            '</div>';
+        });
+
+        panel.innerHTML = html;
+    }
+
+    let pendingVisit = null;
+    let ytPlayer = null;
+    let videoTaskData = null;
+    let videoWatchedPercent = 0;
+    let videoCheckInterval = null;
+
+    // Load YouTube IFrame API
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    function openVideoModal(courseName, weekNo, taskId, videoUrl) {
+        const videoId = extractYouTubeId(videoUrl);
+        if (!videoId) { alert('Invalid YouTube URL'); return; }
+
+        // Destroy old player and recreate fresh iframe
+        if (ytPlayer && ytPlayer.destroy) { ytPlayer.destroy(); ytPlayer = null; }
+        const wrap = document.getElementById('videoPlayerWrap');
+        wrap.innerHTML = '<div id="ytPlayerDiv"></div>';
+
+        videoTaskData = { courseName, weekNo, taskId };
+        videoWatchedPercent = 0;
+        document.getElementById('videoProgressBar').style.width = '0%';
+        document.getElementById('videoProgressText').textContent = '0%';
+        document.getElementById('videoStatusMsg').textContent = 'Watch at least 30 seconds to unlock the quiz';
+        document.getElementById('videoStatusMsg').style.color = '#94a3b8';
+        document.getElementById('videoQuizTriggerBtn').style.display = 'none';
+
+        document.getElementById('videoModal').style.display = 'flex';
+
+        // Fallback: show quiz button after 6s if YT tracking doesn't work
+        setTimeout(() => {
+            if (document.getElementById('videoQuizTriggerBtn').style.display === 'none') {
+                document.getElementById('videoQuizTriggerBtn').style.display = 'block';
+                document.getElementById('videoStatusMsg').textContent = 'Click below to take the quiz and complete this task';
+                document.getElementById('videoStatusMsg').style.color = '#10b981';
+            }
+        }, 6000);
+
+        if (window.YT && window.YT.Player) {
+            initYouTubePlayer(videoId);
+        } else {
+            window.onYouTubeIframeAPIReady = () => initYouTubePlayer(videoId);
+        }
+    }
+
+    function initYouTubePlayer(videoId) {
+        ytPlayer = new YT.Player('ytPlayerDiv', {
+            width: '100%',
+            height: '100%',
+            videoId: videoId,
+            playerVars: { autoplay: 1, controls: 1, modestbranding: 1, rel: 0 },
+            events: {
+                onReady: e => e.target.playVideo(),
+                onStateChange: onPlayerStateChange
+            }
+        });
+        // Fix iframe sizing after creation
+        setTimeout(() => {
+            const iframe = document.querySelector('#videoPlayerWrap iframe');
+            if (iframe) {
+                iframe.style.position = 'absolute';
+                iframe.style.top = '0';
+                iframe.style.left = '0';
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+            }
+        }, 500);
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            startVideoTracking();
+        } else if (event.data === YT.PlayerState.PAUSED) {
+            stopVideoTracking();
+        } else if (event.data === YT.PlayerState.ENDED) {
+            stopVideoTracking();
+            onVideoCompleted();
+        }
+    }
+
+    function startVideoTracking() {
+        if (videoCheckInterval) return;
+        videoCheckInterval = setInterval(() => {
+            if (!ytPlayer || !ytPlayer.getDuration) return;
+            const current  = ytPlayer.getCurrentTime();
+            const duration = ytPlayer.getDuration();
+            if (duration > 0) {
+                const percent = Math.min(Math.round((current / duration) * 100), 100);
+                if (percent > videoWatchedPercent) {
+                    videoWatchedPercent = percent;
+                    document.getElementById('videoProgressBar').style.width = percent + '%';
+                    document.getElementById('videoProgressText').textContent = percent + '%';
+                }
+                // unlock quiz button after 30 seconds watched
+                if (current >= 30 && document.getElementById('videoQuizTriggerBtn').style.display === 'none') {
+                    document.getElementById('videoQuizTriggerBtn').style.display = 'block';
+                    document.getElementById('videoStatusMsg').textContent = 'You can now take the quiz or keep watching!';
+                    document.getElementById('videoStatusMsg').style.color = '#10b981';
+                }
+                // auto trigger on video end
+                if (percent >= 98) {
+                    stopVideoTracking();
+                    onVideoCompleted();
+                }
+            }
+        }, 1000);
+    }
+
+    function stopVideoTracking() {
+        if (videoCheckInterval) {
+            clearInterval(videoCheckInterval);
+            videoCheckInterval = null;
+        }
+    }
+
+    async function onVideoCompleted() {
+        stopVideoTracking();
+        document.getElementById('videoProgressBar').style.width = '100%';
+        document.getElementById('videoProgressText').textContent = '100%';
+        document.getElementById('videoStatusMsg').textContent = '\u2705 Video completed! Loading quiz...';
+        document.getElementById('videoStatusMsg').style.color = '#10b981';
+
+        const { courseName, weekNo, taskId } = videoTaskData;
+
+        // Fetch quiz questions for this video task
+        try {
+            const res  = await fetch(API + '/api/dashboard/quiz?task_id=' + taskId, { headers: { 'Authorization': 'Bearer ' + token } });
+            const data = await res.json();
+
+            if (!data.questions || !data.questions.length) {
+                // No quiz questions — just mark done directly
+                await markVideoTaskDone(courseName, weekNo, taskId);
+                return;
+            }
+
+            // Close video modal and open quiz modal
+            setTimeout(() => {
+                closeVideoModal();
+                openVideoQuiz(courseName, weekNo, taskId, data.questions, data.pass_score);
+            }, 1000);
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    function openVideoQuiz(courseName, weekNo, taskId, questions, passScore) {
+        const opts = ['a','b','c','d'];
+        let html = '';
+        questions.forEach((q, i) => {
+            html += '<div style="margin-bottom:18px;padding:14px;background:#f8fafc;border-radius:12px;">' +
+                '<div style="font-weight:600;color:#1e293b;margin-bottom:10px;font-size:0.88rem;">' + (i+1) + '. ' + escapeHtml(q.question) + '</div>' +
+                opts.map(o =>
+                    '<label style="display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;cursor:pointer;margin-bottom:5px;background:white;border:1px solid #e2e8f0;">' +
+                    '<input type="radio" name="vq' + q.id + '" value="' + o + '" style="accent-color:#667eea;"> ' + escapeHtml(q['option_' + o]) +
+                    '</label>'
+                ).join('') +
+            '</div>';
+        });
+
+        document.getElementById('videoQuizBody').innerHTML = html;
+        document.getElementById('videoQuizResult').innerHTML = '';
+        document.getElementById('videoQuizModal').style.display = 'flex';
+        document.getElementById('videoQuizSubmitBtn').onclick = () => submitVideoQuiz(courseName, weekNo, taskId, questions, passScore);
+    }
+
+    async function submitVideoQuiz(courseName, weekNo, taskId, questions, passScore) {
+        const answers = {};
+        let allAnswered = true;
+        questions.forEach(q => {
+            const sel = document.querySelector('input[name="vq' + q.id + '"]:checked');
+            if (sel) answers[q.id] = sel.value;
+            else allAnswered = false;
+        });
+        if (!allAnswered) { alert('Please answer all questions.'); return; }
+
+        const res  = await fetch(API + '/api/dashboard/submit-video-quiz', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ course_name: courseName, week_no: weekNo, task_id: taskId, answers })
+        });
+        const data = await res.json();
+        const resultEl = document.getElementById('videoQuizResult');
+
+        if (data.passed) {
+            resultEl.innerHTML = '<div style="background:#d1fae5;border-radius:10px;padding:12px;text-align:center;color:#059669;font-weight:700;">🎉 Passed! Score: ' + data.score + '% (' + data.correct + '/' + data.total + ' correct)</div>';
+            document.getElementById('videoQuizSubmitBtn').style.display = 'none';
+            setTimeout(async () => {
+                document.getElementById('videoQuizModal').style.display = 'none';
+                document.getElementById('videoQuizSubmitBtn').style.display = 'block';
+                await checkWeekCompletion(courseName, weekNo);
+            }, 1500);
+        } else {
+            resultEl.innerHTML = '<div style="background:#fee2e2;border-radius:10px;padding:12px;text-align:center;color:#ef4444;font-weight:700;">❌ Score: ' + data.score + '% (Need ' + data.pass_score + '% to pass). Try again!</div>';
+        }
+    }
+
+    async function markVideoTaskDone(courseName, weekNo, taskId) {
+        try {
+            await fetch(API + '/api/dashboard/video-watched', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify({ course_name: courseName, week_no: weekNo, task_id: taskId })
+            });
+
+            setTimeout(async () => {
+                closeVideoModal();
+                await checkWeekCompletion(courseName, weekNo);
+            }, 1500);
+        } catch(e) { console.error(e); }
+    }
+
+    async function checkWeekCompletion(courseName, weekNo) {
+        const res2  = await fetch(API + '/api/dashboard/tasks?course=' + encodeURIComponent(courseName) + '&week=' + weekNo, { headers: { 'Authorization': 'Bearer ' + token } });
+        const data2 = await res2.json();
+        const allDone = data2.tasks.every(t => data2.doneMap[t.id]);
+        if (allDone) {
+            const res3  = await fetch(API + '/api/dashboard/complete', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body: JSON.stringify({ course_name: courseName, week_no: weekNo }) });
+            const data3 = await res3.json();
+            alert('🎉 ' + data3.message);
+            await loadSyllabus(courseName);
+        } else {
+            const panel = document.getElementById('tasks-panel-' + weekNo);
+            if (panel) {
+                await loadTasks(courseName, weekNo, panel);
+                panel.classList.add('open');
+                document.getElementById('week-card-' + weekNo).classList.add('open');
+            }
+        }
+    }
+
+    function confirmCloseVideo() {
+        if (confirm('If you close now, your progress will not be saved and the task will not be marked as done.\n\nAre you sure you want to exit?')) {
+            closeVideoModal();
+        }
+    }
+
+    function closeVideoModal() {
+        stopVideoTracking();
+        if (ytPlayer && ytPlayer.destroy) ytPlayer.destroy();
+        ytPlayer = null;
+        videoTaskData = null;
+        document.getElementById('videoModal').style.display = 'none';
+    }
+
+    function extractYouTubeId(url) {
+        const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    }
+
+    async function trackVisit(courseName, weekNo, taskId) {
+        await fetch(API + '/api/dashboard/visit-link', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ course_name: courseName, week_no: weekNo, task_id: taskId })
+        });
+        pendingVisit = { courseName, weekNo, taskId, leftAt: Date.now() };
+    }
+
+    window.addEventListener('focus', async () => {
+        if (!pendingVisit) return;
+        const { courseName, weekNo, taskId, leftAt } = pendingVisit;
+        const secondsSpent = (Date.now() - leftAt) / 1000;
+
+        const panel = document.getElementById('tasks-panel-' + weekNo);
+
+        if (secondsSpent < 10) {
+            pendingVisit = null;
+            if (panel) {
+                await loadTasks(courseName, weekNo, panel);
+                panel.classList.add('open');
+                document.getElementById('week-card-' + weekNo).classList.add('open');
+                // Show warning on the task item
+                const taskEl = panel.querySelector('[data-task-id="' + taskId + '"]');
+                if (taskEl) {
+                    const warn = taskEl.querySelector('.visit-warn');
+                    if (warn) {
+                        warn.style.display = 'block';
+                        setTimeout(() => warn.style.display = 'none', 4000);
+                    }
+                }
+            }
+            return;
+        }
+
+        pendingVisit = null;
+        // Auto mark done after 10+ seconds on resource page
+        try {
+            const res = await fetch(API + '/api/dashboard/complete-task', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify({ course_name: courseName, week_no: weekNo, task_id: taskId })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                if (panel) {
+                    await loadTasks(courseName, weekNo, panel);
+                    panel.classList.add('open');
+                    document.getElementById('week-card-' + weekNo).classList.add('open');
+                }
+                return;
+            }
+            // Check if all tasks done → auto complete week
+            const res2  = await fetch(API + '/api/dashboard/tasks?course=' + encodeURIComponent(courseName) + '&week=' + weekNo, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data2 = await res2.json();
+            const allDone = data2.tasks.every(t => data2.doneMap[t.id]);
+            if (allDone) {
+                const res3  = await fetch(API + '/api/dashboard/complete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ course_name: courseName, week_no: weekNo })
+                });
+                const data3 = await res3.json();
+                alert('🎉 ' + data3.message);
+                await loadSyllabus(courseName);
+            } else if (panel) {
+                await loadTasks(courseName, weekNo, panel);
+                panel.classList.add('open');
+                document.getElementById('week-card-' + weekNo).classList.add('open');
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    });
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    async function openQuiz(courseName, weekNo, taskId) {
+        const res  = await fetch(API + '/api/dashboard/quiz?task_id=' + taskId, { headers: { 'Authorization': 'Bearer ' + token } });
+        const data = await res.json();
+        if (!data.questions || !data.questions.length) { alert('No quiz questions available.'); return; }
+
+        const opts = ['a','b','c','d'];
+        let qHtml  = '';
+        data.questions.forEach((q, i) => {
+            qHtml += '<div style="margin-bottom:20px;">' +
+                '<div style="font-weight:600;color:#1e293b;margin-bottom:10px;font-size:0.92rem;">' + (i+1) + '. ' + escapeHtml(q.question) + '</div>' +
+                opts.map(o =>
+                    '<label style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;cursor:pointer;margin-bottom:6px;background:#f8fafc;">' +
+                    '<input type="radio" name="q' + q.id + '" value="' + o + '" style="accent-color:#667eea;"> ' + escapeHtml(q['option_' + o]) +
+                    '</label>'
+                ).join('') +
+            '</div>';
+        });
+
+        document.getElementById('quizModal').style.display = 'flex';
+        document.getElementById('quizBody').innerHTML = qHtml;
+        document.getElementById('quizResult').innerHTML = '';
+        document.getElementById('quizSubmitBtn').onclick = () => submitQuiz(courseName, weekNo, taskId, data.questions, data.pass_score);
+    }
+
+    async function submitQuiz(courseName, weekNo, taskId, questions, passScore) {
+        const answers = {};
+        let allAnswered = true;
+        questions.forEach(q => {
+            const sel = document.querySelector('input[name="q' + q.id + '"]:checked');
+            if (sel) answers[q.id] = sel.value;
+            else allAnswered = false;
+        });
+        if (!allAnswered) { alert('Please answer all questions.'); return; }
+
+        const res  = await fetch(API + '/api/dashboard/submit-quiz', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ course_name: courseName, week_no: weekNo, task_id: taskId, answers })
+        });
+        const data = await res.json();
+
+        const resultEl = document.getElementById('quizResult');
+        if (data.passed) {
+            resultEl.innerHTML = '<div style="background:#d1fae5;border-radius:10px;padding:14px;text-align:center;color:#059669;font-weight:700;">🎉 Passed! Score: ' + data.score + '% (' + data.correct + '/' + data.total + ' correct)</div>';
+            setTimeout(async () => {
+                document.getElementById('quizModal').style.display = 'none';
+                // Check if all tasks done → auto complete week
+                const r2   = await fetch(API + '/api/dashboard/tasks?course=' + encodeURIComponent(courseName) + '&week=' + weekNo, { headers: { 'Authorization': 'Bearer ' + token } });
+                const d2   = await r2.json();
+                const allDone = d2.tasks.every(t => d2.doneMap[t.id]);
+                if (allDone) {
+                    const r3   = await fetch(API + '/api/dashboard/complete', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body: JSON.stringify({ course_name: courseName, week_no: weekNo }) });
+                    const d3   = await r3.json();
+                    alert('🎉 ' + d3.message);
+                    await loadSyllabus(courseName);
+                } else {
+                    await loadSyllabus(courseName);
+                }
+            }, 1500);
+        } else {
+            resultEl.innerHTML = '<div style="background:#fee2e2;border-radius:10px;padding:14px;text-align:center;color:#ef4444;font-weight:700;">❌ Failed. Score: ' + data.score + '% (Need ' + data.pass_score + '% to pass). Try again!</div>';
+        }
+    }
+
+    async function completeTask(courseName, weekNo, taskId, btn) {
+        btn.disabled = true;
+        btn.textContent = '...';
+        try {
+            const res  = await fetch(API + '/api/dashboard/complete-task', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify({ course_name: courseName, week_no: weekNo, task_id: taskId })
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.error); btn.disabled = false; btn.textContent = 'Mark Done'; return; }
+
+            // Check if this was the assessment (last task) — if so complete the week
+            const panel = document.getElementById('tasks-panel-' + weekNo);
+            const res2  = await fetch(API + '/api/dashboard/tasks?course=' + encodeURIComponent(courseName) + '&week=' + weekNo, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data2 = await res2.json();
+            const allDone = data2.tasks.every(t => data2.doneMap[t.id]);
+
+            if (allDone) {
+                const res3 = await fetch(API + '/api/dashboard/complete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ course_name: courseName, week_no: weekNo })
+                });
+                const data3 = await res3.json();
+                alert('🎉 ' + data3.message);
+                await loadSyllabus(courseName);
+            } else {
+                await loadTasks(courseName, weekNo, panel);
+                panel.classList.add('open');
+                document.getElementById('week-card-' + weekNo).classList.add('open');
+            }
+        } catch(e) {
+            alert('Server error.');
+            btn.disabled = false;
+        }
+    }
+
+    function renderProgress(data) {
+        const { syllabus, progress } = data;
+        const total     = syllabus.length;
+        const completed = progress.filter(p => p.is_completed).length;
+        const unlocked  = progress.filter(p => p.is_unlocked && !p.is_completed).length;
+        const percent   = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        document.getElementById('statCompleted').textContent = completed;
+        document.getElementById('statUnlocked').textContent  = unlocked;
+        if (dashData) renderBadges(dashData, completed);
+
+        if (dashData && dashData.enrolled_courses && dashData.enrolled_courses.length > 0) {
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('progressCourseName').textContent = dashData.enrolled_courses[0].course_name;
+            document.getElementById('progressPercent').textContent    = percent + '%';
+            document.getElementById('progressBarFill').style.width    = percent + '%';
+            document.getElementById('progressDetail').textContent     = completed + ' of ' + total + ' weeks completed';
+            document.getElementById('progressStatus').textContent     = completed === total ? 'Completed!' : 'In Progress';
+        }
+    }
+
+    function goToSyllabus(courseName) {
+        if (dashData && dashData.enrolled_courses && dashData.enrolled_courses.length > 1) {
+            renderEnrolledCourses(dashData.enrolled_courses);
+            const idx = dashData.enrolled_courses.findIndex(c => c.course_name === courseName);
+            if (idx >= 0) {
+                const btn = document.getElementById('course-tab-' + idx);
+                if (btn) switchCourseTab(idx, btn);
+            }
+        }
+        loadSyllabus(courseName);
+        showSection('syllabus', document.querySelector('.sidebar-nav a[href="#syllabus"]'));
+    }
+
+    function showSection(name, el) {
+        document.querySelectorAll('[id^="section-"]').forEach(s => s.style.display = 'none');
+        document.getElementById('section-' + name).style.display = 'block';
+        document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+        const link = el || document.querySelector('.sidebar-nav a[href="#' + name + '"]');
+        if (link) link.classList.add('active');
+        return false;
+    }
+
+    // Logout
+    document.getElementById('logoutLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.clear();
+        location.href = 'apply.html';
+    });
+
+    // Hamburger
+    document.getElementById('hamburger').addEventListener('click', function () {
+        document.querySelector('.nav-links').classList.toggle('active');
+        this.classList.toggle('active');
+    });
+
+    // Init
+    loadDashboard();
+
+    // ── DateTime Clock ──
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('navDateTime').textContent = now.toLocaleString('en-IN', { timeZone:'Asia/Kolkata', weekday:'short', day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', second:'2-digit' }) + ' IST';
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── Student Notifications ──
+    let notifOpen = false;
+    async function loadNotifications() {
+        try {
+            const res = await fetch(API + '/api/student/notifications', { headers: { 'Authorization': 'Bearer ' + token } });
+            const data = await res.json();
+            const list = document.getElementById('notifList');
+            const count = document.getElementById('notifCount');
+            if (!Array.isArray(data) || !data.length) {
+                list.innerHTML = '<div style="padding:20px;text-align:center;color:#94a3b8;font-size:0.82rem;"><i class="fas fa-check-circle" style="color:#10b981;"></i> No updates yet.</div>';
+                count.style.display = 'none'; return;
+            }
+            list.innerHTML = data.map(n => {
+                const t = new Date(n.time);
+                const timeStr = t.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+                return '<div style="padding:12px 16px;border-bottom:1px solid #f8fafc;display:flex;gap:10px;align-items:flex-start;">' +
+                    '<div style="width:32px;height:32px;border-radius:50%;background:' + n.color + '22;display:flex;align-items:center;justify-content:center;flex-shrink:0;">' +
+                    '<i class="fas ' + n.icon + '" style="color:' + n.color + ';font-size:0.8rem;"></i></div>' +
+                    '<div style="flex:1;"><div style="font-size:0.82rem;color:#1e293b;font-weight:500;">' + n.text + '</div>' +
+                    '<div style="font-size:0.72rem;color:#94a3b8;margin-top:2px;">' + timeStr + '</div></div></div>';
+            }).join('');
+            count.textContent = data.length;
+            count.style.display = 'flex';
+        } catch(e) {}
+    }
+    function toggleNotifPanel() {
+        const panel = document.getElementById('notifPanel');
+        notifOpen = !notifOpen;
+        panel.style.display = notifOpen ? 'block' : 'none';
+        if (notifOpen) loadNotifications();
+    }
+    document.addEventListener('click', (e) => {
+        if (notifOpen && !e.target.closest('#notifBell') && !e.target.closest('#notifPanel')) {
+            notifOpen = false;
+            document.getElementById('notifPanel').style.display = 'none';
+        }
+    });
+    loadNotifications();
+</script>
+</body>
+</html>

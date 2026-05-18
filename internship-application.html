@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Application - Build Together Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ui-enhancements.css">
+    <style>
+        /* ── Dark mode overrides for this page ── */
+        body.dark-mode .application-section {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        }
+        body.dark-mode .application-card {
+            background: #1e293b;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+        }
+        body.dark-mode .application-form-body {
+            background: #1e293b;
+        }
+        body.dark-mode .app-form-group label {
+            color: #cbd5e1;
+        }
+        body.dark-mode .app-form-group input,
+        body.dark-mode .app-form-group select,
+        body.dark-mode .app-form-group textarea {
+            background: #0f172a;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+        body.dark-mode .app-form-group input::placeholder,
+        body.dark-mode .app-form-group textarea::placeholder {
+            color: #475569;
+        }
+        body.dark-mode .app-form-group input:focus,
+        body.dark-mode .app-form-group select:focus,
+        body.dark-mode .app-form-group textarea:focus {
+            background: #1e293b;
+            border-color: #667eea;
+        }
+        body.dark-mode .app-form-group select option {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+        body.dark-mode .app-form-group input:valid:not(:placeholder-shown) {
+            border-color: #10b981;
+            background: #0f2a1e;
+        }
+        body.dark-mode .app-form-group input:invalid:not(:placeholder-shown):not(:focus) {
+            border-color: #ef4444;
+            background: #2a0f0f;
+        }
+        body.dark-mode .success-msg h3 { color: #e2e8f0; }
+        body.dark-mode .success-msg p  { color: #94a3b8; }
+        .application-section {
+            padding: 60px 0 80px;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            min-height: 70vh;
+        }
+        .application-card {
+            max-width: 720px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+        .application-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 35px 40px;
+            text-align: center;
+            color: white;
+        }
+        .application-card-header .card-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+        }
+        .application-card-header h2 { font-size: 1.8rem; margin-bottom: 8px; }
+        .application-card-header p { opacity: 0.85; font-size: 0.95rem; }
+        .application-form-body { padding: 40px; }
+        .app-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .app-form-grid .full { grid-column: span 2; }
+        .app-form-group { display: flex; flex-direction: column; gap: 6px; }
+        .app-form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .app-form-group label i { color: #667eea; width: 16px; }
+        .app-form-group input,
+        .app-form-group select,
+        .app-form-group textarea {
+            padding: 13px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .app-form-group input:focus,
+        .app-form-group select:focus,
+        .app-form-group textarea:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+        }
+        .app-form-group input:valid:not(:placeholder-shown) { border-color: #10b981; background: #f0fdf4; }
+        .app-form-group input:invalid:not(:placeholder-shown):not(:focus) { border-color: #ef4444; background: #fff5f5; }
+        .app-form-group textarea { resize: vertical; min-height: 110px; }
+        .app-submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .app-submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+        }
+        .success-msg {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .success-msg .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+        }
+        .success-msg h3 { font-size: 1.6rem; color: #1e293b; margin-bottom: 10px; }
+        .success-msg p { color: #64748b; margin-bottom: 25px; }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: gap 0.3s;
+        }
+        .back-link:hover { gap: 12px; }
+        @media (max-width: 600px) {
+            .app-form-grid { grid-template-columns: 1fr; }
+            .app-form-grid .full { grid-column: span 1; }
+            .application-form-body { padding: 25px 20px; }
+            .application-card-header { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+    <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="internship.html" class="active">Internship</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="apply.html" class="apply-nav">Apply Now</a></li>
+    </ul>
+    <div class="navbar-right">
+        <button class="dark-toggle" id="darkToggleBtn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+</nav>
+
+<section class="page-header">
+    <div class="header-content">
+        <h1>Internship Application</h1>
+        <p class="hero-subtitle">Take the first step towards your career — fill in your details below.</p>
+    </div>
+</section>
+
+<section class="application-section" data-reveal>
+    <div class="container">
+        <div class="application-card">
+            <div class="application-card-header">
+                <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+                <h2>Apply for Internship</h2>
+                <p>Complete the form and our team will reach out within 48 hours</p>
+            </div>
+            <div class="application-form-body">
+                <form id="internForm" novalidate>
+                    <div class="app-form-grid">
+
+                        <div class="app-form-group">
+                            <label><i class="fas fa-user"></i> Full Name</label>
+                            <input type="text" id="iName" placeholder="Your full name" required>
+                        </div>
+
+                        <div class="app-form-group">
+                            <label><i class="fas fa-envelope"></i> Email Address</label>
+                            <input type="email" id="iEmail" placeholder="your@email.com" required>
+                            <div id="intern-email-otp-container"></div>
+                        </div>
+
+                        <div class="app-form-group">
+                            <label><i class="fas fa-phone"></i> Phone Number</label>
+                            <input type="tel" id="iPhone" placeholder="e.g. 9876543210" maxlength="10" inputmode="numeric" required>
+                            <div id="intern-otp-container"></div>
+                        </div>
+
+                        <div class="app-form-group">
+                            <label><i class="fas fa-map-marker-alt"></i> City / Location</label>
+                            <input type="text" id="iCity" placeholder="Your city" required>
+                        </div>
+
+                        <div class="app-form-group full">
+                            <label><i class="fas fa-briefcase"></i> Role Applying For</label>
+                            <select id="iRole" required>
+                                <option value="" disabled selected>Select a role</option>
+                                <option value="Frontend Developer Intern">Frontend Developer Intern</option>
+                                <option value="Python & Data Science Intern">Python &amp; Data Science Intern</option>
+                                <option value="Digital Marketing Intern">Digital Marketing Intern</option>
+                            </select>
+                        </div>
+
+                        <div class="app-form-group">
+                            <label><i class="fas fa-user-graduate"></i> Highest Qualification</label>
+                            <select id="iQualification" required>
+                                <option value="" disabled selected>Select qualification</option>
+                                <option>High School (10th / 12th)</option>
+                                <option>Diploma</option>
+                                <option>Bachelor's Degree</option>
+                                <option>Master's Degree</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="app-form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Availability</label>
+                            <select id="iAvailability" required>
+                                <option value="" disabled selected>When can you start?</option>
+                                <option>Immediately</option>
+                                <option>Within 2 weeks</option>
+                                <option>Within 1 month</option>
+                                <option>After 1 month</option>
+                            </select>
+                        </div>
+
+                        <div class="app-form-group full">
+                            <label><i class="fas fa-tools"></i> Key Skills</label>
+                            <input type="text" id="iSkills" placeholder="e.g. HTML, CSS, JavaScript, React" required>
+                        </div>
+
+                        <div class="app-form-group full">
+                            <label><i class="fas fa-link"></i> Resume / Portfolio Link <span style="font-weight:400;color:#94a3b8;">(Google Drive, LinkedIn, GitHub, etc.)</span></label>
+                            <input type="url" id="iResume" placeholder="https://..." required>
+                        </div>
+
+                        <div class="app-form-group full">
+                            <label><i class="fas fa-comment-alt"></i> Why do you want this internship? <span style="font-weight:400;color:#94a3b8;">(Optional)</span></label>
+                            <textarea id="iMessage" placeholder="Tell us about your motivation and what you hope to learn..."></textarea>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="app-submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </form>
+
+                <div class="success-msg" id="successMsg">
+                    <div class="success-icon"><i class="fas fa-check"></i></div>
+                    <h3>Application Submitted! 🎉</h3>
+                    <p>Thank you for applying! Our HR team will review your application and contact you within 48 hours.</p>
+                    <a href="internship.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Internship</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer-simple">
+    <div class="container">
+        <div class="footer-newsletter">
+            <div>
+                <h4>&#128140; Stay Updated</h4>
+                <p>Get the latest courses, internship openings &amp; career tips.</p>
+            </div>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email">
+                <button type="submit"><i class="fas fa-paper-plane"></i> Subscribe</button>
+            </form>
+        </div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+                <p>Empowering students with industry-ready skills and real-world experience since 2020.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="internship.html">Internship</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Our Courses</h4>
+                <ul>
+                    <li><a href="courses.html">Full Stack Dev</a></li>
+                    <li><a href="courses.html">Data Science &amp; AI</a></li>
+                    <li><a href="courses.html">UI/UX Design</a></li>
+                    <li><a href="courses.html">Cloud Computing</a></li>
+                    <li><a href="courses.html">Cyber Security</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <div class="footer-contact-list">
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>123 Tech Park, OMR Road,<br>Chennai - 600096</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>info@buildtogether.in</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+91 98765 43210</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Build Together Institute. All Rights Reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="navbar-auth.js"></script>
+<script src="darkmode.js"></script>
+<script src="ui-enhancements.js"></script>
+<script src="otp-verify.js"></script>
+<script>
+    if (!sessionStorage.getItem('loggedIn')) {
+        alert('Please log in first to apply for an internship.');
+        const role = new URLSearchParams(window.location.search).get('role');
+        sessionStorage.setItem('redirectAfterLogin', 'internship-application.html' + (role ? '?role=' + encodeURIComponent(role) : ''));
+        location.href = 'apply.html';
+    }
+
+    const API = 'http://localhost:5000';
+    let internEmailVerified = false;
+    let internPhoneVerified = false;
+
+    async function initVerification() {
+        const token = sessionStorage.getItem('token');
+        try {
+            const res = await fetch(`${API}/api/auth/verified-status`, { headers: { 'Authorization': 'Bearer ' + token } });
+            const data = await res.json();
+            if (res.ok && data.is_email_verified) {
+                const el = document.getElementById('iEmail');
+                el.value = data.email || sessionStorage.getItem('userEmail') || '';
+                el.readOnly = true; el.style.background = '#f0fdf4'; el.style.borderColor = '#10b981';
+                document.getElementById('intern-email-otp-container').innerHTML =
+                    '<div style="margin-top:6px;padding:7px 12px;background:#d1fae5;border-radius:8px;color:#059669;font-size:0.82rem;font-weight:600;"><i class="fas fa-check-circle"></i> Email verified!</div>';
+                internEmailVerified = true;
+            } else {
+                initEmailOtp('iEmail', 'intern-email-otp-container', (v) => { internEmailVerified = v; });
+            }
+            if (res.ok && data.is_phone_verified) {
+                const el = document.getElementById('iPhone');
+                el.value = data.phone || sessionStorage.getItem('userPhone') || '';
+                el.readOnly = true; el.style.background = '#f0fdf4'; el.style.borderColor = '#10b981';
+                document.getElementById('intern-otp-container').innerHTML =
+                    '<div style="margin-top:6px;padding:7px 12px;background:#d1fae5;border-radius:8px;color:#059669;font-size:0.82rem;font-weight:600;"><i class="fas fa-check-circle"></i> Phone number verified!</div>';
+                internPhoneVerified = true;
+            } else {
+                initPhoneOtp('iPhone', 'intern-otp-container', (v) => { internPhoneVerified = v; }, 'iEmail');
+            }
+        } catch(e) {
+            initEmailOtp('iEmail', 'intern-email-otp-container', (v) => { internEmailVerified = v; });
+            initPhoneOtp('iPhone', 'intern-otp-container', (v) => { internPhoneVerified = v; }, 'iEmail');
+        }
+    }
+    initVerification();
+
+    // Phone — digits only
+    document.getElementById('iPhone').addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+    });
+
+    // Form submit
+    document.getElementById('internForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const full_name     = document.getElementById('iName').value.trim();
+        const email         = document.getElementById('iEmail').value.trim();
+        const phone         = document.getElementById('iPhone').value.trim();
+        const city          = document.getElementById('iCity').value.trim();
+        const role_applied  = document.getElementById('iRole').value;
+        const qualification = document.getElementById('iQualification').value;
+        const availability  = document.getElementById('iAvailability').value;
+        const skills        = document.getElementById('iSkills').value.trim();
+        const resume_link   = document.getElementById('iResume').value.trim();
+        const message       = document.getElementById('iMessage').value.trim();
+
+        if (!full_name || !email || !phone || !city || !role_applied || !qualification || !availability || !skills || !resume_link) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+        if (!internEmailVerified) {
+            alert('Please verify your email address with OTP.');
+            return;
+        }
+        if (!internPhoneVerified) {
+            alert('Please verify your phone number with OTP.');
+            return;
+        }
+
+        const token = sessionStorage.getItem('token');
+        try {
+            const res = await fetch(`${API}/api/apply/internship`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ full_name, email, phone, city, role_applied, qualification, availability, skills, resume_link, message })
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                if (res.status === 409) {
+                    alert('You have already applied for ' + role_applied + '. You cannot apply again for the same role.');
+                } else {
+                    alert(data.error || 'Submission failed. Please try again.');
+                }
+                return;
+            }
+            this.style.display = 'none';
+            document.getElementById('successMsg').style.display = 'block';
+        } catch (err) {
+            alert('Server error. Make sure backend is running.');
+        }
+    });
+
+    // Hamburger
+    document.getElementById('hamburger').addEventListener('click', function () {
+        document.querySelector('.nav-links').classList.toggle('active');
+        this.classList.toggle('active');
+    });
+</script>
+</body>
+</html>

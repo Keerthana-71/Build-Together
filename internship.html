@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Program - Build Together Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ui-enhancements.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+    <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="internship.html" class="active">Internship</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="apply.html" class="apply-nav">Apply Now</a></li>
+    </ul>
+    <div class="navbar-right">
+        <button class="dark-toggle" id="darkToggleBtn" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+</nav>
+
+<section class="page-header">
+    <div class="header-content">
+        <h1>Launch Your Career with Our Internship</h1>
+        <p class="hero-subtitle">Bridge the gap between learning and industry with hands-on real-time projects.</p>
+    </div>
+</section>
+
+<section class="internship-perks" data-reveal>
+    <div class="container">
+        <h2 class="section-title" data-animate>Program Highlights &amp; Perks</h2>
+        <div class="perks-grid">
+            <div class="perk-card" data-animate data-delay="100">
+                <div class="perk-icon">💰</div>
+                <h3>Paid Internship</h3>
+                <p>Get a monthly stipend based on your performance and project contribution.</p>
+            </div>
+            <div class="perk-card" data-animate data-delay="200">
+                <div class="perk-icon">📜</div>
+                <h3>Global Certification</h3>
+                <p>Receive a professional certificate recognized by top companies.</p>
+            </div>
+            <div class="perk-card" data-animate data-delay="300">
+                <div class="perk-icon">👨🏫</div>
+                <h3>Mentorship</h3>
+                <p>One-on-one guidance from senior developers and industry experts.</p>
+            </div>
+            <div class="perk-card" data-animate data-delay="400">
+                <div class="perk-icon">💼</div>
+                <h3>PPO Opportunity</h3>
+                <p>Top performers get a Pre-Placement Offer for a full-time job.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="internship-roles" data-reveal>
+    <div class="container">
+        <h2 class="section-title" data-animate>Currently Hiring Interns For</h2>
+        <div class="roles-container">
+            <div class="role-box" data-animate data-delay="100">
+                <div class="role-header">
+                    <h3>Frontend Developer Intern</h3>
+                    <span class="type">Remote / On-site</span>
+                </div>
+                <p>Skills: HTML5, CSS3, JavaScript (React preferred). Build modern UIs.</p>
+                <button class="apply-small-btn" onclick="applyIntern('Frontend Developer Intern')">Apply Now</button>
+            </div>
+            <div class="role-box" data-animate data-delay="200">
+                <div class="role-header">
+                    <h3>Python &amp; Data Science Intern</h3>
+                    <span class="type">On-site</span>
+                </div>
+                <p>Skills: Python, SQL, Pandas. Analyze data and build ML models.</p>
+                <button class="apply-small-btn" onclick="applyIntern('Python & Data Science Intern')">Apply Now</button>
+            </div>
+            <div class="role-box" data-animate data-delay="300">
+                <div class="role-header">
+                    <h3>Digital Marketing Intern</h3>
+                    <span class="type">Remote</span>
+                </div>
+                <p>Skills: SEO, Social Media, Content Writing. Assist in brand growth.</p>
+                <button class="apply-small-btn" onclick="applyIntern('Digital Marketing Intern')">Apply Now</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="how-it-works" data-reveal>
+    <div class="container">
+        <h2 class="section-title" data-animate>How to Apply</h2>
+        <div class="steps-grid">
+            <div class="step" data-animate data-delay="100"><div class="step-num">1</div><h4>Submit Application</h4><p>Fill the form with your details and resume link.</p></div>
+            <div class="step" data-animate data-delay="200"><div class="step-num">2</div><h4>Skill Assessment</h4><p>Complete a small task or MCQ test online.</p></div>
+            <div class="step" data-animate data-delay="300"><div class="step-num">3</div><h4>Technical Interview</h4><p>Discussion with our mentors about your interests.</p></div>
+            <div class="step" data-animate data-delay="400"><div class="step-num">4</div><h4>Onboarding</h4><p>Start your journey and build great things!</p></div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer-simple">
+    <div class="container">
+        <div class="footer-newsletter">
+            <div>
+                <h4>&#128140; Stay Updated</h4>
+                <p>Get the latest courses, internship openings &amp; career tips.</p>
+            </div>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email">
+                <button type="submit"><i class="fas fa-paper-plane"></i> Subscribe</button>
+            </form>
+        </div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo"><span class="logo-text">BUILD</span><span class="logo-highlight">TOGETHER</span></div>
+                <p>Empowering students with industry-ready skills and real-world experience since 2020.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="internship.html">Internship</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Our Courses</h4>
+                <ul>
+                    <li><a href="courses.html#fullstack">Full Stack Dev</a></li>
+                    <li><a href="courses.html#datascience">Data Science &amp; AI</a></li>
+                    <li><a href="courses.html#uiux">UI/UX Design</a></li>
+                    <li><a href="courses.html#cloud">Cloud Computing</a></li>
+                    <li><a href="courses.html#cyber">Cyber Security</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <div class="footer-contact-list">
+                    <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>123 Tech Park, OMR Road,<br>Chennai - 600096</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>info@buildtogether.in</span></div>
+                    <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+91 98765 43210</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Build Together Institute. All Rights Reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="navbar-auth.js"></script>
+<script src="darkmode.js"></script>
+<script src="ui-enhancements.js"></script>
+<script>
+    function applyIntern(role) {
+        if (!sessionStorage.getItem('loggedIn')) {
+            sessionStorage.setItem('redirectAfterLogin', 'internship-application.html?role=' + encodeURIComponent(role));
+            alert('Please log in first to apply for an internship.');
+            location.href = 'apply.html';
+        } else {
+            location.href = 'internship-application.html?role=' + encodeURIComponent(role);
+        }
+    }
+
+    document.getElementById('hamburger').addEventListener('click', function () {
+        document.querySelector('.nav-links').classList.toggle('active');
+        this.classList.toggle('active');
+    });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
