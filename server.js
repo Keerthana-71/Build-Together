@@ -47,10 +47,10 @@ app.use(express.urlencoded({ extended: true }));
 // DATABASE CONNECTION
 // =============================================
 const db = mysql.createConnection({
-    host     : process.env.DB_HOST     || 'localhost',
+    host     : process.env.DB_HOST     || 'shuttle.proxy.rlwy.net',
     user     : process.env.DB_USER     || 'root',
     password : process.env.DB_PASSWORD || '',
-    database : process.env.DB_NAME     || 'buildtogether'
+    database : process.env.DB_NAME     || 'railway'
 });
 
 db.connect((err) => {
@@ -62,10 +62,10 @@ db.connect((err) => {
 
     // ── Session store (MySQL) ────────────────────────────────────────────────
     const sessionStore = new MySQLStore({
-        host     : process.env.DB_HOST     || 'localhost',
+        host     : process.env.DB_HOST     || 'shuttle.proxy.rlwy.net',
         user     : process.env.DB_USER     || 'root',
         password : process.env.DB_PASSWORD || '',
-        database : process.env.DB_NAME     || 'buildtogether',
+        database : process.env.DB_NAME     || 'railway',
         clearExpired     : true,
         checkExpirationInterval : 900000,
         createDatabaseTable     : true
@@ -89,7 +89,7 @@ db.connect((err) => {
 
     // ── Static files & home route ────────────────────────────────────────────
     app.use(express.static(path.join(__dirname)));
-    app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'home.html')));
+    app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 });
 
 // =============================================
