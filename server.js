@@ -98,7 +98,7 @@ db.connect((err) => {
 // EMAIL TRANSPORTER
 // =============================================
 const transporter = nodemailer.createTransport({
-    service: 'smtp.gmail.com',
+    service: 'gmail',
     port: 587,
     secure: false,
     auth: {
