@@ -14,7 +14,18 @@ const path           = require('path');
 const session        = require('express-session');
 const passport       = require('passport');
 const MySQLStore     = require('express-mysql-session')(session);
+const multer         = require('multer');
+const { PDFParse }    = require('pdf-parse');
+const fs             = require('fs');
 require('dotenv').config();
+
+// Dynamically import node-fetch once at the top level
+let fetch;
+(async () => {
+    fetch = (await import('node-fetch')).default;
+})();
+
+const upload = multer({ dest: 'uploads/' });
 
 const app    = express();
 const server = http.createServer(app);
@@ -145,7 +156,7 @@ app.post('/api/auth/signup', async (req, res) => {
         const password_hash = await bcrypt.hash(password, 10);
 
         db.query(
-            'INSERT INTO users (full_name, email, password_hash, role, phone, is_email_verified, is_phone_verified) VALUES (?, ?, ?, ?, ?, 1, 1)',
+            'INSERT INTO users (full_name, email, password_hash, role, phone, email_verified, phone_verified) VALUES (?, ?, ?, ?, ?, 1, 1)',
             [full_name, email, password_hash, role, phone || null],
             async (err) => {
                 if (err) return res.status(500).json({ error: 'Failed to create account.' });
@@ -305,6 +316,13 @@ app.post('/api/apply/course', verifyToken, (req, res) => {
                     } catch (e) {
                         console.warn('Email send failed:', e.message);
                     }
+
+                    // Auto-request mock interview access upon enrollment
+                    db.query('INSERT IGNORE INTO mock_interview_access (user_id, course_name, status) VALUES (?, ?, "pending")',
+                        [user_id, course_name], (accErr) => {
+                            if (accErr) console.error('Failed to create interview request:', accErr.message);
+                        });
+
                     res.status(201).json({ message: 'Course application submitted successfully!' });
                 }
             );
@@ -857,7 +875,7 @@ app.post('/api/otp/send', (req, res) => {
 
 // GET /api/auth/verified-status — check if user's email/phone are verified
 app.get('/api/auth/verified-status', verifyToken, (req, res) => {
-    db.query('SELECT is_email_verified, is_phone_verified, email, phone FROM users WHERE id = ?', [req.user.id], (err, results) => {
+    db.query('SELECT email_verified AS is_email_verified, phone_verified AS is_phone_verified, email, phone FROM users WHERE id = ?', [req.user.id], (err, results) => {
         if (err) {
             // Column may not exist yet — return verified=true as fallback
             db.query('SELECT email, phone FROM users WHERE id = ?', [req.user.id], (err2, r2) => {
@@ -1228,211 +1246,255 @@ io.on('connection', (socket) => {
 // =============================================
 // START SERVER
 // =============================================
+// --------------------
+// Interview management APIs
+// --------------------
+
+// GET pending/all interview access requests (admin)
+app.get('/api/admin/interview-requests', verifyToken, adminOnly, (req, res) => {
+    db.query(
+        'SELECT mia.id, mia.user_id, mia.course_name, mia.status, mia.requested_at, u.full_name, u.email FROM mock_interview_access mia LEFT JOIN users u ON mia.user_id = u.id ORDER BY mia.requested_at DESC',
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Failed to fetch requests.' });
+            res.json(results.map(r => ({ id: r.id, user_id: r.user_id, course_name: r.course_name, status: r.status, requested_at: r.requested_at, full_name: r.full_name, email: r.email })));
+        }
+    );
+});
+
+// PATCH update interview request status (approve/deny)
+app.patch('/api/admin/interview-requests/:id', verifyToken, adminOnly, (req, res) => {
+    const id = req.params.id;
+    const { status } = req.body;
+    if (!['approved','denied'].includes(status)) return res.status(400).json({ error: 'Invalid status.' });
+
+    db.query('SELECT user_id, course_name FROM mock_interview_access WHERE id = ?', [id], (err, rows) => {
+        if (err || !rows.length) return res.status(404).json({ error: 'Request not found.' });
+        const user_id = rows[0].user_id;
+        const course_name = rows[0].course_name;
+
+        db.query('UPDATE mock_interview_access SET status = ? WHERE id = ?', [status, id], async (err) => {
+            if (err) return res.status(500).json({ error: 'Failed to update status.' });
+
+            // notify user via email
+            db.query('SELECT email, full_name FROM users WHERE id = ?', [user_id], async (err, urows) => {
+                if (!err && urows.length) {
+                    try {
+                        if (status === 'approved') {
+                            await sendEmail(urows[0].email, 'Interview Access Approved', '<p>Your access to mock interview for <strong>' + course_name + '</strong> has been approved.</p>');
+                        } else {
+                            await sendEmail(urows[0].email, 'Interview Access Update', '<p>Your request for mock interview access for <strong>' + course_name + '</strong> was not approved.</p>');
+                        }
+                    } catch (e) { console.warn('Notify email failed:', e.message); }
+                }
+            });
+
+            res.json({ message: 'Status updated.' });
+        });
+    });
+});
+
+// Upload PDF and extract simple Q&A (admin)
+app.post('/api/admin/upload-qa', verifyToken, adminOnly, upload.single('pdf'), async (req, res) => {
+    try {
+        const course_name = req.body.course_name || req.body.course || 'General';
+        if (!req.file) return res.status(400).json({ error: 'PDF file required.' });
+
+        const dataBuffer = fs.readFileSync(req.file.path);
+        let text = '';
+
+        try {
+            const parser = new PDFParse({ data: dataBuffer });
+            const result = await parser.getText();
+            text = result.text || '';
+        } catch (parseErr) {
+            console.error('PDF parse attempt failed:', parseErr.message);
+            text = '';
+        }
+
+        // Very small heuristic: split by lines, find questions ending with '?' and treat following non-empty lines as answers.
+        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        const qa = [];
+        for (let i = 0; i < lines.length; i++) {
+            const ln = lines[i];
+            if (ln.endsWith('?') || /^Q[:\.]?/i.test(ln) || /^Question/i.test(ln)) {
+                const question = ln.replace(/^Q[:\.]?\s*/i, '');
+                let ans = '';
+                for (let j = i + 1; j < Math.min(i + 6, lines.length); j++) {
+                    if (lines[j].endsWith('?') || /^Q[:\.]?/i.test(lines[j])) break;
+                    ans += (ans ? ' ' : '') + lines[j];
+                }
+                qa.push({ question, answer: ans });
+            }
+        }
+
+        const qaJson = JSON.stringify(qa);
+        const pdfPath = req.file.path;
+        db.query('INSERT INTO course_qa_data (course_name, pdf_path, qa_json, uploaded_at) VALUES (?,?,?,NOW())', [course_name, pdfPath, qaJson], (err) => {
+            if (err) return res.status(500).json({ error: 'Failed to save QA data.' });
+            res.json({ message: 'PDF processed', count: qa.length, qa });
+        });
+    } catch (e) {
+        console.error('PDF parse error:', e.message);
+        res.status(500).json({ error: 'Failed to parse PDF.' });
+    }
+});
+
+// Get course QA for students (by course name)
+app.get('/api/interview/course-questions/:courseName', verifyToken, (req, res) => {
+    const course = req.params.courseName;
+    db.query('SELECT qa_json FROM course_qa_data WHERE course_name = ? ORDER BY uploaded_at DESC LIMIT 1', [course], (err, rows) => {
+        if (err) return res.status(500).json({ error: 'Failed to fetch QA.' });
+        if (!rows.length) return res.json([]);
+        try { const qa = JSON.parse(rows[0].qa_json || '[]'); res.json(qa); }
+        catch(e) { res.json([]); }
+    });
+});
+
+// Download the uploaded PDF for a course
+app.get('/api/interview/course-pdf/:courseName', verifyToken, (req, res) => {
+    const course = req.params.courseName;
+
+    db.query('SELECT pdf_path FROM course_qa_data WHERE course_name = ? ORDER BY uploaded_at DESC LIMIT 1', [course], (err, rows) => {
+        if (err) return res.status(500).json({ error: 'Failed to fetch PDF.' });
+        if (!rows.length || !rows[0].pdf_path) return res.status(404).json({ error: 'PDF not found.' });
+
+        const pdfPath = path.resolve(__dirname, rows[0].pdf_path);
+        if (!fs.existsSync(pdfPath)) return res.status(404).json({ error: 'PDF not found.' });
+
+        res.download(pdfPath, `${course}.pdf`);
+    });
+});
+
+// Student: get interview access status and enrolled courses (used by frontend)
+app.get('/api/interview/status', verifyToken, (req, res) => {
+    const user_id = req.user.id;
+    db.query(`
+        SELECT m.course_name,
+               m.status,
+               m.requested_at,
+               m.id,
+               (
+                   SELECT c.qa_json
+                   FROM course_qa_data c
+                   WHERE c.course_name = m.course_name
+                   ORDER BY c.uploaded_at DESC
+                   LIMIT 1
+               ) AS qa_json
+        FROM mock_interview_access m
+        WHERE m.user_id = ?
+    `, [user_id], (err, rows) => {
+        if (err) return res.status(500).json({ error: 'Failed to fetch status.' });
+        res.json(rows);
+    });
+});
+
+// Student: request mock interview access for a course
+app.post('/api/interview/request', verifyToken, (req, res) => {
+    const user_id = req.user.id;
+    const { course_name } = req.body;
+
+    if (!course_name) return res.status(400).json({ error: 'Course name is required.' });
+
+    db.query(
+        'INSERT INTO mock_interview_access (user_id, course_name, status) VALUES (?, ?, "pending") ON DUPLICATE KEY UPDATE status = "pending", requested_at = NOW(), updated_at = NOW()',
+        [user_id, course_name],
+        (err) => {
+            if (err) return res.status(500).json({ error: 'Failed to submit interview access request.' });
+            res.json({ success: true, status: 'pending', course_name });
+        }
+    );
+});
+
+// Admin: interview analytics
+app.get('/api/admin/interview-analytics', verifyToken, adminOnly, (req, res) => {
+    db.query(`
+        SELECT
+            COUNT(*) AS total_interviews,
+            AVG(final_score) AS avg_score,
+            COUNT(DISTINCT user_id) AS unique_users,
+            SUM(CASE WHEN final_score >= 7 THEN 1 ELSE 0 END) AS passed_count
+        FROM mock_interviews
+        WHERE status = 'completed'
+    `, (err, summaryRows) => {
+        if (err) return res.status(500).json({ error: 'Failed to load analytics.' });
+
+        db.query(`
+            SELECT role, COUNT(*) AS count, AVG(final_score) AS avg_score
+            FROM mock_interviews
+            WHERE status = 'completed'
+            GROUP BY role
+            ORDER BY count DESC
+        `, (roleErr, roleRows) => {
+            if (roleErr) return res.status(500).json({ error: 'Failed to load role analytics.' });
+
+            res.json({
+                summary: summaryRows[0] || {
+                    total_interviews: 0,
+                    avg_score: 0,
+                    unique_users: 0,
+                    passed_count: 0
+                },
+                by_role: roleRows
+            });
+        });
+    });
+});
+
+// Admin: interview results
+app.get('/api/admin/interviews', verifyToken, adminOnly, (req, res) => {
+    db.query(`
+        SELECT
+            m.id,
+            m.role,
+            m.level,
+            m.final_score,
+            m.technical_score,
+            m.communication_score,
+            m.confidence_score,
+            m.duration_seconds,
+            m.completed_at,
+            m.created_at,
+            u.full_name,
+            u.email
+        FROM mock_interviews m
+        LEFT JOIN users u ON u.id = m.user_id
+        WHERE m.status = 'completed'
+        ORDER BY COALESCE(m.completed_at, m.created_at) DESC
+        LIMIT 100
+    `, (err, rows) => {
+        if (err) return res.status(500).json({ error: 'Failed to load interviews.' });
+        res.json(rows);
+    });
+});
+
+// POST /api/interview/start - create a new mock interview session
+app.post('/api/interview/start', verifyToken, (req, res) => {
+    const user_id = req.user.id;
+    const { role, level, total_questions, session_id, course_name } = req.body;
+    if (!role || !session_id) return res.status(400).json({ error: 'role and session_id required.' });
+
+    db.query(
+        'INSERT INTO mock_interviews (user_id, session_id, role, level, total_questions, status, created_at) VALUES (?,?,?,?,?,"in_progress",NOW())',
+        [user_id, session_id, role, level || 'Beginner', total_questions || 5],
+        (err, result) => {
+            if (err) { console.error('Create interview error:', err.message); return res.status(500).json({ error: 'Failed to start interview.' }); }
+            return res.json({ message: 'Interview started', interviewId: result.insertId });
+        }
+    );
+});
+
 const PORT = process.env.PORT || 5000;
+
+server.on('error', (e) => {
+    if (e.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Try killing the process using it or change the PORT in server.js.`);
+        process.exit(1);
+    }
+});
+
 server.listen(PORT, () => {
     console.log('Server running on http://localhost:' + PORT);
     const { exec } = require('child_process');
     exec('start http://localhost:' + PORT);
 });
-
-// =============================================
-// MOCK INTERVIEW ROUTES
-// =============================================
-
-// GET /api/interview/config — send Gemini key to frontend
-app.get('/api/interview/config', verifyToken, (req, res) => {
-    res.json({ geminiKey: process.env.GEMINI_API_KEY || '' });
-});
-
-// POST /api/interview/ai — Gemini proxy (backend calls Gemini)
-app.post('/api/interview/ai', verifyToken, async (req, res) => {
-    const { prompt } = req.body;
-    if (!prompt) return res.status(400).json({ error: 'Prompt required.' });
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: 'Gemini API key not configured.' });
-
-    try {
-        const fetch = (await import('node-fetch')).default;
-        const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { temperature: 0.8, maxOutputTokens: 1024 }
-                })
-            }
-        );
-
-        if (!response.ok) {
-            const err = await response.json();
-            return res.status(500).json({ error: err.error?.message || 'Gemini API error.' });
-        }
-
-        const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
-        res.json({ response: text });
-    } catch (e) {
-        console.error('Gemini proxy error:', e.message);
-        res.status(500).json({ error: 'AI service unavailable.' });
-    }
-});
-
-// POST /api/interview/start — create interview session
-app.post('/api/interview/start', verifyToken, (req, res) => {
-    const { role, level, total_questions, session_id } = req.body;
-    const user_id = req.user.id;
-
-    if (!role || !level) return res.status(400).json({ error: 'Role and level required.' });
-
-    db.query(
-        'INSERT INTO mock_interviews (user_id, role, level, total_questions, session_id, status) VALUES (?,?,?,?,?,?)',
-        [user_id, role, level, total_questions || 5, session_id, 'in_progress'],
-        (err, result) => {
-            if (err) return res.status(500).json({ error: 'Failed to create interview session.' });
-            res.status(201).json({ interviewId: result.insertId, message: 'Interview started.' });
-        }
-    );
-});
-
-// POST /api/interview/answer — save individual answer
-app.post('/api/interview/answer', verifyToken, (req, res) => {
-    const { interview_id, question_no, question, answer, score, feedback } = req.body;
-    const user_id = req.user.id;
-
-    if (!interview_id || !question) return res.status(400).json({ error: 'Missing required fields.' });
-
-    db.query(
-        'INSERT INTO interview_answers (interview_id, user_id, question_no, question, answer, score, feedback) VALUES (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE answer=VALUES(answer), score=VALUES(score), feedback=VALUES(feedback)',
-        [interview_id, user_id, question_no, question, answer || '', score || 0, feedback || ''],
-        (err) => {
-            if (err) return res.status(500).json({ error: 'Failed to save answer.' });
-            res.json({ message: 'Answer saved.' });
-        }
-    );
-});
-
-// POST /api/interview/autosave — auto-save progress
-app.post('/api/interview/autosave', verifyToken, (req, res) => {
-    const { interview_id, questions } = req.body;
-    if (!interview_id) return res.status(400).json({ error: 'interview_id required.' });
-
-    db.query(
-        'UPDATE mock_interviews SET status=? WHERE id=? AND user_id=?',
-        ['in_progress', interview_id, req.user.id],
-        (err) => {
-            if (err) return res.status(500).json({ error: 'Autosave failed.' });
-            res.json({ message: 'Progress saved.' });
-        }
-    );
-});
-
-// POST /api/interview/complete — save final report
-app.post('/api/interview/complete', verifyToken, (req, res) => {
-    const {
-        interview_id, final_score, technical_score, communication_score,
-        confidence_score, strengths, weaknesses, suggestions, summary, duration_seconds
-    } = req.body;
-    const user_id = req.user.id;
-
-    if (!interview_id) return res.status(400).json({ error: 'interview_id required.' });
-
-    db.query(
-        `UPDATE mock_interviews SET
-            status='completed', final_score=?, technical_score=?, communication_score=?,
-            confidence_score=?, strengths=?, weaknesses=?, suggestions=?,
-            summary=?, duration_seconds=?, completed_at=NOW()
-         WHERE id=? AND user_id=?`,
-        [
-            final_score || 0, technical_score || 0, communication_score || 0,
-            confidence_score || 0, strengths || '[]', weaknesses || '[]',
-            suggestions || '[]', summary || '', duration_seconds || 0,
-            interview_id, user_id
-        ],
-        (err) => {
-            if (err) return res.status(500).json({ error: 'Failed to save report.' });
-            res.json({ message: 'Interview completed and report saved.' });
-        }
-    );
-});
-
-// GET /api/interview/history — get user's past interviews
-app.get('/api/interview/history', verifyToken, (req, res) => {
-    const user_id = req.user.id;
-    db.query(
-        'SELECT id, role, level, total_questions, final_score, status, created_at FROM mock_interviews WHERE user_id=? AND status="completed" ORDER BY created_at DESC LIMIT 10',
-        [user_id],
-        (err, results) => {
-            if (err) return res.status(500).json({ error: 'Failed to fetch history.' });
-            res.json(results);
-        }
-    );
-});
-
-// GET /api/interview/:id — get full interview report
-app.get('/api/interview/:id', verifyToken, (req, res) => {
-    const user_id = req.user.id;
-    db.query(
-        'SELECT * FROM mock_interviews WHERE id=? AND user_id=?',
-        [req.params.id, user_id],
-        (err, results) => {
-            if (err) return res.status(500).json({ error: 'Database error.' });
-            if (!results.length) return res.status(404).json({ error: 'Interview not found.' });
-
-            const interview = results[0];
-            db.query(
-                'SELECT * FROM interview_answers WHERE interview_id=? ORDER BY question_no ASC',
-                [req.params.id],
-                (err2, answers) => {
-                    if (err2) return res.status(500).json({ error: 'Database error.' });
-                    res.json({ interview, answers });
-                }
-            );
-        }
-    );
-});
-
-// GET /api/admin/interviews — admin: view all interview results
-app.get('/api/admin/interviews', verifyToken, adminOnly, (req, res) => {
-    db.query(
-        `SELECT mi.*, u.full_name, u.email
-         FROM mock_interviews mi
-         JOIN users u ON mi.user_id = u.id
-         WHERE mi.status = 'completed'
-         ORDER BY mi.completed_at DESC
-         LIMIT 100`,
-        (err, results) => {
-            if (err) return res.status(500).json({ error: 'Failed to fetch interviews.' });
-            res.json(results);
-        }
-    );
-});
-
-// GET /api/admin/interview-analytics — admin: analytics summary
-app.get('/api/admin/interview-analytics', verifyToken, adminOnly, (req, res) => {
-    db.query(
-        `SELECT
-            COUNT(*) as total_interviews,
-            AVG(final_score) as avg_score,
-            MAX(final_score) as highest_score,
-            MIN(final_score) as lowest_score,
-            COUNT(DISTINCT user_id) as unique_users,
-            SUM(CASE WHEN final_score >= 7 THEN 1 ELSE 0 END) as passed_count
-         FROM mock_interviews WHERE status='completed'`,
-        (err, results) => {
-            if (err) return res.status(500).json({ error: 'Analytics error.' });
-
-            db.query(
-                `SELECT role, COUNT(*) as count, AVG(final_score) as avg_score
-                 FROM mock_interviews WHERE status='completed'
-                 GROUP BY role ORDER BY count DESC`,
-                (err2, roleStats) => {
-                    if (err2) return res.status(500).json({ error: 'Analytics error.' });
-                    res.json({ summary: results[0], by_role: roleStats });
-                }
-            );
-        }
-    );
-});
+ 

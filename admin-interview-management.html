@@ -1,0 +1,423 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Interview Management | Build Together Institute</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: #f4f7f6; color: #333; }
+        .topbar { background: #2c3e50; color: white; padding: 16px 24px; }
+        .topbar .brand { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 700; }
+        .topbar nav { display: flex; gap: 12px; flex-wrap: wrap; }
+        .topbar nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: background 0.2s, color 0.2s; }
+        .topbar nav a.active, .topbar nav a:hover { background: rgba(255,255,255,0.12); color: white; }
+        .page-wrapper { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .page-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; padding-bottom: 20px; }
+        .page-header h1 { margin: 0; font-size: 2rem; color: #2c3e50; }
+        .page-header p { margin: 8px 0 0; color: #7f8c8d; max-width: 720px; }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #1f2937; text-decoration: none; margin-top: 10px; }
+        .back-link i { color: #3498db; }
+        .section-header h2 { margin-top: 0; font-size: 1.6rem; color: #2c3e50; }
+        .section-header p { margin: 6px 0 0; color: #7f8c8d; }
+        .admin-subtabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 2px solid #ecf0f1; }
+        .admin-subtab-btn { background: none; border: none; padding: 12px 20px; font-size: 1rem; font-weight: 500; color: #666; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; }
+        .admin-subtab-btn:hover { color: #3498db; }
+        .admin-subtab-btn.active { color: #3498db; border-bottom: 3px solid #3498db; margin-bottom: -2px; }
+        .admin-subtab-btn .badge { background: #e74c3c; color: white; border-radius: 12px; padding: 2px 8px; font-size: 0.75rem; font-weight: bold; margin-left: 5px; }
+        .interview-subtab { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .filter-section { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .filter-input { padding: 10px 15px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 0.95rem; font-family: 'Poppins', sans-serif; flex: 1; min-width: 200px; }
+        .filter-input:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); }
+        .requests-container { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .request-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 20px; transition: all 0.3s ease; }
+        .request-card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-color: #3498db; }
+        .request-info { display: flex; align-items: flex-start; gap: 15px; }
+        .request-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem; flex-shrink: 0; }
+        .request-details { flex: 1; }
+        .request-details h4 { margin: 0 0 5px 0; font-size: 1rem; color: #2c3e50; }
+        .request-details p { margin: 3px 0; font-size: 0.85rem; color: #666; }
+        .request-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; margin-top: 5px; }
+        .request-badge.pending { background: #ffeaa7; color: #d63031; }
+        .request-badge.approved { background: #a9dfbf; color: #27ae60; }
+        .request-badge.denied { background: #f5b7b1; color: #c0392b; }
+        .request-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+        .btn-small { padding: 8px 15px; font-size: 0.85rem; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; font-weight: 500; }
+        .btn-approve { background: #27ae60; color: white; }
+        .btn-approve:hover { background: #229954; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3); }
+        .btn-deny { background: #e74c3c; color: white; }
+        .btn-deny:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3); }
+        .btn-view { background: #3498db; color: white; }
+        .btn-view:hover { background: #2980b9; transform: translateY(-2px); }
+        .upload-section { margin-bottom: 40px; }
+        .upload-card { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; border-radius: 12px; padding: 30px; }
+        .upload-card h3 { margin-top: 0; margin-bottom: 20px; font-size: 1.3rem; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem; }
+        .form-control, .file-upload-area { width: 100%; padding: 12px; border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.95rem; background: rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
+        .form-control::placeholder { color: rgba(255, 255, 255, 0.6); }
+        .form-control:focus, .file-upload-area:focus-within { outline: none; border-color: rgba(255, 255, 255, 0.6); background: rgba(255, 255, 255, 0.15); }
+        .file-upload-area { border: 2px dashed rgba(255, 255, 255, 0.5); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+        .file-upload-area:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.8); }
+        .file-upload-area i { font-size: 2.5rem; margin-bottom: 10px; }
+        .file-upload-area p { margin: 5px 0; font-size: 1rem; }
+        .file-upload-area small { font-size: 0.8rem; opacity: 0.8; }
+        .btn-block { width: 100%; margin-top: 10px; }
+        .btn-primary { background: #2c3e50; color: white; padding: 12px 20px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; }
+        .btn-primary:hover { background: #1a252f; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+        .btn-primary:disabled { background: #bdc3c7; cursor: not-allowed; transform: none; }
+        .courses-section h3 { margin-bottom: 20px; color: #2c3e50; }
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .course-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column; }
+        .course-card:hover { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); border-color: #3498db; }
+        .course-header { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 20px; text-align: center; }
+        .course-header h4 { margin: 0 0 10px 0; font-size: 1.1rem; }
+        .course-header .course-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .course-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        .course-stat { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e0e0e0; font-size: 0.9rem; }
+        .course-stat:last-child { border-bottom: none; }
+        .course-stat-value { font-weight: 600; color: #3498db; }
+        .course-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 15px; }
+        .course-actions button { flex: 1; padding: 10px; border: 1px solid #3498db; background: white; color: #3498db; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.3s ease; }
+        .course-actions button:hover { background: #3498db; color: white; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: white; border-radius: 12px; padding: 30px; max-width: 400px; width: 90%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+        .modal-content h3 { margin: 0 0 20px 0; color: #2c3e50; }
+        .modal-content textarea { width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; margin-bottom: 20px; resize: vertical; min-height: 100px; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal-actions button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; }
+        .modal-actions .btn-cancel { background: #ecf0f1; color: #666; }
+        .modal-actions .btn-confirm { background: #e74c3c; color: white; }
+        .modal-actions button:hover { transform: translateY(-2px); }
+        @media (max-width: 1100px) { .request-card { grid-template-columns: 1fr; } .request-actions { justify-content: flex-start; } .courses-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .filter-section { flex-direction: column; } .filter-input { min-width: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="page-wrapper" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+            <div class="brand"><i class="fas fa-shield-alt"></i> Build Together Institute Admin</div>
+            <nav>
+                <a href="admin-dashboard.html">Dashboard</a>
+                <a href="admin-interview-management.html" class="active"><i class="fas fa-video"></i> Interview Management</a>
+            </nav>
+        </div>
+    </div>
+    <div class="page-wrapper">
+        <header class="page-header">
+            <div>
+                <h1>Interview Management</h1>
+                <p>Approve student interview access and upload interview Q&A materials for courses.</p>
+            </div>
+            <a class="back-link" href="admin-dashboard.html"><i class="fas fa-arrow-left"></i> Back to Admin Dashboard</a>
+        </header>
+        <div class="section-header">
+            <h2><i class="fas fa-video"></i> Mock Interview Management</h2>
+            <p>Manage interview access requests and upload course materials</p>
+        </div>
+        <div class="admin-subtabs">
+            <button class="admin-subtab-btn active" onclick="switchInterviewSubtab('access-requests', event)">
+                <i class="fas fa-user-check"></i> Access Requests
+                <span id="pendingBadge" class="badge">0</span>
+            </button>
+            <button class="admin-subtab-btn" onclick="switchInterviewSubtab('course-materials', event)">
+                <i class="fas fa-file-pdf"></i> Course Materials
+            </button>
+        </div>
+        <div id="access-requests" class="interview-subtab" style="display:block;">
+            <div class="filter-section">
+                <input type="text" id="searchStudent" placeholder="🔍 Search student name or email..." class="filter-input">
+                <select id="statusFilter" class="filter-input" onchange="filterAccessRequests()">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="denied">Denied</option>
+                </select>
+            </div>
+            <div class="requests-container" id="requestsContainer">
+                <div class="loading" style="text-align:center; padding:40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:2rem; color:#3498db;"></i>
+                    <p>Loading requests...</p>
+                </div>
+            </div>
+        </div>
+        <div id="course-materials" class="interview-subtab" style="display:none;">
+            <div class="upload-section">
+                <div class="upload-card">
+                    <h3><i class="fas fa-cloud-upload-alt"></i> Upload Interview Materials</h3>
+                    <div class="form-group">
+                        <label for="courseName">Select Course</label>
+                        <select id="courseName" class="form-control">
+                            <option value="">-- Choose Course --</option>
+                            <option value="Full Stack Web Development">Full Stack Web Development</option>
+                            <option value="Data Science & AI">Data Science & AI</option>
+                            <option value="UI/UX Design">UI/UX Design</option>
+                            <option value="Advanced UI/UX Design">Advanced UI/UX Design</option>
+                            <option value="Cloud Computing (AWS/GCP)">Cloud Computing (AWS/GCP)</option>
+                            <option value="Cyber Security & Ethical Hacking">Cyber Security & Ethical Hacking</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pdfFile">Upload PDF with Q&A</label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <i class="fas fa-file-pdf"></i>
+                            <p>Click to upload or drag and drop</p>
+                            <small>PDF files only, max 50MB</small>
+                            <input type="file" id="pdfFile" accept=".pdf" style="display:none;">
+                        </div>
+                        <div id="uploadFileName" style="margin-top:10px; font-size:0.9rem; color:#666;"></div>
+                    </div>
+                    <button onclick="uploadPDF()" class="btn btn-primary btn-block" id="uploadBtn">
+                        <i class="fas fa-upload"></i> Upload & Extract Q&A
+                    </button>
+                </div>
+            </div>
+            <div class="courses-section">
+                <h3><i class="fas fa-book"></i> Existing Course Materials</h3>
+                <div id="coursesContainer" class="courses-grid">
+                    <div style="text-align:center; padding:40px; grid-column:1/-1;">
+                        <i class="fas fa-spinner fa-spin" style="font-size:2rem; color:#3498db;"></i>
+                        <p>Loading courses...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const API = 'http://localhost:5000';
+        const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+        const role = sessionStorage.getItem('userRole');
+        if (!token || role !== 'admin') { alert('Admin access only. Please login.'); location.href = 'apply.html'; }
+        let allRequests = [];
+        let currentDenyId = null;
+        function switchInterviewSubtab(tab, event) {
+            document.querySelectorAll('.interview-subtab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.admin-subtab-btn').forEach(b => b.classList.remove('active'));
+            const btn = event?.currentTarget || event?.target?.closest?.('.admin-subtab-btn');
+            if (btn) btn.classList.add('active');
+            document.getElementById(tab).style.display = 'block';
+            if (tab === 'access-requests') loadAccessRequests();
+            if (tab === 'course-materials') loadCoursesMaterials();
+        }
+        async function loadAccessRequests() {
+            const container = document.getElementById('requestsContainer');
+            container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#3498db"></i><p>Loading requests...</p></div>';
+            try {
+                const response = await fetch(`${API}/api/admin/interview-requests`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const rawText = await response.text();
+                if (!response.ok) throw new Error(rawText || 'Failed to load requests');
+                allRequests = JSON.parse(rawText);
+                displayAccessRequests(allRequests);
+                updatePendingBadge();
+            } catch (error) {
+                container.innerHTML = `<div style="text-align:center; padding:40px; color:#e74c3c;"><i class="fas fa-exclamation-circle"></i><p>Failed to load requests. Please try again.</p><pre style="white-space:pre-wrap; text-align:left; margin-top:10px;">${String(error && error.message ? error.message : error)}</pre></div>`;
+            }
+        }
+        function displayAccessRequests(requests) {
+            const container = document.getElementById('requestsContainer');
+            if (!requests.length) {
+                container.innerHTML = `<div style="text-align:center; padding:40px;"><i class="fas fa-check-circle" style="font-size:3rem; color:#27ae60; margin-bottom:10px;"></i><p style="color:#666;">No interview requests to review</p></div>`;
+                return;
+            }
+            container.innerHTML = requests.map(req => {
+                const fullName = req.full_name || req.name || req.user_name || req.email || 'Unknown';
+                const statusLabel = String(req.status || 'pending');
+                const avatarLetter = fullName.charAt(0).toUpperCase();
+                const requestedAt = req.requested_at ? new Date(req.requested_at) : null;
+                return `
+                    <div class="request-card">
+                        <div class="request-info">
+                            <div class="request-avatar">${avatarLetter}</div>
+                            <div class="request-details">
+                                <h4>${fullName}</h4>
+                                <p><strong>Email:</strong> ${req.email || ''}</p>
+                                <p><strong>Course:</strong> ${req.course_name || ''}</p>
+                                <p><strong>Requested:</strong> ${requestedAt ? requestedAt.toLocaleDateString() : '-'}</p>
+                                <span class="request-badge ${statusLabel}">${statusLabel.toUpperCase()}</span>
+                            </div>
+                        </div>
+                        <div class="request-actions">
+                            ${statusLabel === 'pending' ? `
+                                <button class="btn-small btn-approve" onclick="approveRequest(${req.id})"><i class="fas fa-check"></i> Approve</button>
+                                <button class="btn-small btn-deny" onclick="openDenyModal(${req.id})"><i class="fas fa-times"></i> Deny</button>
+                            ` : `<button class="btn-small btn-view" disabled style="background:#bdc3c7; cursor:default;">${statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}</button>`}
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+        function updatePendingBadge() {
+            const pendingCount = allRequests.filter(r => (r.status || 'pending') === 'pending').length;
+            const badge = document.getElementById('pendingBadge');
+            badge.textContent = pendingCount;
+            badge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+        }
+        function filterAccessRequests() {
+            const status = document.getElementById('statusFilter').value;
+            const search = document.getElementById('searchStudent').value.toLowerCase();
+            displayAccessRequests(allRequests.filter(req => {
+                const reqStatus = req.status || 'pending';
+                const fullName = (req.full_name || req.name || req.user_name || '').toLowerCase();
+                const email = (req.email || '').toLowerCase();
+                const matchesStatus = !status || reqStatus === status;
+                const matchesSearch = !search || fullName.includes(search) || email.includes(search);
+                return matchesStatus && matchesSearch;
+            }));
+        }
+        async function approveRequest(id) {
+            if (!confirm('Approve this student\'s mock interview access?')) return;
+            try {
+                const response = await fetch(`${API}/api/admin/interview-requests/${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'approved' })
+                });
+                if (!response.ok) throw new Error('Failed to approve');
+                alert('✅ Student approved! Notification email sent.');
+                loadAccessRequests();
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        }
+        function openDenyModal(id) { currentDenyId = id; document.getElementById('denyModal').classList.add('active'); }
+        function closeDenyModal() { currentDenyId = null; document.getElementById('denyModal').classList.remove('active'); document.getElementById('denyReason').value = ''; }
+        async function denyRequest() {
+            const reason = document.getElementById('denyReason').value.trim();
+            if (!reason) { alert('Please provide a reason for denial'); return; }
+            try {
+                const response = await fetch(`${API}/api/admin/interview-requests/${currentDenyId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'denied' })
+                });
+                if (!response.ok) throw new Error('Failed to deny');
+                alert('❌ Request denied. Notification email sent.');
+                closeDenyModal();
+                loadAccessRequests();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        async function loadCoursesMaterials() {
+            const container = document.getElementById('coursesContainer');
+            container.innerHTML = '';
+            const courses = [
+                'Full Stack Web Development',
+                'Data Science & AI',
+                'UI/UX Design',
+                'Advanced UI/UX Design',
+                'Cloud Computing (AWS/GCP)',
+                'Cyber Security & Ethical Hacking'
+            ];
+            for (const course of courses) {
+                try {
+                    const response = await fetch(`${API}/api/interview/course-questions/${encodeURIComponent(course)}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                    if (response.ok) {
+                        const qaData = await response.json();
+                        displayCourseCard(course, qaData.length, null);
+                    } else {
+                        displayCourseCard(course, 0, null);
+                    }
+                } catch (e) {
+                    displayCourseCard(course, 0, null);
+                }
+            }
+        }
+        function displayCourseCard(name, qCount, uploadedAt) {
+            const container = document.getElementById('coursesContainer');
+            const card = document.createElement('div');
+            card.className = 'course-card';
+            card.innerHTML = `
+                <div class="course-header">
+                    <div class="course-icon"><i class="fas fa-book"></i></div>
+                    <h4>${name}</h4>
+                </div>
+                <div class="course-body">
+                    <div class="course-stat">
+                        <span>Questions Available:</span>
+                        <span class="course-stat-value">${qCount}</span>
+                    </div>
+                    <div class="course-stat">
+                        <span>Last Updated:</span>
+                        <span class="course-stat-value">${uploadedAt ? new Date(uploadedAt).toLocaleDateString() : 'Never'}</span>
+                    </div>
+                    <div class="course-actions">
+                        <button onclick="selectCourseForUpload('${name.replace(/'/g, "\\'")}')"><i class="fas fa-upload"></i> Update PDF</button>
+                        ${qCount > 0 ? `<button onclick="viewCourseQA('${name.replace(/'/g, "\\'")}')"><i class="fas fa-eye"></i> View Q&A</button>` : ''}
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+        function selectCourseForUpload(courseName) { document.getElementById('courseName').value = courseName; document.getElementById('courseName').scrollIntoView({ behavior: 'smooth' }); }
+        async function uploadPDF() {
+            const courseName = document.getElementById('courseName').value;
+            const fileInput = document.getElementById('pdfFile');
+            const file = fileInput.files[0];
+            if (!courseName || !file) { alert('Please select both a course and a PDF file'); return; }
+            const formData = new FormData();
+            formData.append('course_name', courseName);
+            formData.append('pdf', file);
+            const btn = document.getElementById('uploadBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            try {
+                const response = await fetch(`${API}/api/admin/upload-qa`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: formData });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Upload failed');
+                alert(`✅ Success!\n\n${data.message}\nFound ${data.count} questions`);
+                fileInput.value = '';
+                document.getElementById('uploadFileName').textContent = '';
+                loadCoursesMaterials();
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-upload"></i> Upload & Extract Q&A';
+            }
+        }
+        function updateFileName() {
+            const fileInput = document.getElementById('pdfFile');
+            const fileName = document.getElementById('uploadFileName');
+            if (fileInput.files[0]) fileName.textContent = `📄 Selected: ${fileInput.files[0].name}`;
+        }
+        function viewCourseQA(courseName) { alert(`View Q&A for ${courseName} - Feature coming soon!`); }
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileArea = document.getElementById('fileUploadArea');
+            const fileInput = document.getElementById('pdfFile');
+            if (fileArea && fileInput) {
+                fileArea.addEventListener('click', () => fileInput.click());
+                fileArea.addEventListener('dragover', (e) => { e.preventDefault(); fileArea.style.background = 'rgba(255,255,255,0.2)'; });
+                fileArea.addEventListener('dragleave', () => { fileArea.style.background = ''; });
+                fileArea.addEventListener('drop', (e) => { e.preventDefault(); fileArea.style.background = ''; fileInput.files = e.dataTransfer.files; updateFileName(); });
+                fileInput.addEventListener('change', updateFileName);
+            }
+            const modal = document.createElement('div');
+            modal.id = 'denyModal';
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h3><i class="fas fa-times-circle"></i> Deny Access Request</h3>
+                    <p>Provide a reason for denying this interview access:</p>
+                    <textarea id="denyReason" placeholder="E.g., Course prerequisites not completed, Unsatisfactory performance, etc."></textarea>
+                    <div class="modal-actions">
+                        <button class="btn-cancel" onclick="closeDenyModal()">Cancel</button>
+                        <button class="btn-confirm" onclick="denyRequest()">Deny Access</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            const searchInput = document.getElementById('searchStudent');
+            if (searchInput) searchInput.addEventListener('input', filterAccessRequests);
+            loadAccessRequests();
+        });
+    </script>
+</body>
+</html>

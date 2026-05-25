@@ -188,3 +188,23 @@ CREATE TABLE IF NOT EXISTS interview_answers (
     INDEX idx_interview_id (interview_id),
     INDEX idx_user_id      (user_id)
 );
+
+-- Mock Interview Access Management
+CREATE TABLE IF NOT EXISTS mock_interview_access (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    course_name VARCHAR(150) NOT NULL,
+    status ENUM('pending', 'approved', 'denied') DEFAULT 'pending',
+    requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_user_course_access (user_id, course_name)
+);
+
+-- Course Q&A Storage (Extracted from PDF)
+CREATE TABLE IF NOT EXISTS course_qa_data (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(150) NOT NULL,
+    pdf_path VARCHAR(255),
+    qa_json LONGTEXT, -- Stores the array of {question, answer} objects
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

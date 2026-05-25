@@ -1,0 +1,695 @@
+<!-- ============================================================
+     STUDENT MOCK INTERVIEW PREPARATION SECTION
+     This goes into the student dashboard.html
+============================================================= -->
+
+<section class="mi-prep-section" id="mockInterviewPrep">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-graduation-cap"></i> Mock Interview Preparation</h2>
+            <p>Review course materials and prepare for your mock interview</p>
+        </div>
+
+        <!-- Status Overview -->
+        <div class="prep-overview" id="prepOverview">
+            <div class="overview-card loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading your preparation status...</p>
+            </div>
+        </div>
+
+        <!-- Enrolled Courses with Interview Status -->
+        <div class="enrolled-courses-section">
+            <h3><i class="fas fa-book-open"></i> Enrolled Courses</h3>
+            <div class="courses-list" id="coursesList">
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading courses...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal for viewing Q&A -->
+<div id="qaModal" class="qa-modal" style="display: none;">
+    <div class="qa-modal-content">
+        <div class="qa-modal-header">
+            <h2 id="qaModalTitle">Interview Questions & Answers</h2>
+            <button class="qa-close-btn" onclick="closeQAModal()">×</button>
+        </div>
+        <div class="qa-modal-body" id="qaModalBody">
+            <!-- Q&A content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     STYLES FOR PREPARATION SECTION
+============================================================= -->
+<style>
+.mi-prep-section {
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    margin: 40px 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.section-header p {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Overview Cards */
+.prep-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.overview-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.overview-card:hover:not(.loading) {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+.overview-card.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1 / -1;
+    color: #3498db;
+}
+
+.overview-card i {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.overview-card .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3498db;
+    margin: 10px 0;
+}
+
+.overview-card .stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Enrolled Courses */
+.enrolled-courses-section {
+    margin-top: 40px;
+}
+
+.enrolled-courses-section h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+.courses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.course-prep-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-prep-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+.course-prep-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+}
+
+.course-prep-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.course-prep-header .course-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.course-prep-body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    width: fit-content;
+}
+
+.status-badge.pending {
+    background: #ffeaa7;
+    color: #d63031;
+}
+
+.status-badge.approved {
+    background: #a9dfbf;
+    color: #27ae60;
+}
+
+.status-badge.denied {
+    background: #f5b7b1;
+    color: #c0392b;
+}
+
+.course-info {
+    margin-bottom: 15px;
+    flex: 1;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.info-value {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.course-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-view-materials {
+    background: #3498db;
+    color: white;
+}
+
+.btn-view-materials:hover:not(:disabled) {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.btn-download {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-download:hover:not(:disabled) {
+    background: #229954;
+    transform: translateY(-2px);
+}
+
+.btn-start-interview {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-start-interview:hover:not(:disabled) {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+.btn-pending {
+    background: #95a5a6;
+    color: white;
+    cursor: not-allowed;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: #bdc3c7;
+    margin-bottom: 15px;
+}
+
+.empty-state p {
+    color: #666;
+    margin: 10px 0;
+}
+
+/* Q&A Modal */
+.qa-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.qa-modal.active {
+    display: flex;
+}
+
+.qa-modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.qa-modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.qa-modal-header h2 {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.qa-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.qa-close-btn:hover {
+    transform: rotate(90deg);
+}
+
+.qa-modal-body {
+    overflow-y: auto;
+    padding: 20px;
+    flex: 1;
+}
+
+.qa-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.qa-item:last-child {
+    border-bottom: none;
+}
+
+.qa-number {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+.qa-question {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 10px 0;
+    margin-left: 40px;
+}
+
+.qa-answer {
+    background: #f5f7fa;
+    padding: 12px;
+    border-left: 3px solid #27ae60;
+    margin-left: 40px;
+    border-radius: 4px;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.download-btn-modal {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.download-btn-modal:hover {
+    background: #229954;
+}
+
+@media (max-width: 768px) {
+    .mi-prep-section {
+        padding: 20px 15px;
+    }
+
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .courses-list {
+        grid-template-columns: 1fr;
+    }
+
+    .course-actions {
+        flex-direction: column;
+    }
+
+    .action-btn {
+        min-width: 100%;
+    }
+
+    .qa-modal-content {
+        max-height: 90vh;
+    }
+
+    .qa-modal-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .qa-modal-header h2 {
+        font-size: 1rem;
+    }
+}
+</style>
+
+<!-- ============================================================
+     JAVASCRIPT FOR PREPARATION SECTION
+============================================================= -->
+<script>
+// Load and display preparation materials
+async function loadMockInterviewPrep() {
+    try {
+        const token = sessionStorage.getItem('token') || localStorage.getItem('token');
+        if (!token) return;
+
+        const response = await fetch('http://localhost:5000/api/interview/status', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Failed to load preparation data');
+
+        const courses = await response.json();
+        displayPrepStatus(courses);
+    } catch (error) {
+        console.error('Error loading prep materials:', error);
+    }
+}
+
+// Display preparation overview and courses
+function displayPrepStatus(courses) {
+    // Update overview
+    const approvedCount = courses.filter(c => c.status === 'approved').length;
+    const pendingCount = courses.filter(c => c.status === 'pending').length;
+
+    const overviewHTML = `
+        <div class="overview-card">
+            <i class="fas fa-book"></i>
+            <div class="stat-number">${courses.length}</div>
+            <div class="stat-label">Enrolled Courses</div>
+        </div>
+        <div class="overview-card">
+            <i class="fas fa-check-circle" style="color: #27ae60;"></i>
+            <div class="stat-number">${approvedCount}</div>
+            <div class="stat-label">Approved for Interview</div>
+        </div>
+        <div class="overview-card">
+            <i class="fas fa-clock" style="color: #f39c12;"></i>
+            <div class="stat-number">${pendingCount}</div>
+            <div class="stat-label">Pending Review</div>
+        </div>
+    `;
+
+    document.getElementById('prepOverview').innerHTML = overviewHTML;
+
+    // Display courses
+    displayCoursesPrep(courses);
+}
+
+// Display course cards with interview prep materials
+function displayCoursesPrep(courses) {
+    const coursesList = document.getElementById('coursesList');
+
+    if (!courses.length) {
+        coursesList.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No enrolled courses yet</p>
+                <p style="font-size: 0.9rem;">Enroll in a course to see preparation materials</p>
+            </div>
+        `;
+        return;
+    }
+
+    coursesList.innerHTML = courses.map(course => `
+        <div class="course-prep-card">
+            <div class="course-prep-header">
+                <div class="course-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h4>${course.course_name}</h4>
+            </div>
+            <div class="course-prep-body">
+                <span class="status-badge ${course.status}">
+                    ${course.status.charAt(0).toUpperCase() + course.status.slice(1)}
+                </span>
+
+                <div class="course-info">
+                    <div class="info-item">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">${formatStatus(course.status)}</span>
+                    </div>
+                    ${course.status === 'approved' ? `
+                        <div class="info-item">
+                            <span class="info-label">Questions Available:</span>
+                            <span class="info-value">${course.qa_data ? course.qa_data.length : 0}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Uploaded:</span>
+                            <span class="info-value">${formatDate(course.uploaded_at)}</span>
+                        </div>
+                    ` : `
+                        <div class="info-item">
+                            <span class="info-label">Requested:</span>
+                            <span class="info-value">${formatDate(course.requested_at)}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Note:</span>
+                            <span class="info-value" style="font-size: 0.85rem;">
+                                Admin will review your request soon
+                            </span>
+                        </div>
+                    `}
+                </div>
+
+                <div class="course-actions">
+                    ${course.status === 'approved' ? `
+                        <button class="action-btn btn-view-materials" onclick="viewCourseQA('${encodeURIComponent(course.course_name)}', '${encodeURIComponent(JSON.stringify(course.qa_data))}')">
+                            <i class="fas fa-eye"></i> View Q&A
+                        </button>
+                        <button class="action-btn btn-start-interview" onclick="goToMockInterview('${encodeURIComponent(course.course_name)}')">
+                            <i class="fas fa-play-circle"></i> Start Interview
+                        </button>
+                    ` : `
+                        <button class="action-btn btn-pending" disabled>
+                            <i class="fas fa-hourglass-half"></i> Awaiting Approval
+                        </button>
+                    `}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// View Q&A in modal
+function viewCourseQA(courseName, qaDataStr) {
+    const courseName_decoded = decodeURIComponent(courseName);
+    const qaData = JSON.parse(decodeURIComponent(qaDataStr));
+
+    const modal = document.getElementById('qaModal');
+    document.getElementById('qaModalTitle').textContent = `${courseName_decoded} - Preparation Materials`;
+
+    let qaHTML = '';
+    qaData.forEach((item, index) => {
+        qaHTML += `
+            <div class="qa-item">
+                <div style="display: flex; align-items: start;">
+                    <span class="qa-number">${index + 1}</span>
+                    <div style="flex: 1;">
+                        <div class="qa-question">${escapeHtml(item.question)}</div>
+                        <div class="qa-answer">${escapeHtml(item.answer)}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    qaHTML += `
+        <button class="download-btn-modal" onclick="downloadQAPDF('${courseName_decoded}')">
+            <i class="fas fa-download"></i> Download as PDF
+        </button>
+    `;
+
+    document.getElementById('qaModalBody').innerHTML = qaHTML;
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+}
+
+// Close Q&A modal
+function closeQAModal() {
+    const modal = document.getElementById('qaModal');
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+}
+
+// Go to mock interview
+function goToMockInterview(courseName) {
+    const course_decoded = decodeURIComponent(courseName);
+    // Store selected course in session
+    sessionStorage.setItem('selectedInterviewCourse', course_decoded);
+    // Redirect to mock interview page
+    window.location.href = 'mock-interview.html?course=' + encodeURIComponent(course_decoded);
+}
+
+// Download Q&A as PDF
+function downloadQAPDF(courseName) {
+    alert('Downloading PDF preparation materials for ' + courseName + '...\n(Feature implementation in progress)');
+    // TODO: Implement PDF generation using libraries like jsPDF or pdfkit
+}
+
+// Helper functions
+function formatStatus(status) {
+    if (status === 'approved') return '✅ Approved';
+    if (status === 'pending') return '⏳ Pending Admin Review';
+    if (status === 'denied') return '❌ Denied';
+    return status;
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return 'N/A';
+    return new Date(dateStr).toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Load on page load
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('mockInterviewPrep')) {
+        loadMockInterviewPrep();
+    }
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('qaModal');
+    if (modal && e.target === modal) {
+        closeQAModal();
+    }
+});
+</script>

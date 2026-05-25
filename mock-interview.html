@@ -68,35 +68,6 @@
             <div class="mi-form">
 
                 <div class="mi-field">
-                    <label><i class="fas fa-briefcase"></i> Interview Role</label>
-                    <select id="roleSelect">
-                        <option value="">-- Select Role --</option>
-                        <optgroup label="Development">
-                            <option value="Frontend Developer">Frontend Developer</option>
-                            <option value="Backend Developer">Backend Developer</option>
-                            <option value="Full Stack Developer">Full Stack Developer</option>
-                            <option value="Java Developer">Java Developer</option>
-                            <option value="Python Developer">Python Developer</option>
-                            <option value="Mobile Developer">Mobile Developer</option>
-                        </optgroup>
-                        <optgroup label="Design & Data">
-                            <option value="UI/UX Designer">UI/UX Designer</option>
-                            <option value="Data Scientist">Data Scientist</option>
-                            <option value="Data Analyst">Data Analyst</option>
-                        </optgroup>
-                        <optgroup label="Infrastructure">
-                            <option value="DevOps Engineer">DevOps Engineer</option>
-                            <option value="Cloud Engineer">Cloud Engineer</option>
-                            <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
-                        </optgroup>
-                        <optgroup label="HR & Management">
-                            <option value="HR Round">HR Round (General)</option>
-                            <option value="Product Manager">Product Manager</option>
-                        </optgroup>
-                    </select>
-                </div>
-
-                <div class="mi-field">
                     <label><i class="fas fa-layer-group"></i> Difficulty Level</label>
                     <div class="mi-level-btns">
                         <button class="mi-level-btn active" data-level="Beginner"><i class="fas fa-seedling"></i><span>Beginner</span><small>0–1 yr</small></button>
@@ -159,6 +130,10 @@
     </div>
 
     <!-- Progress -->
+    <div id="ivProgress" style="padding: 10px 20px; background: rgba(0,0,0,0.05);">
+        <!-- Populated via updateProgress() -->
+    </div>
+
     <div class="iv-progress-bar">
         <div class="iv-progress-fill" id="ivProgressFill"></div>
     </div>
@@ -177,6 +152,37 @@
                 <div class="iv-cam-overlay">
                     <div class="iv-cam-badge"><div class="iv-rec-dot"></div> YOU</div>
                     <div class="iv-cam-name" id="ivCamName">Candidate</div>
+                </div>
+                <div class="iv-interview-overlay">
+                    <div class="iv-chat-overlay">
+                        <div class="iv-chat" id="ivChat">
+                            <div class="iv-chat-welcome">
+                                <div class="iv-ai-avatar"><i class="fas fa-robot"></i></div>
+                                <p>Connecting to your AI interviewer...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="iv-listening" id="ivListening" style="display:none;">
+                        <div class="iv-listen-dot"></div>
+                        <span>Listening... speak your answer</span>
+                        <button onclick="stopVoiceInput()" class="iv-stop-listen"><i class="fas fa-stop"></i> Stop</button>
+                    </div>
+                    <div class="iv-answer-area collapsed" id="ivAnswerArea" style="display:none;">
+                        <div class="iv-answer-mini" id="ivAnswerMini">
+                            <div class="iv-answer-mini-text">Speak to answer or tap to type</div>
+                            <div class="iv-answer-mini-actions">
+                                <button class="iv-mic-btn iv-mic-mini" id="ivMiniMicBtn" type="button" title="Speak your answer"><i class="fas fa-microphone"></i></button>
+                                <button class="iv-text-toggle-btn" id="ivTextToggleBtn" type="button"><i class="fas fa-keyboard"></i> Type</button>
+                            </div>
+                        </div>
+                        <div class="iv-answer-expanded" id="ivAnswerExpanded">
+                            <textarea id="ivAnswerInput" placeholder="Type your answer here... (Ctrl+Enter to submit)" rows="4"></textarea>
+                            <div class="iv-answer-actions">
+                                <button class="iv-mic-btn" id="ivMicBtn" title="Speak your answer"><i class="fas fa-microphone"></i></button>
+                                <button class="iv-submit-btn" id="ivSubmitBtn"><i class="fas fa-paper-plane"></i> Submit</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="iv-cam-denied" id="ivCamDenied" style="display:none;">
                     <i class="fas fa-video-slash"></i>
@@ -207,31 +213,27 @@
             </div>
         </div>
 
-        <!-- RIGHT — Chat + Answer -->
+        <!-- RIGHT — Scripted Answer Assistant -->
         <div class="iv-right">
-            <!-- Chat messages -->
-            <div class="iv-chat" id="ivChat">
-                <div class="iv-chat-welcome">
-                    <div class="iv-ai-avatar"><i class="fas fa-robot"></i></div>
-                    <p>Connecting to your AI interviewer...</p>
+            <aside class="iv-assistant" id="ivAssistant" style="display:none;">
+                <div class="iv-assistant-header">
+                    <div class="iv-assistant-badge"><i class="fas fa-lightbulb"></i> Scripted Answer Assistant</div>
+                    <div class="iv-assistant-meta">
+                        <span id="ivAssistantRole">Role</span>
+                        <span id="ivAssistantQno">Question 0</span>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Voice listening indicator -->
-            <div class="iv-listening" id="ivListening" style="display:none;">
-                <div class="iv-listen-dot"></div>
-                <span>Listening... speak your answer</span>
-                <button onclick="stopVoiceInput()" class="iv-stop-listen"><i class="fas fa-stop"></i> Stop</button>
-            </div>
-
-            <!-- Answer area -->
-            <div class="iv-answer-area" id="ivAnswerArea" style="display:none;">
-                <textarea id="ivAnswerInput" placeholder="Type your answer here... (Ctrl+Enter to submit)" rows="4"></textarea>
-                <div class="iv-answer-actions">
-                    <button class="iv-mic-btn" id="ivMicBtn" title="Speak your answer"><i class="fas fa-microphone"></i></button>
-                    <button class="iv-submit-btn" id="ivSubmitBtn"><i class="fas fa-paper-plane"></i> Submit Answer</button>
+                <div class="iv-assistant-body">
+                    <div class="iv-assistant-label">Read this while you answer</div>
+                    <div class="iv-assistant-scroll" id="ivAssistantText" tabindex="0"></div>
                 </div>
-            </div>
+                <div class="iv-assistant-footer">
+                    <span>Live teleprompter view</span>
+                    <button class="iv-assistant-refresh" id="ivAssistantRefresh" type="button">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </aside>
         </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
         body {
@@ -8,6 +9,7 @@
             font-family: Arial;
             background: #eff6ff; /* light blue */
         }
+
         .navbar {
             background: #1e3a8a;
             color: white;
@@ -51,6 +53,20 @@
             text-align: center;
             padding: 10px;
             margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            .login-box {
+                width: 90%;
+                max-width: 380px;
+                margin: 20px auto;
+                padding: 16px;
+            }
+            .title {
+                padding: 20px 15px;
+            }
+            button {
+                padding: 12px;
+            }
         }
     </style>
 </head>
