@@ -48,6 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 // =============================================
 const db = mysql.createConnection({
     host     : process.env.DB_HOST     || 'shuttle.proxy.rlwy.net',
+    port     : process.env.DB_PORT     || 31070,
     user     : process.env.DB_USER     || 'root',
     password : process.env.DB_PASSWORD || '',
     database : process.env.DB_NAME     || 'railway'
@@ -63,6 +64,7 @@ db.connect((err) => {
     // ── Session store (MySQL) ────────────────────────────────────────────────
     const sessionStore = new MySQLStore({
         host     : process.env.DB_HOST     || 'shuttle.proxy.rlwy.net',
+        port     : process.env.DB_PORT     || 31070,
         user     : process.env.DB_USER     || 'root',
         password : process.env.DB_PASSWORD || '',
         database : process.env.DB_NAME     || 'railway',
