@@ -4,7 +4,7 @@
 // CONFIG
 // =============================================
 const MI_CONFIG = {
-    apiBase:        'http://localhost:5000',
+    apiBase:        'https://build-together-backend.onrender.com',
     geminiEndpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
     typingSpeed:    22,
     questionTimeout:120,
@@ -1911,7 +1911,7 @@ const STATE_ADDITIONS = {
 async function loadEnrolledCourses() {
     try {
         const token = getToken();
-        const response = await fetch('http://localhost:5000/api/interview/status', {
+        const response = await fetch('https://build-together-backend.onrender.com/api/interview/status', {
             headers: { 'Authorization': 'Bearer ' + token }
         });
 
@@ -2089,7 +2089,7 @@ async function handleStartEnhanced() {
     }
 
     try {
-        const r = await fetch('http://localhost:5000/api/interview/start', {
+        const r = await fetch('https://build-together-backend.onrender.com/api/interview/start', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -2263,7 +2263,7 @@ async function evaluateAnswerWithContext(question, answer, expectedAnswer) {
     Focus on how well the candidate answered relative to the expected answer.`;
 
     try {
-        const response = await fetch('http://localhost:5000/api/interview/ai', {
+        const response = await fetch('https://build-together-backend.onrender.com/api/interview/ai', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + getToken(),
@@ -2334,7 +2334,7 @@ async function handleSubmitCourseAware() {
         // Save to backend
         if (S.interviewId) {
             try {
-                await fetch('http://localhost:5000/api/interview/answer', {
+                await fetch('https://build-together-backend.onrender.com/api/interview/answer', {
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + getToken(),

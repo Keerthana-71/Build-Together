@@ -1171,7 +1171,7 @@ function switchInterviewSubtab(tab) {
 async function loadAccessRequests() {
     try {
         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/admin/interview-requests', {
+        const response = await fetch('https://build-together-backend.onrender.com/api/admin/interview-requests', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -1262,7 +1262,7 @@ async function approveRequest(id) {
     
     try {
         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/admin/interview-requests/${id}`, {
+        const response = await fetch(`https://build-together-backend.onrender.com/api/admin/interview-requests/${id}`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -1303,7 +1303,7 @@ async function denyRequest() {
     
     try {
         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/admin/interview-requests/${currentDenyId}`, {
+        const response = await fetch(`https://build-together-backend.onrender.com/api/admin/interview-requests/${currentDenyId}`, {
             method: 'PATCH',
             headers: { 
                 'Authorization': `Bearer ${token}`,
@@ -1340,7 +1340,7 @@ async function loadCoursesMaterials() {
         
         for (const course of courses) {
             try {
-                const response = await fetch(`http://localhost:5000/api/interview/course-questions/${encodeURIComponent(course)}`, {
+                const response = await fetch(`https://build-together-backend.onrender.com/api/interview/course-questions/${encodeURIComponent(course)}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
@@ -1418,7 +1418,7 @@ async function uploadPDF() {
     
     try {
         const token = sessionStorage.getItem('token') || localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/admin/upload-qa', {
+        const response = await fetch('https://build-together-backend.onrender.com/api/admin/upload-qa', {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` },
             body: formData
@@ -1512,7 +1512,7 @@ function viewCourseQA(courseName) {
 <script src="darkmode.js"></script>
 
 <script>
-const API   = 'http://localhost:5000';
+const API   = 'https://build-together-backend.onrender.com';
 const token = sessionStorage.getItem('token');
 const role  = sessionStorage.getItem('userRole');
 const name  = sessionStorage.getItem('userName');

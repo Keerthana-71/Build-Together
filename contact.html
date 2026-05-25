@@ -225,7 +225,7 @@
         document.querySelectorAll('.faq-question i').forEach(i => i.style.transform = '');
         if (!isOpen) { answer.style.display = 'block'; icon.style.transform = 'rotate(180deg)'; }
     }
-    const API = 'http://localhost:5000';
+    const API = 'https://build-together-backend.onrender.com';
 
     // Auto-fill & lock name/email if logged in
     const loggedIn = sessionStorage.getItem('loggedIn');

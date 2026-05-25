@@ -1216,10 +1216,10 @@ async function loadMockInterviewPrep() {
         if (!token) return;
 
         const [accessResponse, dashboardResponse] = await Promise.all([
-            fetch('http://localhost:5000/api/interview/status', {
+            fetch('https://build-together-backend.onrender.com/api/interview/status', {
                 headers: { 'Authorization': `Bearer ${token}` }
             }),
-            fetch('http://localhost:5000/api/dashboard', {
+            fetch('https://build-together-backend.onrender.com/api/dashboard', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
         ]);
@@ -1388,7 +1388,7 @@ async function requestInterviewAccess(courseNameEncoded) {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/interview/request', {
+        const response = await fetch('https://build-together-backend.onrender.com/api/interview/request', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1474,7 +1474,7 @@ async function downloadQAPDF(courseName) {
     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
 
     try {
-        const response = await fetch('http://localhost:5000/api/interview/course-pdf/' + encodeURIComponent(resolvedCourse), {
+        const response = await fetch('https://build-together-backend.onrender.com/api/interview/course-pdf/' + encodeURIComponent(resolvedCourse), {
             headers: token ? { 'Authorization': `Bearer ${token}` } : {}
         });
 
@@ -1546,7 +1546,7 @@ window.addEventListener('click', (e) => {
 <script src="navbar-auth.js"></script>
 <script src="darkmode.js"></script>
 <script>
-    const API = 'http://localhost:5000';
+    const API = 'https://build-together-backend.onrender.com';
     const token = sessionStorage.getItem('token') || localStorage.getItem('token');
     const loggedIn = sessionStorage.getItem('loggedIn') || localStorage.getItem('loggedIn');
 

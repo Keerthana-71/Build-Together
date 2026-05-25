@@ -1,5 +1,5 @@
 // otp-verify.js — Two-step OTP: Email first, then Phone
-const OTP_API = 'http://localhost:5000';
+const OTP_API = 'https://build-together-backend.onrender.com';
 
 // Step 1: Email OTP verification
 // Usage: initEmailOtp(emailInputId, containerId, onVerified)
