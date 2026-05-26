@@ -98,15 +98,24 @@ db.connect((err) => {
 // EMAIL TRANSPORTER
 // =============================================
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'smtp.gmail.com',
     port: 587,
-    secure: true,
+    secure: false,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
-
+transporter.verify((err, success) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("SMTP Ready");
+  }
+});
 function sendEmail(to, subject, html) {
     return transporter.sendMail({
         from: '"Build Together Institute" <' + process.env.EMAIL_USER + '>',
