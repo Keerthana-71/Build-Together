@@ -97,12 +97,8 @@ db.connect((err) => {
 // =============================================
 // EMAIL TRANSPORTER
 // =============================================
-const dns = require('dns');
-
-dns.setDefaultResultOrder('ipv4first');
-
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: '74.125.24.108', // Gmail SMTP IPv4
     port: 587,
     secure: false,
     requireTLS: true,
@@ -110,10 +106,11 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    family: 4,
     tls: {
+        servername: 'smtp.gmail.com',
         rejectUnauthorized: false
-    }
+    },
+    connectionTimeout: 60000
 });
 transporter.verify((error, success) => {
     if (error) {
