@@ -98,19 +98,19 @@ db.connect((err) => {
 // EMAIL TRANSPORTER
 // =============================================
 const transporter = nodemailer.createTransport({
-    host: '74.125.24.108', // Gmail SMTP IPv4
-    port: 587,
+    host: 'smtp.gmail.com',
+    port: 2525,
     secure: false,
-    requireTLS: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        servername: 'smtp.gmail.com',
         rejectUnauthorized: false
     },
-    connectionTimeout: 60000
+    connectionTimeout: 120000,
+    greetingTimeout: 120000,
+    socketTimeout: 120000
 });
 transporter.verify((error, success) => {
     if (error) {
