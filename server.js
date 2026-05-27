@@ -97,57 +97,24 @@ db.connect((err) => {
 // =============================================
 // EMAIL TRANSPORTER
 // =============================================
-async function sendEmail(to, subject, html) {
-    console.log('Attempting to send email to:', to);
-
-    const accessTokenRes = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-            client_id: process.env.GMAIL_CLIENT_ID,
-            client_secret: process.env.GMAIL_CLIENT_SECRET,
-            refresh_token: process.env.GMAIL_REFRESH_TOKEN,
-            grant_type: 'refresh_token'
-        })
-    });
-
-    const tokenData = await accessTokenRes.json();
-    console.log('Access token fetched:', !!tokenData.access_token);
-
-    if (!tokenData.access_token) {
-        throw new Error('Failed to get access token: ' + JSON.stringify(tokenData));
+// ✅ ADD this at top with other requires
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
+transporter.verify((error, success) => {
+    if (error) {
+        console.error('SMTP Error:', error);
+    } else {
+        console.log('SMTP Server Ready');
     }
+});
 
-    const email = [
-        'From: "Build Together Institute" <buildtogether.institute@gmail.com>',
-        'To: ' + to,
-        'Subject: ' + subject,
-        'MIME-Version: 1.0',
-        'Content-Type: text/html; charset=utf-8',
-        '',
+function sendEmail(to, subject, html) {
+    return resend.emails.send({
+        from: '"Build Together Institute" <' + process.env.EMAIL_USER + '>',
+        to,
+        subject,
         html
-    ].join('\n');
-
-    const encodedEmail = Buffer.from(email).toString('base64')
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-
-    const gmailRes = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + tokenData.access_token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ raw: encodedEmail })
     });
-
-    const result = await gmailRes.json();
-    console.log('Gmail API response:', result);
-
-    if (!gmailRes.ok) {
-        throw new Error('Gmail API error: ' + JSON.stringify(result));
-    }
-
-    return result;
 }
 // =============================================
 // JWT MIDDLEWARE
