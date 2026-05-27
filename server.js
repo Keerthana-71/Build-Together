@@ -97,30 +97,25 @@ db.connect((err) => {
 // =============================================
 // EMAIL TRANSPORTER
 // =============================================
-const transporter = nodemailer.createTransport({
-    host: 'smtp-relay.brevo.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.BREVO_USER,
-        pass: process.env.BREVO_PASS
-    }
-});
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('SMTP Error:', error);
-    } else {
-        console.log('SMTP Server Ready');
-    }
-});
-
-function sendEmail(to, subject, html) {
-    return transporter.sendMail({
-        from: '"Build Together Institute" <' + process.env.EMAIL_USER + '>',
-        to,
-        subject,
-        html
+async function sendEmail(to, subject, html) {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'api-key': process.env.BREVO_API_KEY
+        },
+        body: JSON.stringify({
+            sender: { name: 'Build Together Institute', email: process.env.BREVO_USER },
+            to: [{ email: to }],
+            subject: subject,
+            htmlContent: html
+        })
     });
+    if (!response.ok) {
+        const err = await response.text();
+        throw new Error('Brevo API error: ' + err);
+    }
+    return response.json();
 }
 
 // =============================================
