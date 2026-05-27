@@ -98,26 +98,57 @@ db.connect((err) => {
 // EMAIL TRANSPORTER
 // =============================================
 async function sendEmail(to, subject, html) {
-    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    console.log('Attempting to send email to:', to);
+
+    const accessTokenRes = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'api-key': process.env.BREVO_API_KEY
-        },
-        body: JSON.stringify({
-            sender: { name: 'Build Together Institute', email: process.env.BREVO_USER },
-            to: [{ email: to }],
-            subject: subject,
-            htmlContent: html
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            client_id: process.env.GMAIL_CLIENT_ID,
+            client_secret: process.env.GMAIL_CLIENT_SECRET,
+            refresh_token: process.env.GMAIL_REFRESH_TOKEN,
+            grant_type: 'refresh_token'
         })
     });
-    if (!response.ok) {
-        const err = await response.text();
-        throw new Error('Brevo API error: ' + err);
-    }
-    return response.json();
-}
 
+    const tokenData = await accessTokenRes.json();
+    console.log('Access token fetched:', !!tokenData.access_token);
+
+    if (!tokenData.access_token) {
+        throw new Error('Failed to get access token: ' + JSON.stringify(tokenData));
+    }
+
+    const email = [
+        'From: "Build Together Institute" <buildtogether.institute@gmail.com>',
+        'To: ' + to,
+        'Subject: ' + subject,
+        'MIME-Version: 1.0',
+        'Content-Type: text/html; charset=utf-8',
+        '',
+        html
+    ].join('\n');
+
+    const encodedEmail = Buffer.from(email).toString('base64')
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+    const gmailRes = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + tokenData.access_token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ raw: encodedEmail })
+    });
+
+    const result = await gmailRes.json();
+    console.log('Gmail API response:', result);
+
+    if (!gmailRes.ok) {
+        throw new Error('Gmail API error: ' + JSON.stringify(result));
+    }
+
+    return result;
+}
 // =============================================
 // JWT MIDDLEWARE
 // =============================================
